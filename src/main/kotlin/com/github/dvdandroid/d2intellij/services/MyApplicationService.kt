@@ -1,6 +1,6 @@
-package org.jetbrains.plugins.template.services
+package com.github.dvdandroid.d2intellij.services
 
-import org.jetbrains.plugins.template.MyBundle
+import com.github.dvdandroid.d2intellij.MyBundle
 
 class MyApplicationService {
 
