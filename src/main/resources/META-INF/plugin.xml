@@ -1,18 +1,118 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.dvdandroid.d2intellij</id>
-    <name>IntelliJ Platform Plugin d2-intellij</name>
-    <vendor>dvdandroid</vendor>
+  <id>com.dvd.intellij.d2</id>
+  <name>D2</name>
+  <description><![CDATA[
+    Language support for D2.
 
-    <depends>com.intellij.modules.platform</depends>
+    https://d2lang.com/
+  ]]></description>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.dvdandroid.d2intellij.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.dvdandroid.d2intellij.services.MyProjectService"/>
-    </extensions>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.platform.images</depends>
 
-    <applicationListeners>
-        <listener class="com.github.dvdandroid.d2intellij.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+  <resource-bundle>messages.D2Bundle</resource-bundle>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <fileType name="D2"
+              language="D2"
+              extensions="d2"
+              implementationClass="com.dvd.intellij.d2.ide.file.D2FileType"
+              fieldName="INSTANCE"/>
+
+    <lang.parserDefinition language="D2" implementationClass="com.dvd.intellij.d2.ide.parser.D2ParserDefinition"/>
+    <lang.braceMatcher language="D2" implementationClass="com.dvd.intellij.d2.ide.editor.D2BraceMatcher"/>
+    <lang.commenter language="D2" implementationClass="com.dvd.intellij.d2.ide.editor.D2Commenter"/>
+    <lang.syntaxHighlighterFactory language="D2"
+                                   implementationClass="com.dvd.intellij.d2.ide.lang.D2SyntaxHighlighterFactory"/>
+
+    <colorSettingsPage implementation="com.dvd.intellij.d2.ide.settings.D2ColorSettingsPage"/>
+
+    <colorProvider implementation="com.dvd.intellij.d2.ide.editor.D2ColorProvider"/>
+
+    <fileEditorProvider implementation="com.dvd.intellij.d2.ide.editor.D2FileEditorProvider"/>
+
+    <psi.referenceContributor language="D2"
+                              implementation="com.dvd.intellij.d2.ide.reference.D2UrlReferenceContributor"/>
+
+    <!--    todo move to single contributor?-->
+    <completion.contributor language="D2"
+                            implementationClass="com.dvd.intellij.d2.ide.completion.D2ShapesTypesCompletionContributor"/>
+    <completion.contributor language="D2"
+                            implementationClass="com.dvd.intellij.d2.ide.completion.D2StyleCompletionContributor"/>
+
+    <spellchecker.support language="D2" implementationClass="com.dvd.intellij.d2.ide.spell.D2SpellCheckerStrategy"/>
+
+    <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
+
+    <editorNotificationProvider implementation="com.dvd.intellij.d2.ide.editor.D2MissingCompilerNotificationProvider"/>
+
+    <applicationService serviceImplementation="com.dvd.intellij.d2.ide.service.D2ServiceImpl"
+                        serviceInterface="com.dvd.intellij.d2.ide.service.D2Service"/>
+    <projectService serviceImplementation="com.dvd.intellij.d2.ide.toolWindow.D2ToolWindowServiceImpl"
+                    serviceInterface="com.dvd.intellij.d2.ide.toolWindow.D2ToolWindowService"/>
+
+    <toolWindow factoryClass="com.dvd.intellij.d2.ide.toolWindow.D2ToolWindow" id="D2ToolWindow" anchor="bottom"/>
+  </extensions>
+
+  <applicationListeners>
+    <listener class="com.dvd.intellij.d2.ide.editor.D2FileCloseListener"
+              topic="com.intellij.openapi.fileEditor.FileEditorManagerListener$Before"/>
+    <listener class="com.dvd.intellij.d2.ide.toolWindow.D2FileToolWindowListener"
+              topic="com.intellij.openapi.fileEditor.FileEditorManagerListener$Before"/>
+    <listener class="com.dvd.intellij.d2.ide.toolWindow.D2FileToolWindowListener"
+              topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+  </applicationListeners>
+
+  <actions>
+    <group id="D2.ThemeChooser"
+           class="com.dvd.intellij.d2.ide.action.D2ThemesActionGroup"
+           popup="true"
+           icon="AllIcons.Toolwindows.ToolWindowPalette"/>
+    <group id="D2.LayoutChooser"
+           class="com.dvd.intellij.d2.ide.action.D2LayoutEngineActionGroup"
+           popup="true"
+           icon="AllIcons.General.Layout"/>
+    <group id="D2.ExportMenu"
+           popup="true"
+           icon="AllIcons.ToolbarDecorator.Export">
+      <action class="com.dvd.intellij.d2.ide.action.D2ExportAction"
+              id="D2.ExportDiagram"
+              icon="AllIcons.Actions.MenuSaveall"/>
+      <action class="com.dvd.intellij.d2.ide.action.D2LiveBrowserAction"
+              id="D2.LiveBrowser"
+              icon="AllIcons.RunConfigurations.Web_app"/>
+    </group>
+    <action class="com.dvd.intellij.d2.ide.action.D2MessagesAction"
+            id="D2.Messages"
+            icon="AllIcons.Debugger.Console"/>
+    <action class="com.dvd.intellij.d2.ide.action.D2InfoAction"
+            id="D2.Info"
+            icon="AllIcons.General.ShowInfos"/>
+
+    <group id="D2.EditorToolbar">
+      <reference id="Images.ToggleTransparencyChessboard"/>
+      <reference id="Images.Editor.ToggleGrid"/>
+      <separator/>
+      <reference id="Images.Editor.ZoomIn"/>
+      <reference id="Images.Editor.ZoomOut"/>
+      <reference id="Images.Editor.ActualSize"/>
+      <reference id="Images.Editor.FitZoomToWindow"/>
+      <separator/>
+      <reference id="D2.ThemeChooser"/>
+      <reference id="D2.LayoutChooser"/>
+      <reference id="D2.ExportMenu"/>
+      <separator/>
+      <reference id="D2.Messages"/>
+      <reference id="D2.Info"/>
+    </group>
+
+    <group id="D2.EditorPopupMenu">
+      <reference id="$Copy"/>
+      <reference id="CopyReferencePopupGroup"/>
+      <separator/>
+      <reference id="SynchronizeCurrentFile"/>
+      <separator/>
+      <reference id="D2.EditorToolbar"/>
+    </group>
+  </actions>
 </idea-plugin>

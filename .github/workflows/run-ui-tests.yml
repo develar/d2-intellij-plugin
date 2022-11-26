@@ -39,8 +39,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: zulu
-          java-version: 11
+          distribution: corretto
+          java-version: 17
 
       # Run IDEA prepared for UI testing
       - name: Run IDE
