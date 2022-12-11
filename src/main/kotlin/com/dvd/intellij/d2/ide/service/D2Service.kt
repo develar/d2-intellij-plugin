@@ -5,6 +5,7 @@ import com.dvd.intellij.d2.ide.action.ConversionOutput
 import com.dvd.intellij.d2.ide.execution.D2CommandOutput
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.vfs.VirtualFile
+import java.io.File
 
 
 interface D2Service {
@@ -17,6 +18,8 @@ interface D2Service {
 
   fun compile(fileEditor: FileEditor)
   fun closeFile(fileEditor: FileEditor)
+
+  fun format(file: File): String
 
   fun convert(file: VirtualFile, format: ConversionOutput): ByteArray
 }

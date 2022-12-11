@@ -31,6 +31,8 @@
     <psi.referenceContributor language="D2"
                               implementation="com.dvd.intellij.d2.ide.reference.D2UrlReferenceContributor"/>
 
+    <formattingService implementation="com.dvd.intellij.d2.ide.format.D2FormatterService"/>
+
     <!--    todo move to single contributor?-->
     <completion.contributor language="D2"
                             implementationClass="com.dvd.intellij.d2.ide.completion.D2ShapesTypesCompletionContributor"/>

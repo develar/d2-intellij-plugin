@@ -40,10 +40,10 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
 
   override val map: Map<FileEditor, D2CommandOutput.Generate> = _map
 
-  override val compilerVersion: String? get() = simpleRun(D2Command.Version)?.version
+  override val compilerVersion: String? = simpleRun(D2Command.Version)?.version
   override val isCompilerInstalled = compilerVersion != null
 
-  override val layoutEngines: List<D2Layout>? get() = simpleRun(D2Command.LayoutEngines)?.layouts
+  override val layoutEngines: List<D2Layout>? = simpleRun(D2Command.LayoutEngines)?.layouts
 
   override fun compile(fileEditor: FileEditor) {
     val oldExec = _map[fileEditor]
@@ -108,6 +108,8 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
 
     LOG.info("[plugin] Closed file")
   }
+
+  override fun format(file: File) = simpleRun(D2Command.Format(file))?.content.orEmpty()
 
   override fun convert(file: VirtualFile, format: ConversionOutput): ByteArray {
     val input = TranscoderInput(file.javaPath.toUri().toString())
