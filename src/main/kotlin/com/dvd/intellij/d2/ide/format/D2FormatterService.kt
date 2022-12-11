@@ -2,6 +2,8 @@ package com.dvd.intellij.d2.ide.format
 
 import com.dvd.intellij.d2.ide.file.D2File
 import com.dvd.intellij.d2.ide.service.D2Service
+import com.dvd.intellij.d2.ide.utils.D2Bundle
+import com.dvd.intellij.d2.ide.utils.NOTIFICATION_GROUP
 import com.intellij.formatting.service.AsyncDocumentFormattingService
 import com.intellij.formatting.service.AsyncFormattingRequest
 import com.intellij.formatting.service.FormattingService
@@ -10,8 +12,8 @@ import com.intellij.psi.PsiFile
 
 class D2FormatterService : AsyncDocumentFormattingService() {
 
-  override fun getName(): String = "D2 Formatter"
-  override fun getNotificationGroupId(): String = "D2_INFO"
+  override fun getName(): String = D2Bundle["d2.formatter"]
+  override fun getNotificationGroupId(): String = NOTIFICATION_GROUP
   override fun getFeatures(): MutableSet<FormattingService.Feature> = mutableSetOf()
   override fun canFormat(file: PsiFile): Boolean = file is D2File
 

@@ -3,9 +3,14 @@
 # d2-intellij Changelog
 
 ## [Unreleased]
-### Fixed
-- stuff
+
+### Added
+
+- Formatter
 
 ## [0.0.1-eap]
+
 ### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+
+- Initial scaffold created
+  from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
