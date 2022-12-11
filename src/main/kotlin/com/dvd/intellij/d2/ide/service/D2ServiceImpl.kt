@@ -162,18 +162,18 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
   private fun deleteFile(fileEditor: FileEditor) {
     val app = ApplicationManager.getApplication()
 
-//    val deleteFile: () -> Unit = { map[fileEditor]?.cmd?.dest?.delete(null) }
-//    if (app.isDispatchThread) {
-//      try {
-//        app.runWriteAction(deleteFile)
-//      } catch (_: Throwable) {
-//        // todo
-//        // Already disposed: MessageBus(owner=Application  (containerState DISPOSED)  (internal) (WA inProgress allowed) (RA allowed) (exit in progress), disposeState= 1)
-//        // but isWriteAccessAllowed = true
-//      }
-//    } else {
-//      app.invokeLater(deleteFile)
-//    }
+    val deleteFile: () -> Unit = { map[fileEditor]?.cmd?.dest?.delete(null) }
+    if (app.isDispatchThread) {
+      try {
+        app.runWriteAction(deleteFile)
+      } catch (_: Throwable) {
+        // todo
+        // Already disposed: MessageBus(owner=Application  (containerState DISPOSED)  (internal) (WA inProgress allowed) (RA allowed) (exit in progress), disposeState= 1)
+        // but isWriteAccessAllowed = true
+      }
+    } else {
+      app.invokeLater(deleteFile)
+    }
   }
 
   private fun generateTempSvg(): VirtualFile {

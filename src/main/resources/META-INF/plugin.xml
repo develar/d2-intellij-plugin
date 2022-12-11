@@ -1,11 +1,8 @@
 <idea-plugin>
   <id>com.dvd.intellij.d2</id>
   <name>D2</name>
-  <description><![CDATA[
-    Language support for D2.
-
-    https://d2lang.com/
-  ]]></description>
+  <vendor url="https://github.com/dvdandroid/d2-intellij">dvdandroid</vendor>
+  <description>--replaced by plugin--</description>
 
   <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.platform.images</depends>
