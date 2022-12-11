@@ -17,7 +17,7 @@ class D2InfoAction : AnAction() {
       .getNotificationGroup(NOTIFICATION_GROUP)
       .createNotification(
         D2Bundle["d2"],
-        D2Bundle["d2.compiler.info"].replace("%version%", version),
+        D2Bundle["d2.compiler.info", version],
         NotificationType.INFORMATION
       )
       .notify(e.project)

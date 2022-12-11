@@ -74,9 +74,12 @@ sealed class D2Command<O> {
       add(formatted.path)
     }
 
+    // if failed during formatting, the console output is returned
     override fun parseOutput(output: String): D2CommandOutput.Format {
       val content = formatted.readText()
       formatted.delete()
+      if ("err: failed" in output) return D2CommandOutput.Format(output)
+
       return D2CommandOutput.Format(content)
     }
   }

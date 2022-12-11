@@ -9,5 +9,5 @@ sealed class D2CommandOutput {
     fun appendLog(log: String): Generate = copy(log = this.log + log)
   }
 
-  data class Format(val content: String) : D2CommandOutput()
+  data class Format(val content: String?) : D2CommandOutput()
 }

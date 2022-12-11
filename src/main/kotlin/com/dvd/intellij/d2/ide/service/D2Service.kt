@@ -3,6 +3,7 @@ package com.dvd.intellij.d2.ide.service
 import com.dvd.intellij.d2.components.D2Layout
 import com.dvd.intellij.d2.ide.action.ConversionOutput
 import com.dvd.intellij.d2.ide.execution.D2CommandOutput
+import com.dvd.intellij.d2.ide.format.D2FormatterResult
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
@@ -19,7 +20,7 @@ interface D2Service {
   fun compile(fileEditor: FileEditor)
   fun closeFile(fileEditor: FileEditor)
 
-  fun format(file: File): String
+  fun format(file: File): D2FormatterResult
 
   fun convert(file: VirtualFile, format: ConversionOutput): ByteArray
 }

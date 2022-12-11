@@ -12,6 +12,10 @@ import com.intellij.psi.PsiFile
 
 class D2FormatterService : AsyncDocumentFormattingService() {
 
+  companion object {
+    private val ERROR_REGEX = "err: failed to fmt: .*:\\d*:?\\d*: (.*)".toRegex()
+  }
+
   override fun getName(): String = D2Bundle["d2.formatter"]
   override fun getNotificationGroupId(): String = NOTIFICATION_GROUP
   override fun getFeatures(): MutableSet<FormattingService.Feature> = mutableSetOf()
@@ -25,8 +29,17 @@ class D2FormatterService : AsyncDocumentFormattingService() {
 
     return object : FormattingTask {
       override fun run() {
-        val out = service.format(file)
-        request.onTextReady(out)
+        when (val res = service.format(file)) {
+          is D2FormatterResult.Error -> {
+            val error = ERROR_REGEX.find(res.error)?.groupValues?.get(1) ?: res.error
+            request.onError(
+              D2Bundle["d2.formatter"],
+              D2Bundle["d2.formatter.error", error]
+            )
+          }
+
+          is D2FormatterResult.Success -> request.onTextReady(res.content)
+        }
       }
 
       override fun cancel(): Boolean = true

@@ -7,6 +7,7 @@ import com.dvd.intellij.d2.ide.action.ConversionOutput
 import com.dvd.intellij.d2.ide.editor.images.D2FileEditorImpl
 import com.dvd.intellij.d2.ide.execution.D2Command
 import com.dvd.intellij.d2.ide.execution.D2CommandOutput
+import com.dvd.intellij.d2.ide.format.D2FormatterResult
 import com.dvd.intellij.d2.ide.toolWindow.D2ToolWindowService
 import com.dvd.intellij.d2.ide.utils.javaPath
 import com.intellij.execution.process.*
@@ -109,7 +110,14 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
     LOG.info("[plugin] Closed file")
   }
 
-  override fun format(file: File) = simpleRun(D2Command.Format(file))?.content.orEmpty()
+  override fun format(file: File): D2FormatterResult {
+    val out = simpleRun(D2Command.Format(file))?.content
+    return when {
+      out == null -> D2FormatterResult.Error("Unknown error")
+      out.contains("err: failed") -> D2FormatterResult.Error(out)
+      else -> D2FormatterResult.Success(out)
+    }
+  }
 
   override fun convert(file: VirtualFile, format: ConversionOutput): ByteArray {
     val input = TranscoderInput(file.javaPath.toUri().toString())
