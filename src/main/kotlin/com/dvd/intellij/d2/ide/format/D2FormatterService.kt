@@ -42,6 +42,7 @@ class D2FormatterService : AsyncDocumentFormattingService() {
         }
       }
 
+      override fun isRunUnderProgress(): Boolean = true
       override fun cancel(): Boolean = true
     }
   }

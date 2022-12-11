@@ -35,11 +35,15 @@ enum class ShapeStyles(
   FILLED("filled", Shapes.EDGES, BooleanStyleValidator),
   ;
 
-  val completionContributor = when (validator) {
+  val completionElements = when (validator) {
     is BooleanStyleValidator -> BOOLEAN_COMPLETION
     is ColorStyleValidator -> COLOR_COMPLETION
     is FontStyleValidator -> FONT_COMPLETION
     else -> null
+  }
+
+  companion object {
+    fun fromKeyword(keyword: String): ShapeStyles? = values().find { it.keyword == keyword }
   }
 }
 

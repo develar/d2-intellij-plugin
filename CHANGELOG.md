@@ -6,6 +6,7 @@
 
 ### Added
 
+- Completion contributor
 - Formatter
 
 ## [0.0.1-eap]

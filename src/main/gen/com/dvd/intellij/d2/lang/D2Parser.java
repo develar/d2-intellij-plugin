@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package com.dvd.intellij.d2.lang;
 
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
+import com.intellij.lang.PsiParser;
+import com.intellij.psi.tree.IElementType;
+
 import static com.dvd.intellij.d2.lang.D2ElementTypes.*;
 import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class D2Parser implements PsiParser, LightPsiParser {
@@ -205,13 +205,14 @@ public class D2Parser implements PsiParser, LightPsiParser {
   // ShapeDefinition (ShapeConnection | SubShapeDefinition | InlineShapeDefinition)* ShapeExtras?
   public static boolean ShapeDefinitions(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ShapeDefinitions")) return false;
-    boolean result_;
+    boolean result_, pinned_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, SHAPE_DEFINITIONS, "<shape definitions>");
     result_ = ShapeDefinition(builder_, level_ + 1);
-    result_ = result_ && ShapeDefinitions_1(builder_, level_ + 1);
-    result_ = result_ && ShapeDefinitions_2(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, result_, false, null);
-    return result_;
+    pinned_ = result_; // pin = 1
+    result_ = result_ && report_error_(builder_, ShapeDefinitions_1(builder_, level_ + 1));
+    result_ = pinned_ && ShapeDefinitions_2(builder_, level_ + 1) && result_;
+    exit_section_(builder_, level_, marker_, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // (ShapeConnection | SubShapeDefinition | InlineShapeDefinition)*
@@ -247,12 +248,13 @@ public class D2Parser implements PsiParser, LightPsiParser {
   static boolean ShapeExtras(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ShapeExtras")) return false;
     if (!nextTokenIs(builder_, COLON)) return false;
-    boolean result_;
-    Marker marker_ = enter_section_(builder_);
+    boolean result_, pinned_;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_);
     result_ = consumeToken(builder_, COLON);
+    pinned_ = result_; // pin = 1
     result_ = result_ && ShapeExtras_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+    exit_section_(builder_, level_, marker_, result_, pinned_, null);
+    return result_ || pinned_;
   }
 
   // LabelDefinition BlockDefinition? | BlockDefinition
