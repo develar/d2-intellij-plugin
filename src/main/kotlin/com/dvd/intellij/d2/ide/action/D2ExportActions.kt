@@ -32,7 +32,7 @@ class D2ExportAction : AnAction() {
       val converted = service<D2Service>().convert(d2File, ConversionOutput.valueOf(vfw.file.extension.uppercase()))
       vfw.file.writeBytes(converted)
 
-      LocalFileSystem.getInstance().refresh(true);
+      LocalFileSystem.getInstance().refresh(true)
     }
   }
 }

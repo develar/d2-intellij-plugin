@@ -8,6 +8,8 @@ internal const val D2_GROUP_TOOLBAR = "D2.EditorToolbar"
 internal const val D2_GROUP_POPUP = "D2.EditorPopupMenu"
 internal const val D2_ACTION_PLACE = "D2.Editor"
 
+internal const val NOTIFICATION_GROUP = "D2_INFO"
+
 // https://github.com/terrastruct/d2/blob/eb55a49559fe933b3846094d8af01496ed55d037/d2graph/d2graph.go#L1040-L1050
 internal val RESERVED_KEYWORDS = arrayOf(
   "label",

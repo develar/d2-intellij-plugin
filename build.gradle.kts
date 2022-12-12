@@ -1,3 +1,4 @@
+import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.grammarkit.GrammarKitConstants
 import org.jetbrains.grammarkit.tasks.GenerateLexerTask
@@ -8,8 +9,8 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
   id("java")
-  id("org.jetbrains.kotlin.jvm") version "1.7.21"
-  id("org.jetbrains.intellij") version "1.10.0"
+  id("org.jetbrains.kotlin.jvm") version "1.7.22"
+  id("org.jetbrains.intellij") version "1.10.1"
   id("org.jetbrains.changelog") version "2.0.0"
   id("org.jetbrains.qodana") version "0.1.13"
   id("org.jetbrains.kotlinx.kover") version "0.6.1"
@@ -118,14 +119,18 @@ tasks {
       }.joinToString("\n").let { markdownToHTML(it) }
     )
 
-//    changeNotes.set(provider {
-//      with(changelog) {
-//        renderItem(
-//          getOrNull(properties("pluginVersion")) ?: getLatest(),
-//          Changelog.OutputType.HTML,
-//        )
-//      }
-//    })
+    changeNotes.set(provider {
+      with(changelog) {
+        renderItem(
+          getOrNull(properties("pluginVersion")) ?: getLatest(),
+          Changelog.OutputType.HTML,
+        )
+      }
+    })
+  }
+
+  buildSearchableOptions {
+    enabled = false
   }
 
   runIdeForUiTests {

@@ -7,6 +7,7 @@ import com.dvd.intellij.d2.ide.action.ConversionOutput
 import com.dvd.intellij.d2.ide.editor.images.D2FileEditorImpl
 import com.dvd.intellij.d2.ide.execution.D2Command
 import com.dvd.intellij.d2.ide.execution.D2CommandOutput
+import com.dvd.intellij.d2.ide.format.D2FormatterResult
 import com.dvd.intellij.d2.ide.toolWindow.D2ToolWindowService
 import com.dvd.intellij.d2.ide.utils.javaPath
 import com.intellij.execution.process.*
@@ -40,10 +41,10 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
 
   override val map: Map<FileEditor, D2CommandOutput.Generate> = _map
 
-  override val compilerVersion: String? get() = simpleRun(D2Command.Version)?.version
+  override val compilerVersion: String? = simpleRun(D2Command.Version)?.version
   override val isCompilerInstalled = compilerVersion != null
 
-  override val layoutEngines: List<D2Layout>? get() = simpleRun(D2Command.LayoutEngines)?.layouts
+  override val layoutEngines: List<D2Layout>? = simpleRun(D2Command.LayoutEngines)?.layouts
 
   override fun compile(fileEditor: FileEditor) {
     val oldExec = _map[fileEditor]
@@ -109,6 +110,15 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
     LOG.info("[plugin] Closed file")
   }
 
+  override fun format(file: File): D2FormatterResult {
+    val out = simpleRun(D2Command.Format(file))?.content
+    return when {
+      out == null -> D2FormatterResult.Error("Unknown error")
+      out.contains("err: failed") -> D2FormatterResult.Error(out)
+      else -> D2FormatterResult.Success(out)
+    }
+  }
+
   override fun convert(file: VirtualFile, format: ConversionOutput): ByteArray {
     val input = TranscoderInput(file.javaPath.toUri().toString())
     return ByteArrayOutputStream().use {
@@ -162,18 +172,18 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
   private fun deleteFile(fileEditor: FileEditor) {
     val app = ApplicationManager.getApplication()
 
-//    val deleteFile: () -> Unit = { map[fileEditor]?.cmd?.dest?.delete(null) }
-//    if (app.isDispatchThread) {
-//      try {
-//        app.runWriteAction(deleteFile)
-//      } catch (_: Throwable) {
-//        // todo
-//        // Already disposed: MessageBus(owner=Application  (containerState DISPOSED)  (internal) (WA inProgress allowed) (RA allowed) (exit in progress), disposeState= 1)
-//        // but isWriteAccessAllowed = true
-//      }
-//    } else {
-//      app.invokeLater(deleteFile)
-//    }
+    val deleteFile: () -> Unit = { map[fileEditor]?.cmd?.dest?.delete(null) }
+    if (app.isDispatchThread) {
+      try {
+        app.runWriteAction(deleteFile)
+      } catch (_: Throwable) {
+        // todo
+        // Already disposed: MessageBus(owner=Application  (containerState DISPOSED)  (internal) (WA inProgress allowed) (RA allowed) (exit in progress), disposeState= 1)
+        // but isWriteAccessAllowed = true
+      }
+    } else {
+      app.invokeLater(deleteFile)
+    }
   }
 
   private fun generateTempSvg(): VirtualFile {

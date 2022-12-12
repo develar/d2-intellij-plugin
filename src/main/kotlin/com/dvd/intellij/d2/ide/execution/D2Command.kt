@@ -5,6 +5,7 @@ import com.dvd.intellij.d2.components.D2Theme
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.openapi.vfs.VirtualFile
+import java.io.File
 
 sealed class D2Command<O> {
   abstract val args: List<String>
@@ -61,6 +62,25 @@ sealed class D2Command<O> {
         D2Layout(name, bundled.isNotEmpty(), desc)
       }
       return D2CommandOutput.LayoutEngines(layouts)
+    }
+  }
+
+  data class Format(val d2: File) : D2Command<D2CommandOutput.Format>() {
+    private val formatted = File.createTempFile("d2_temp_${d2.name}", ".d2.formatted")
+    override val args = buildList {
+      add("fmt")
+
+      d2.copyTo(formatted, overwrite = true)
+      add(formatted.path)
+    }
+
+    // if failed during formatting, the console output is returned
+    override fun parseOutput(output: String): D2CommandOutput.Format {
+      val content = formatted.readText()
+      formatted.delete()
+      if ("err: failed" in output) return D2CommandOutput.Format(output)
+
+      return D2CommandOutput.Format(content)
     }
   }
 

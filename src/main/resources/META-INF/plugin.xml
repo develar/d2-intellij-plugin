@@ -1,11 +1,8 @@
 <idea-plugin>
   <id>com.dvd.intellij.d2</id>
   <name>D2</name>
-  <description><![CDATA[
-    Language support for D2.
-
-    https://d2lang.com/
-  ]]></description>
+  <vendor url="https://github.com/dvdandroid/d2-intellij">dvdandroid</vendor>
+  <description>--replaced by plugin--</description>
 
   <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.platform.images</depends>
@@ -34,11 +31,16 @@
     <psi.referenceContributor language="D2"
                               implementation="com.dvd.intellij.d2.ide.reference.D2UrlReferenceContributor"/>
 
-    <!--    todo move to single contributor?-->
+    <formattingService implementation="com.dvd.intellij.d2.ide.format.D2FormatterService"/>
+
     <completion.contributor language="D2"
                             implementationClass="com.dvd.intellij.d2.ide.completion.D2ShapesTypesCompletionContributor"/>
     <completion.contributor language="D2"
                             implementationClass="com.dvd.intellij.d2.ide.completion.D2StyleCompletionContributor"/>
+    <completion.contributor language="D2"
+                            implementationClass="com.dvd.intellij.d2.ide.completion.D2BlockCompletionContributor"/>
+    <completion.contributor language="D2"
+                            implementationClass="com.dvd.intellij.d2.ide.completion.D2ConnectorCompletionContributor"/>
 
     <spellchecker.support language="D2" implementationClass="com.dvd.intellij.d2.ide.spell.D2SpellCheckerStrategy"/>
 

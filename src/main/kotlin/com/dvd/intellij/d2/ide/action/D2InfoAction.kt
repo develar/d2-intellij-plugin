@@ -1,7 +1,8 @@
 package com.dvd.intellij.d2.ide.action
 
 import com.dvd.intellij.d2.ide.service.D2Service
-import com.dvd.intellij.d2.ide.utils.file
+import com.dvd.intellij.d2.ide.utils.D2Bundle
+import com.dvd.intellij.d2.ide.utils.NOTIFICATION_GROUP
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.AnAction
@@ -13,14 +14,11 @@ class D2InfoAction : AnAction() {
     val version = service<D2Service>().compilerVersion ?: return
 
     NotificationGroupManager.getInstance()
-      .getNotificationGroup("D2_INFO")
+      .getNotificationGroup(NOTIFICATION_GROUP)
       .createNotification(
-        "D2", """
-        Compiler version: $version
-        <br>
-        <a href="https://d2lang.com">Website</a><br>
-        <a href="https://github.com/dvdandroid/d2-intellij">Plugin</a>
-      """.trimIndent(), NotificationType.INFORMATION
+        D2Bundle["d2"],
+        D2Bundle["d2.compiler.info", version],
+        NotificationType.INFORMATION
       )
       .notify(e.project)
   }
