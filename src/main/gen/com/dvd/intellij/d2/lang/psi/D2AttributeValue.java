@@ -1,9 +1,10 @@
 // This is a generated file. Not intended for manual editing.
 package com.dvd.intellij.d2.lang.psi;
 
-import com.dvd.intellij.d2.lang.D2CompositeElement;
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
+import com.dvd.intellij.d2.lang.D2CompositeElement;
 
 public interface D2AttributeValue extends D2CompositeElement {
 

@@ -1,10 +1,10 @@
 // This is a generated file. Not intended for manual editing.
 package com.dvd.intellij.d2.lang;
 
-import com.dvd.intellij.d2.lang.psi.impl.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.PsiElement;
+import com.intellij.lang.ASTNode;
+import com.dvd.intellij.d2.lang.psi.impl.*;
 
 public interface D2ElementTypes {
 

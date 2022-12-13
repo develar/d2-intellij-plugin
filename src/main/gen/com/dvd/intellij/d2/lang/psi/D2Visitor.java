@@ -1,9 +1,9 @@
 // This is a generated file. Not intended for manual editing.
 package com.dvd.intellij.d2.lang.psi;
 
-import com.dvd.intellij.d2.lang.D2CompositeElement;
+import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.annotations.NotNull;
+import com.dvd.intellij.d2.lang.D2CompositeElement;
 
 public class D2Visitor extends PsiElementVisitor {
 
