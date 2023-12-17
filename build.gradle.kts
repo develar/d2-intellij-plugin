@@ -5,16 +5,18 @@ import org.jetbrains.grammarkit.tasks.GenerateLexerTask
 import org.jetbrains.grammarkit.tasks.GenerateParserTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-fun properties(key: String) = project.findProperty(key).toString()
+fun properties(key: String): String = project.findProperty(key).toString()
+
+val channel: String = properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()
 
 plugins {
   id("java")
-  id("org.jetbrains.kotlin.jvm") version "1.7.22"
-  id("org.jetbrains.intellij") version "1.10.1"
-  id("org.jetbrains.changelog") version "2.0.0"
-  id("org.jetbrains.qodana") version "0.1.13"
-  id("org.jetbrains.kotlinx.kover") version "0.6.1"
-  id("org.jetbrains.grammarkit") version "2022.3"
+  id("org.jetbrains.kotlin.jvm") version "1.9.21"
+  id("org.jetbrains.intellij") version "1.16.1"
+  id("org.jetbrains.changelog") version "2.2.0"
+  id("org.jetbrains.qodana") version "2023.2.1"
+  id("org.jetbrains.kotlinx.kover") version "0.7.4"
+  id("org.jetbrains.grammarkit") version "2022.3.2"
 }
 
 group = properties("pluginGroup")
@@ -54,14 +56,14 @@ changelog {
 
 qodana {
   cachePath.set(file(".qodana").canonicalPath)
-  reportPath.set(file("build/reports/inspections").canonicalPath)
-  saveReport.set(true)
-  showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
+  resultsPath.set(file("build/reports/inspections").canonicalPath)
+//  saveReport.set(true)
+//  showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
 }
 
-kover.xmlReport {
-  onCheck.set(true)
-}
+//kover.xmlReport {
+//  onCheck.set(true)
+//}
 
 grammarKit {
   intellijRelease.set(properties("platformVersion"))
@@ -82,14 +84,14 @@ tasks {
   }
 
   val generateParser = withType<GenerateParserTask> {
-    source.set("./src/main/kotlin/com/dvd/intellij/d2/lang/d2.bnf")
+    sourceFile.set(File("./src/main/kotlin/com/dvd/intellij/d2/lang/d2.bnf"))
     targetRoot.set("./src/main/gen")
     pathToParser.set("/com/dvd/intellij/d2/lang/D2Parser.java")
     pathToPsiRoot.set("/com/dvd/intellij/d2/lang/psi")
     purgeOldFiles.set(true)
   }
   val generateLexer = withType<GenerateLexerTask> {
-    source.set("./src/main/kotlin/com/dvd/intellij/d2/lang/_D2Lexer.flex")
+    sourceFile.set(File("./src/main/kotlin/com/dvd/intellij/d2/lang/_D2Lexer.flex"))
     targetDir.set("./src/main/gen/com/dvd/intellij/d2/lang/")
     targetClass.set("_D2Lexer")
     purgeOldFiles.set(true)
@@ -149,6 +151,7 @@ tasks {
   publishPlugin {
     dependsOn("patchChangelog")
     token.set(System.getenv("PUBLISH_TOKEN"))
-    channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
+
+    channels.set(listOf(channel))
   }
 }
