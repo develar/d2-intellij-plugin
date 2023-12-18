@@ -36,7 +36,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // STRING_LITERAL | IDENTIFIER | NUMERIC_LITERAL | FLOAT_LITERAL | TRUE | FALSE
+  // STRING_LITERAL | IDENTIFIER | NUMERIC_LITERAL | FLOAT_LITERAL | TRUE | FALSE | DOT
   public static boolean AttributeValue(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "AttributeValue")) return false;
     boolean result_;
@@ -47,6 +47,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
     if (!result_) result_ = consumeToken(builder_, FLOAT_LITERAL);
     if (!result_) result_ = consumeToken(builder_, TRUE);
     if (!result_) result_ = consumeToken(builder_, FALSE);
+    if (!result_) result_ = consumeToken(builder_, DOT);
     exit_section_(builder_, level_, marker_, result_, false, null);
     return result_;
   }
