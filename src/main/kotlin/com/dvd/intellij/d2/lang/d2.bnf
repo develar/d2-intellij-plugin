@@ -32,8 +32,10 @@
         NUMERIC_LITERAL        = "regexp:\d+"
         FLOAT_LITERAL          = "regexp:\d+\.\d+"
         STRING_LITERAL         = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\\'|\\)*\")"
-        IDENTIFIER             = "regexp:[a-zA-Z_*0-9\s]*"
+        // allow `stroke-dash`
+        IDENTIFIER             = "regexp:[a-zA-Z_*0-9]+(?:-[a-zA-Z_*0-9]+)*"
         NEWLINE                = "regexp:\r?\n"
+        SPACE                  = "regexp:\s+"
     ]
 }
 
@@ -64,4 +66,4 @@ BlockDefinition ::= LBRACE ShapeDefinitions* RBRACE {
   pin=1
 }
 
-AttributeValue ::= STRING_LITERAL | IDENTIFIER | NUMERIC_LITERAL | FLOAT_LITERAL | TRUE | FALSE
+AttributeValue ::= STRING_LITERAL | IDENTIFIER | NUMERIC_LITERAL | FLOAT_LITERAL | TRUE | FALSE | DOT
