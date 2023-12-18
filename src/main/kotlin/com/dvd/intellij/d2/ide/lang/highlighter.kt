@@ -39,6 +39,7 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
       this += (D2ElementTypes.COLON to COLON)
       this += (D2ElementTypes.SEMICOLON to SEMICOLON)
       this += (D2ElementTypes.STRING_LITERAL to STRING)
+      this += (D2ElementTypes.LABEL_DEFINITION to STRING)
       fillMap(this, D2TokenSets.BRACES, BRACES)
       // todo string, fields
     }
