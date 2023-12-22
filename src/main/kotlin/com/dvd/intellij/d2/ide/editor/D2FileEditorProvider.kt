@@ -1,9 +1,10 @@
 package com.dvd.intellij.d2.ide.editor
 
-import com.dvd.intellij.d2.ide.editor.images.D2FileEditorImpl
+import com.dvd.intellij.d2.ide.editor.images.D2SvgViewer
 import com.dvd.intellij.d2.ide.service.D2Service
 import com.dvd.intellij.d2.ide.utils.D2_EDITOR_NAME
 import com.dvd.intellij.d2.ide.utils.isD2
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.*
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider
@@ -12,16 +13,23 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 
 // https://github.com/JetBrains/intellij-community/blob/master/images/src/org/intellij/images/editor/impl/ImageFileEditorProvider.java
-class D2FileEditorProvider : FileEditorProvider, DumbAware {
-  override fun accept(project: Project, file: VirtualFile): Boolean {
-    if (!file.isD2) return false
+private class D2FileEditorProvider : FileEditorProvider, DumbAware {
+  override fun accept(project: Project, file: VirtualFile): Boolean = file.isD2
 
-    return service<D2Service>().isCompilerInstalled()
+  // 2023.3
+  @Suppress("unused")
+  fun acceptRequiresReadAction(): Boolean {
+    return false
   }
 
   override fun createEditor(project: Project, file: VirtualFile): FileEditor {
-    val view = D2FileEditorImpl(project, file).also { it.refreshD2() }
+    val view = D2SvgViewer(project, file)
     val editor = TextEditorProvider.getInstance().createEditor(project, file) as TextEditor
+
+    ApplicationManager.getApplication().executeOnPooledThread {
+      service<D2Service>().compile(view)
+    }
+
     return TextEditorWithPreview(editor, view, D2_EDITOR_NAME, TextEditorWithPreview.Layout.SHOW_EDITOR_AND_PREVIEW)
   }
 

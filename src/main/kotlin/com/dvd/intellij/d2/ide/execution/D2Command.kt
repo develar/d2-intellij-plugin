@@ -6,18 +6,21 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
+import java.nio.file.Path
 
 sealed class D2Command<O> {
   abstract val args: List<String>
+
   open fun envVars(): Map<String, String> = emptyMap()
+
   abstract fun parseOutput(output: String): O
 
   data class Generate(
-    val d2: VirtualFile,
-    val dest: VirtualFile,
+    val input: VirtualFile,
+    val targetFile: Path,
     val port: Int,
-    val theme: D2Theme = D2Theme.DEFAULT,
-    val layout: D2Layout = D2Layout.DEFAULT,
+    val theme: D2Theme?,
+    val layout: D2Layout?,
   ) : D2Command<D2CommandOutput.Generate>() {
     var process: ProcessHandler? = null
 
@@ -27,14 +30,18 @@ sealed class D2Command<O> {
       add("--port")
       add(port.toString())
 
-      add("--layout")
-      add(layout.name)
+      if (layout != null) {
+        add("--layout")
+        add(layout.name)
+      }
 
-      add("--theme")
-      add(theme.id.toString())
+      if (theme != null) {
+        add("--theme")
+        add(theme.id.toString())
+      }
 
-      add(d2.path)
-      add(dest.path)
+      add(input.path)
+      add(targetFile.toString())
     }
 
     override fun envVars(): Map<String, String> = mapOf(

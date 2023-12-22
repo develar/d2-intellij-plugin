@@ -1,7 +1,7 @@
 package com.dvd.intellij.d2.ide.action
 
 import com.dvd.intellij.d2.components.D2Layout
-import com.dvd.intellij.d2.ide.editor.images.D2FileEditorImpl.Companion.D2_FILE_LAYOUT
+import com.dvd.intellij.d2.ide.editor.images.D2_FILE_LAYOUT
 import com.dvd.intellij.d2.ide.service.D2Service
 import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.dvd.intellij.d2.ide.utils.d2FileEditor
@@ -39,12 +39,11 @@ private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
   },
   null
 ), DumbAware {
-  override fun isSelected(e: AnActionEvent): Boolean =
-    (e.d2FileEditor.getUserData(D2_FILE_LAYOUT) ?: D2Layout.DEFAULT) == layout
+  override fun isSelected(e: AnActionEvent): Boolean = (e.d2FileEditor.getUserData(D2_FILE_LAYOUT) ?: D2Layout.DEFAULT) == layout
 
   override fun setSelected(e: AnActionEvent, state: Boolean) {
     e.d2FileEditor.putUserData(D2_FILE_LAYOUT, layout)
-    e.d2FileEditor.refreshD2()
+    service<D2Service>().compile(e.d2FileEditor)
   }
 
   override fun getActionUpdateThread() = ActionUpdateThread.BGT

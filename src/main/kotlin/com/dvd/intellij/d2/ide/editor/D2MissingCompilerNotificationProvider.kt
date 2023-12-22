@@ -16,16 +16,18 @@ import javax.swing.JComponent
 private class D2MissingCompilerNotificationProvider : EditorNotificationProvider, DumbAware {
   override fun collectNotificationData(project: Project, file: VirtualFile): Function<in FileEditor, out JComponent?>? {
     val installed = service<D2Service>().isCompilerInstalled()
-    return if (file.isD2 && !installed) {
-      Function { fileEditor -> D2MissingCompilerNotificationPanel(fileEditor) }
-    } else null
-  }
-
-  private class D2MissingCompilerNotificationPanel(
-    fileEditor: FileEditor
-  ) : EditorNotificationPanel(fileEditor, Status.Warning) {
-    init {
-      text = D2Bundle.message("d2.executable.not.found.notification")
+    if (file.isD2 && !installed) {
+      return Function { fileEditor -> D2MissingCompilerNotificationPanel(fileEditor) }
+    } else {
+      return null
     }
+  }
+}
+
+private class D2MissingCompilerNotificationPanel(
+  fileEditor: FileEditor
+) : EditorNotificationPanel(fileEditor, Status.Warning) {
+  init {
+    text = D2Bundle.message("d2.executable.not.found.notification")
   }
 }

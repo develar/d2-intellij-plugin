@@ -46,24 +46,11 @@
 
     <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
 
-    <editorNotificationProvider implementation="com.dvd.intellij.d2.ide.editor.D2MissingCompilerNotificationProvider"/>
+    <!--<editorNotificationProvider implementation="com.dvd.intellij.d2.ide.editor.D2MissingCompilerNotificationProvider"/>-->
 
     <applicationService serviceImplementation="com.dvd.intellij.d2.ide.service.D2ServiceImpl"
                         serviceInterface="com.dvd.intellij.d2.ide.service.D2Service"/>
-    <projectService serviceImplementation="com.dvd.intellij.d2.ide.toolWindow.D2ToolWindowServiceImpl"
-                    serviceInterface="com.dvd.intellij.d2.ide.toolWindow.D2ToolWindowService"/>
-
-    <toolWindow factoryClass="com.dvd.intellij.d2.ide.toolWindow.D2ToolWindow" id="D2ToolWindow" anchor="bottom"/>
   </extensions>
-
-  <applicationListeners>
-    <listener class="com.dvd.intellij.d2.ide.editor.D2FileCloseListener"
-              topic="com.intellij.openapi.fileEditor.FileEditorManagerListener$Before"/>
-    <listener class="com.dvd.intellij.d2.ide.toolWindow.D2FileToolWindowListener"
-              topic="com.intellij.openapi.fileEditor.FileEditorManagerListener$Before"/>
-    <listener class="com.dvd.intellij.d2.ide.toolWindow.D2FileToolWindowListener"
-              topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
-  </applicationListeners>
 
   <actions>
     <group id="D2.ThemeChooser"
