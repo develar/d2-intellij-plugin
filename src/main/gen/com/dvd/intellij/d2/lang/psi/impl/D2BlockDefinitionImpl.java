@@ -13,7 +13,7 @@ import com.dvd.intellij.d2.lang.psi.*;
 
 public class D2BlockDefinitionImpl extends D2CompositeElementImpl implements D2BlockDefinition {
 
-  public D2BlockDefinitionImpl(ASTNode node) {
+  public D2BlockDefinitionImpl(@NotNull ASTNode node) {
     super(node);
   }
 

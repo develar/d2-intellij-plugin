@@ -13,7 +13,7 @@ import com.dvd.intellij.d2.lang.psi.*;
 
 public class D2ShapeDefinitionsImpl extends D2CompositeElementImpl implements D2ShapeDefinitions {
 
-  public D2ShapeDefinitionsImpl(ASTNode node) {
+  public D2ShapeDefinitionsImpl(@NotNull ASTNode node) {
     super(node);
   }
 
