@@ -12,26 +12,21 @@ import com.intellij.execution.process.*
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
-import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.net.ServerSocket
 import javax.imageio.ImageIO
 import kotlin.system.measureTimeMillis
 
+private val LOG = logger<D2ServiceImpl>()
+
 private class D2ServiceImpl : D2Service, Disposable {
-  companion object {
-    private val coroutineContext = Job() + Dispatchers.IO
-    private val LOG = Logger.getInstance(D2ServiceImpl::class.java)
-    private val _map: MutableMap<FileEditor, D2CommandOutput.Generate> = mutableMapOf()
-  }
+  private val _map: MutableMap<FileEditor, D2CommandOutput.Generate> = HashMap()
 
   override val map: Map<FileEditor, D2CommandOutput.Generate> = _map
 
@@ -39,7 +34,7 @@ private class D2ServiceImpl : D2Service, Disposable {
 
   override fun isCompilerInstalled() = getCompilerVersion() != null
 
-  override val layoutEngines: List<D2Layout>? = simpleRun(D2Command.LayoutEngines)?.layouts
+  override fun getLayoutEngines(): List<D2Layout>? = simpleRun(D2Command.LayoutEngines)?.layouts
 
   override fun compile(fileEditor: FileEditor) {
     val oldExec = _map[fileEditor]
@@ -79,11 +74,9 @@ private class D2ServiceImpl : D2Service, Disposable {
       }
     }
     cmd.process = prepare(cmd, object : ProcessListener {
-      override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) =
-        onTextAvailable(fileEditor, event, outputType)
+      override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) = onTextAvailable(fileEditor, event, outputType)
 
-      override fun processWillTerminate(event: ProcessEvent, willBeDestroyed: Boolean) =
-        processWillTerminate(fileEditor, event, willBeDestroyed)
+      override fun processWillTerminate(event: ProcessEvent, willBeDestroyed: Boolean) = deleteFile(fileEditor)
     })
 
     @Suppress("IfThenToElvis")
@@ -133,7 +126,7 @@ private class D2ServiceImpl : D2Service, Disposable {
     return out.toByteArray()
   }
 
-  fun onTextAvailable(fileEditor: FileEditor, event: ProcessEvent, outputType: Key<*>) {
+  private fun onTextAvailable(fileEditor: FileEditor, event: ProcessEvent, outputType: Key<*>) {
     buildString {
       append("[process] ")
       if (outputType == ProcessOutputType.SYSTEM) {
@@ -141,7 +134,7 @@ private class D2ServiceImpl : D2Service, Disposable {
         append(event.text)
       } else {
         // remove timestamp
-        append(event.text.replace("\\[?\\d{2}:\\d{2}:\\d{2}\\]? ".toRegex(), ""))
+        append(event.text.replace(Regex("\\[?\\d{2}:\\d{2}:\\d{2}]? "), ""))
       }
     }.let {
       LOG.info(it)
@@ -153,12 +146,6 @@ private class D2ServiceImpl : D2Service, Disposable {
     // update toolwindow console
     (fileEditor as D2FileEditorImpl).project.service<D2ToolWindowService>().update(fileEditor)
   }
-
-  fun processWillTerminate(
-    fileEditor: FileEditor,
-    event: ProcessEvent,
-    willBeDestroyed: Boolean,
-  ) = deleteFile(fileEditor)
 
   override fun dispose() {
     map.forEach { deleteFile(it.key) }
@@ -181,34 +168,35 @@ private class D2ServiceImpl : D2Service, Disposable {
       app.invokeLater(deleteFile)
     }
   }
-}
 
-private fun generateTempSvg(): VirtualFile {
-  val temp = File.createTempFile("d2_temp_svg", ".svg")
-  temp.writeText("""<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>""")
+  private fun generateTempSvg(): VirtualFile {
+    val temp = File.createTempFile("d2_temp_svg", ".svg")
+    temp.writeText("""<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>""")
 
-  return VfsUtil.findFile(temp.toPath(), true) ?: error("Cannot find temp file ${temp.absolutePath}")
-}
-
-private fun prepare(command: D2Command<*>, listener: ProcessListener?) =
-  KillableColoredProcessHandler.Silent(command.createCommandLine().apply {
-    withEnvironment(command.envVars())
-  }).apply {
-    if (listener != null) {
-      addProcessListener(listener)
-    }
+    return VfsUtil.findFile(temp.toPath(), true) ?: error("Cannot find temp file ${temp.absolutePath}")
   }
 
-// null if d2 executable not found
-private fun <O> simpleRun(cmd: D2Command<O>): O? = runBlocking(D2ServiceImpl.coroutineContext) {
-  try {
-    val processOut = ScriptRunnerUtil.getProcessOutput(
-      cmd.createCommandLine(),
-      ScriptRunnerUtil.STDOUT_OR_STDERR_OUTPUT_KEY_FILTER,
-      500
-    )
-    cmd.parseOutput(processOut)
-  } catch (_: Exception) {
-    null
+  private fun prepare(command: D2Command<*>, listener: ProcessListener?) =
+    KillableColoredProcessHandler.Silent(command.createCommandLine().apply {
+      withEnvironment(command.envVars())
+    }).apply {
+      if (listener != null) {
+        addProcessListener(listener)
+      }
+    }
+
+  // null if d2 executable not found
+  private fun <O> simpleRun(cmd: D2Command<O>): O? {
+    try {
+      val processOut = ScriptRunnerUtil.getProcessOutput(
+        cmd.createCommandLine(),
+        ScriptRunnerUtil.STDOUT_OR_STDERR_OUTPUT_KEY_FILTER,
+        500
+      )
+      return cmd.parseOutput(processOut)
+    } catch (e: Exception) {
+      LOG.error(e)
+      return null
+    }
   }
 }

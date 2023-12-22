@@ -15,7 +15,7 @@ interface D2Service {
 
   fun getCompilerVersion(): String?
 
-  val layoutEngines: List<D2Layout>?
+  fun getLayoutEngines(): List<D2Layout>?
 
   fun compile(fileEditor: FileEditor)
   fun closeFile(fileEditor: FileEditor)

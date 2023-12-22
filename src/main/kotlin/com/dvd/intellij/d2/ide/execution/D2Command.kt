@@ -54,13 +54,15 @@ sealed class D2Command<O> {
     private val LAYOUT_ENGINE_REGEX = "(\\w+)(?:\\s(\\(bundled\\)))?\\s-\\s(.*)".toRegex()
 
     override val args = listOf("layout")
-    override fun parseOutput(output: String): D2CommandOutput.LayoutEngines {
-      val layouts = output.split("\n").mapNotNull {
-        val m = LAYOUT_ENGINE_REGEX.matchEntire(it.trim()) ?: return@mapNotNull null
-        val (name, bundled, desc) = m.destructured
 
-        D2Layout(name, bundled.isNotEmpty(), desc)
-      }
+    override fun parseOutput(output: String): D2CommandOutput.LayoutEngines {
+      val layouts = output.splitToSequence('\n')
+        .mapNotNull {
+          val m = LAYOUT_ENGINE_REGEX.matchEntire(it.trim()) ?: return@mapNotNull null
+          val (name, bundled, desc) = m.destructured
+          D2Layout(name = name, bundled = bundled.isNotEmpty(), description = desc)
+        }
+        .toList()
       return D2CommandOutput.LayoutEngines(layouts)
     }
   }
@@ -84,5 +86,5 @@ sealed class D2Command<O> {
     }
   }
 
-  fun createCommandLine(): GeneralCommandLine = GeneralCommandLine("d2", *args.toTypedArray())
+  fun createCommandLine(): GeneralCommandLine = GeneralCommandLine("d2", *args.toTypedArray()).withCharset(Charsets.UTF_8)
 }

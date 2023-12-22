@@ -9,18 +9,23 @@ import com.intellij.icons.AllIcons
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.components.service
+import com.intellij.openapi.project.DumbAware
 
-private class D2LayoutEngineActionGroup : ActionGroup() {
+private class D2LayoutEngineActionGroup : ActionGroup(), DumbAware {
   override fun getChildren(e: AnActionEvent?): Array<AnAction> {
-    if (e == null) return emptyArray()
-    val layouts = service<D2Service>().layoutEngines ?: return emptyArray()
+    if (e == null) {
+      return emptyArray()
+    }
 
+    val layouts = service<D2Service>().getLayoutEngines() ?: return emptyArray()
     return arrayOf(
       *layouts.map(::D2LayoutEngineAction).toTypedArray(),
       Separator(),
       OpenLayoutEngineOverviewAction()
     )
   }
+
+  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
 private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
@@ -33,10 +38,7 @@ private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
     }
   },
   null
-) {
-
-  override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
-
+), DumbAware {
   override fun isSelected(e: AnActionEvent): Boolean =
     (e.d2FileEditor.getUserData(D2_FILE_LAYOUT) ?: D2Layout.DEFAULT) == layout
 
@@ -44,15 +46,15 @@ private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
     e.d2FileEditor.putUserData(D2_FILE_LAYOUT, layout)
     e.d2FileEditor.refreshD2()
   }
+
+  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-class OpenLayoutEngineOverviewAction : AnAction(
+private const val LAYOUT_DOCS = "https://d2lang.com/tour/layouts"
+
+private class OpenLayoutEngineOverviewAction : AnAction(
   D2Bundle.messagePointer("d2.open.layout.documentation"),
   AllIcons.General.Web
-) {
-  companion object {
-    private const val LAYOUT_DOCS = "https://d2lang.com/tour/layouts"
-  }
-
+), DumbAware {
   override fun actionPerformed(e: AnActionEvent) = BrowserUtil.browse(LAYOUT_DOCS)
 }
