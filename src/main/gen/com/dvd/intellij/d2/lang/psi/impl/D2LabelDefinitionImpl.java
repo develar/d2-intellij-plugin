@@ -13,7 +13,7 @@ import com.dvd.intellij.d2.lang.psi.*;
 
 public class D2LabelDefinitionImpl extends D2CompositeElementImpl implements D2LabelDefinition {
 
-  public D2LabelDefinitionImpl(@NotNull ASTNode node) {
+  public D2LabelDefinitionImpl(ASTNode node) {
     super(node);
   }
 

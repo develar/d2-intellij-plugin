@@ -1,6 +1,5 @@
 package com.dvd.intellij.d2.ide.service
 
-import ai.grazie.utils.measureMillis
 import com.dvd.intellij.d2.components.D2Layout
 import com.dvd.intellij.d2.components.D2Theme
 import com.dvd.intellij.d2.ide.action.ConversionOutput
@@ -9,7 +8,6 @@ import com.dvd.intellij.d2.ide.execution.D2Command
 import com.dvd.intellij.d2.ide.execution.D2CommandOutput
 import com.dvd.intellij.d2.ide.format.D2FormatterResult
 import com.dvd.intellij.d2.ide.toolWindow.D2ToolWindowService
-import com.dvd.intellij.d2.ide.utils.javaPath
 import com.intellij.execution.process.*
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
@@ -17,22 +15,18 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
-import org.apache.batik.transcoder.TranscoderInput
-import org.apache.batik.transcoder.TranscoderOutput
-import org.apache.batik.transcoder.image.JPEGTranscoder
-import org.apache.batik.transcoder.image.PNGTranscoder
-import org.apache.batik.transcoder.image.TIFFTranscoder
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.ServerSocket
-import kotlin.io.path.readBytes
+import javax.imageio.ImageIO
+import kotlin.system.measureTimeMillis
 
-class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
+class D2ServiceImpl : D2Service, Disposable {
   companion object {
     private val coroutineContext = Job() + Dispatchers.IO
     private val LOG = Logger.getInstance(D2ServiceImpl::class.java)
@@ -74,7 +68,7 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
     oldExec?.cmd?.process?.let {
       it.destroyProcess()
       @Suppress("ControlFlowWithEmptyBody")
-      val terminationTime = measureMillis {
+      val terminationTime = measureTimeMillis {
         // background process? ~5ms
         while (!it.isProcessTerminated);
       }
@@ -120,24 +114,25 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
   }
 
   override fun convert(file: VirtualFile, format: ConversionOutput): ByteArray {
-    val input = TranscoderInput(file.javaPath.toUri().toString())
-    return ByteArrayOutputStream().use {
-      val output = TranscoderOutput(it)
-      when (format) {
-        ConversionOutput.PNG -> PNGTranscoder()
-        ConversionOutput.JPG -> JPEGTranscoder().apply {
-          addTranscodingHint(JPEGTranscoder.KEY_QUALITY, 0.8f)
-        }
-
-        ConversionOutput.TIFF -> TIFFTranscoder()
-        ConversionOutput.SVG -> return file.javaPath.readBytes()
-      }.transcode(input, output)
-
-      it.toByteArray()
+    if (format == ConversionOutput.SVG) {
+      return file.contentsToByteArray()
     }
+
+    val input = file.inputStream.use { ImageIO.read(it) }
+    val ext = when (format) {
+      ConversionOutput.PNG -> "png"
+      ConversionOutput.JPG -> "jpeg"
+      ConversionOutput.TIFF -> "tiff"
+      else -> {
+        error("cannot be")
+      }
+    }
+    val out = BufferExposingByteArrayOutputStream()
+    ImageIO.write(input, ext, out)
+    return out.toByteArray()
   }
 
-  override fun onTextAvailable(fileEditor: FileEditor, event: ProcessEvent, outputType: Key<*>) {
+  fun onTextAvailable(fileEditor: FileEditor, event: ProcessEvent, outputType: Key<*>) {
     buildString {
       append("[process] ")
       if (outputType == ProcessOutputType.SYSTEM) {
@@ -158,7 +153,7 @@ class D2ServiceImpl : D2Service, FileProcessListener, Disposable {
     (fileEditor as D2FileEditorImpl).project.service<D2ToolWindowService>().update(fileEditor)
   }
 
-  override fun processWillTerminate(
+  fun processWillTerminate(
     fileEditor: FileEditor,
     event: ProcessEvent,
     willBeDestroyed: Boolean,

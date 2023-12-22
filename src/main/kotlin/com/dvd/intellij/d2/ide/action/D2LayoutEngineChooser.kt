@@ -5,13 +5,12 @@ import com.dvd.intellij.d2.ide.editor.images.D2FileEditorImpl.Companion.D2_FILE_
 import com.dvd.intellij.d2.ide.service.D2Service
 import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.dvd.intellij.d2.ide.utils.d2FileEditor
-import com.dvd.intellij.d2.ide.utils.file
 import com.intellij.icons.AllIcons
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.components.service
 
-class D2LayoutEngineActionGroup : ActionGroup() {
+private class D2LayoutEngineActionGroup : ActionGroup() {
   override fun getChildren(e: AnActionEvent?): Array<AnAction> {
     if (e == null) return emptyArray()
     val layouts = service<D2Service>().layoutEngines ?: return emptyArray()
@@ -24,8 +23,9 @@ class D2LayoutEngineActionGroup : ActionGroup() {
   }
 }
 
-class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
+private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
   layout.name,
+  @Suppress("HardCodedStringLiteral")
   buildString {
     append(layout.description)
     if (layout.bundled == true) {
@@ -47,8 +47,7 @@ class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
 }
 
 class OpenLayoutEngineOverviewAction : AnAction(
-  D2Bundle["d2.open.layout.documentation"],
-  D2Bundle["d2.open.layout.documentation"],
+  D2Bundle.messagePointer("d2.open.layout.documentation"),
   AllIcons.General.Web
 ) {
   companion object {

@@ -180,7 +180,7 @@ class D2SvgEditorUI(
     val image = document.value
     if (image != null) {
       val file = fileEditor.generatedFile ?: return
-      infoLabel?.text = D2Bundle["d2.image.info", image.width, image.height, StringUtil.formatFileSize(file.length)]
+      infoLabel?.text = D2Bundle.message("d2.image.info", image.width, image.height, StringUtil.formatFileSize(file.length))
     } else {
       infoLabel?.text = null
     }
@@ -206,7 +206,7 @@ class D2SvgEditorUI(
 
   override fun isTransparencyChessboardVisible(): Boolean = imageComponent.isTransparencyChessboardVisible
 
-  // Disable for thumbnails action
+  // Disable for thumbnail action
   override fun isEnabledForActionPlace(place: String): Boolean = ThumbnailViewActions.ACTION_PLACE != place
 
   override fun setGridVisible(visible: Boolean) {

@@ -9,17 +9,16 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 
-class D2InfoAction : AnAction() {
+private class D2InfoAction : AnAction() {
   override fun actionPerformed(e: AnActionEvent) {
     val version = service<D2Service>().compilerVersion ?: return
-
     NotificationGroupManager.getInstance()
       .getNotificationGroup(NOTIFICATION_GROUP)
       .createNotification(
-        D2Bundle["d2"],
-        D2Bundle["d2.compiler.info", version],
-        NotificationType.INFORMATION
-      )
-      .notify(e.project)
+        D2Bundle.message("d2"),
+        D2Bundle.message("d2.compiler.info", version),
+    NotificationType.INFORMATION
+    )
+    .notify(e.project)
   }
 }

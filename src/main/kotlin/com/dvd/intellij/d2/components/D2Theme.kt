@@ -1,8 +1,9 @@
 package com.dvd.intellij.d2.components
 
+import com.intellij.openapi.util.NlsSafe
 import java.io.Serializable
 
-enum class D2Theme(val id: Int, val tName: String) : Serializable {
+enum class D2Theme(val id: Int, @NlsSafe val tName: String) : Serializable {
   DEFAULT(0, "Default"),
   NEUTRAL_GREY(1, "Neutral grey"),
   FLAGSHIP_TERRASTRUCT(3, "Flagship Terrastruct"),

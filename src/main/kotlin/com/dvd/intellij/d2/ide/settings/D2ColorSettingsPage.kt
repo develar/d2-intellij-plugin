@@ -20,51 +20,51 @@ class D2ColorSettingsPage : ColorSettingsPage {
 
   override fun getAttributeDescriptors(): Array<AttributesDescriptor> = attributesDescriptors {
     descriptor {
-      displayName = D2Bundle["descriptor.comment"]
+      displayName = D2Bundle.messagePointer("descriptor.comment")
       attrKey = D2SyntaxHighlighter.COMMENT
     }
-    descriptors(D2Bundle["descriptors.braces_operators"]) {
+    descriptors(D2Bundle.messagePointer("descriptors.braces_operators")) {
       descriptor {
-        displayName = D2Bundle["descriptor.arrows"]
+        displayName = D2Bundle.messagePointer("descriptor.arrows")
         attrKey = D2SyntaxHighlighter.ARROWS
       }
       descriptor {
-        displayName = D2Bundle["descriptor.dot"]
+        displayName = D2Bundle.messagePointer("descriptor.dot")
         attrKey = D2SyntaxHighlighter.DOT
       }
       descriptor {
-        displayName = D2Bundle["descriptor.colon"]
+        displayName = D2Bundle.messagePointer("descriptor.colon")
         attrKey = D2SyntaxHighlighter.COLON
       }
       descriptor {
-        displayName = D2Bundle["descriptor.semicolon"]
+        displayName = D2Bundle.messagePointer("descriptor.semicolon")
         attrKey = D2SyntaxHighlighter.SEMICOLON
       }
       descriptor {
-        displayName = D2Bundle["descriptor.braces"]
+        displayName = D2Bundle.messagePointer("descriptor.braces")
         attrKey = D2SyntaxHighlighter.BRACES
       }
     }
-    descriptors(D2Bundle["descriptors.identifiers"]) {
+    descriptors(D2Bundle.messagePointer("descriptors.identifiers")) {
       descriptor {
-        displayName = D2Bundle["descriptor.identifier.default"]
+        displayName = D2Bundle.messagePointer("descriptor.identifier.default")
         attrKey = D2SyntaxHighlighter.IDENTIFIERS
       }
       descriptor {
-        displayName = D2Bundle["descriptor.identifier.instance_field"]
+        displayName = D2Bundle.messagePointer("descriptor.identifier.instance_field")
         attrKey = D2SyntaxHighlighter.FIELDS
       }
     }
     descriptor {
-      displayName = D2Bundle["descriptor.keywords"]
+      displayName = D2Bundle.messagePointer("descriptor.keywords")
       attrKey = D2SyntaxHighlighter.KEYWORDS
     }
     descriptor {
-      displayName = D2Bundle["descriptor.strings"]
+      displayName = D2Bundle.messagePointer("descriptor.strings")
       attrKey = D2SyntaxHighlighter.STRING
     }
     descriptor {
-      displayName = D2Bundle["descriptor.numbers"]
+      displayName = D2Bundle.messagePointer("descriptor.numbers")
       attrKey = D2SyntaxHighlighter.NUMBERS
     }
   }

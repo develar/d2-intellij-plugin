@@ -97,7 +97,7 @@ tasks {
     purgeOldFiles.set(true)
   }
   withType<KotlinCompile> {
-    dependsOn(generateParser, generateLexer)
+//    dependsOn(generateParser, generateLexer)
 
     kotlinOptions {
       jvmTarget = properties("jvm.target")

@@ -13,7 +13,7 @@ import com.dvd.intellij.d2.lang.psi.*;
 
 public class D2ConnectorImpl extends D2CompositeElementImpl implements D2Connector {
 
-  public D2ConnectorImpl(@NotNull ASTNode node) {
+  public D2ConnectorImpl(ASTNode node) {
     super(node);
   }
 

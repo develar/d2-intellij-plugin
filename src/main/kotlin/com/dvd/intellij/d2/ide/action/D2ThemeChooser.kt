@@ -30,8 +30,7 @@ class D2ThemeAction(private val theme: D2Theme) : ToggleAction(theme.tName) {
 }
 
 class OpenThemeOverviewAction : AnAction(
-  D2Bundle["d2.open.theme.documentation"],
-  D2Bundle["d2.open.theme.documentation"],
+  D2Bundle.messagePointer("d2.open.theme.documentation"),
   AllIcons.General.Web
 ) {
   companion object {

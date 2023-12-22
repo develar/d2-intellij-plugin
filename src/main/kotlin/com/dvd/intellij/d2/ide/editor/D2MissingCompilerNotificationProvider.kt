@@ -13,8 +13,7 @@ import com.intellij.ui.EditorNotificationProvider
 import java.util.function.Function
 import javax.swing.JComponent
 
-class D2MissingCompilerNotificationProvider : EditorNotificationProvider, DumbAware {
-
+private class D2MissingCompilerNotificationProvider : EditorNotificationProvider, DumbAware {
   override fun collectNotificationData(project: Project, file: VirtualFile): Function<in FileEditor, out JComponent?>? {
     val installed = service<D2Service>().isCompilerInstalled
 
@@ -27,7 +26,7 @@ class D2MissingCompilerNotificationProvider : EditorNotificationProvider, DumbAw
     fileEditor: FileEditor
   ) : EditorNotificationPanel(fileEditor, Status.Warning) {
     init {
-      text = D2Bundle["d2.executable.not.found.notification"]
+      text = D2Bundle.message("d2.executable.not.found.notification")
     }
   }
 }

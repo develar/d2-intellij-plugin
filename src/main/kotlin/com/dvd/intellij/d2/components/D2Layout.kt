@@ -1,7 +1,9 @@
 package com.dvd.intellij.d2.components
 
+import com.intellij.openapi.util.NlsSafe
+
 data class D2Layout(
-  val name: String,
+  @NlsSafe val name: String,
   val bundled: Boolean? = false,
   val description: String,
 ) {
