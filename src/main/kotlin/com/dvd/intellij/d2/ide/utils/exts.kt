@@ -14,7 +14,7 @@ import java.nio.file.Path
 import kotlin.io.path.Path
 
 val isD2Installed = service<D2Service>().isCompilerInstalled
-val VirtualFile.isD2 get() = fileType == D2FileType.INSTANCE
+val VirtualFile.isD2 get() = fileType == D2FileType
 
 val AnActionEvent.file
   get() = getData(PlatformDataKeys.VIRTUAL_FILE) as VirtualFile

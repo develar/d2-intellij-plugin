@@ -11,15 +11,15 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <fileType name="D2"
-              language="D2"
+              language="d2"
               extensions="d2"
               implementationClass="com.dvd.intellij.d2.ide.file.D2FileType"
               fieldName="INSTANCE"/>
 
-    <lang.parserDefinition language="D2" implementationClass="com.dvd.intellij.d2.ide.parser.D2ParserDefinition"/>
-    <lang.braceMatcher language="D2" implementationClass="com.dvd.intellij.d2.ide.editor.D2BraceMatcher"/>
-    <lang.commenter language="D2" implementationClass="com.dvd.intellij.d2.ide.editor.D2Commenter"/>
-    <lang.syntaxHighlighterFactory language="D2"
+    <lang.parserDefinition language="d2" implementationClass="com.dvd.intellij.d2.ide.parser.D2ParserDefinition"/>
+    <lang.braceMatcher language="d2" implementationClass="com.dvd.intellij.d2.ide.editor.D2BraceMatcher"/>
+    <lang.commenter language="d2" implementationClass="com.dvd.intellij.d2.ide.editor.D2Commenter"/>
+    <lang.syntaxHighlighterFactory language="d2"
                                    implementationClass="com.dvd.intellij.d2.ide.lang.D2SyntaxHighlighterFactory"/>
 
     <colorSettingsPage implementation="com.dvd.intellij.d2.ide.settings.D2ColorSettingsPage"/>
@@ -28,21 +28,21 @@
 
     <fileEditorProvider implementation="com.dvd.intellij.d2.ide.editor.D2FileEditorProvider"/>
 
-    <psi.referenceContributor language="D2"
+    <psi.referenceContributor language="d2"
                               implementation="com.dvd.intellij.d2.ide.reference.D2UrlReferenceContributor"/>
 
     <formattingService implementation="com.dvd.intellij.d2.ide.format.D2FormatterService"/>
 
-    <completion.contributor language="D2"
+    <completion.contributor language="d2"
                             implementationClass="com.dvd.intellij.d2.ide.completion.D2ShapesTypesCompletionContributor"/>
-    <completion.contributor language="D2"
+    <completion.contributor language="d2"
                             implementationClass="com.dvd.intellij.d2.ide.completion.D2StyleCompletionContributor"/>
-    <completion.contributor language="D2"
+    <completion.contributor language="d2"
                             implementationClass="com.dvd.intellij.d2.ide.completion.D2BlockCompletionContributor"/>
-    <completion.contributor language="D2"
+    <completion.contributor language="d2"
                             implementationClass="com.dvd.intellij.d2.ide.completion.D2ConnectorCompletionContributor"/>
 
-    <spellchecker.support language="D2" implementationClass="com.dvd.intellij.d2.ide.spell.D2SpellCheckerStrategy"/>
+    <spellchecker.support language="d2" implementationClass="com.dvd.intellij.d2.ide.spell.D2SpellCheckerStrategy"/>
 
     <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
 
