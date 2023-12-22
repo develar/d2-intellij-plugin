@@ -26,7 +26,7 @@ import java.net.ServerSocket
 import javax.imageio.ImageIO
 import kotlin.system.measureTimeMillis
 
-class D2ServiceImpl : D2Service, Disposable {
+private class D2ServiceImpl : D2Service, Disposable {
   companion object {
     private val coroutineContext = Job() + Dispatchers.IO
     private val LOG = Logger.getInstance(D2ServiceImpl::class.java)
@@ -35,8 +35,9 @@ class D2ServiceImpl : D2Service, Disposable {
 
   override val map: Map<FileEditor, D2CommandOutput.Generate> = _map
 
-  override val compilerVersion: String? = simpleRun(D2Command.Version)?.version
-  override val isCompilerInstalled = compilerVersion != null
+  override fun getCompilerVersion(): String? = simpleRun(D2Command.Version)?.version
+
+  override fun isCompilerInstalled() = getCompilerVersion() != null
 
   override val layoutEngines: List<D2Layout>? = simpleRun(D2Command.LayoutEngines)?.layouts
 
@@ -180,35 +181,34 @@ class D2ServiceImpl : D2Service, Disposable {
       app.invokeLater(deleteFile)
     }
   }
+}
 
-  private fun generateTempSvg(): VirtualFile {
-    val temp = File.createTempFile("d2_temp_svg", ".svg")
-    temp.writeText("""<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>""")
+private fun generateTempSvg(): VirtualFile {
+  val temp = File.createTempFile("d2_temp_svg", ".svg")
+  temp.writeText("""<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>""")
 
-    return VfsUtil.findFile(temp.toPath(), true) ?: error("Cannot find temp file ${temp.absolutePath}")
-  }
+  return VfsUtil.findFile(temp.toPath(), true) ?: error("Cannot find temp file ${temp.absolutePath}")
+}
 
-  private fun prepare(cmd: D2Command<*>, listener: ProcessListener?) =
-    KillableColoredProcessHandler.Silent(cmd.gcl.apply {
-      withEnvironment(cmd.envVars())
-    }).apply {
-      if (listener != null) {
-        addProcessListener(listener)
-      }
-    }
-
-  // null if d2 executable not found
-  private fun <O> simpleRun(cmd: D2Command<O>): O? = runBlocking(coroutineContext) {
-    try {
-      val processOut = ScriptRunnerUtil.getProcessOutput(
-        cmd.gcl,
-        ScriptRunnerUtil.STDOUT_OR_STDERR_OUTPUT_KEY_FILTER,
-        500
-      )
-      cmd.parseOutput(processOut)
-    } catch (_: Exception) {
-      null
+private fun prepare(command: D2Command<*>, listener: ProcessListener?) =
+  KillableColoredProcessHandler.Silent(command.createCommandLine().apply {
+    withEnvironment(command.envVars())
+  }).apply {
+    if (listener != null) {
+      addProcessListener(listener)
     }
   }
 
+// null if d2 executable not found
+private fun <O> simpleRun(cmd: D2Command<O>): O? = runBlocking(D2ServiceImpl.coroutineContext) {
+  try {
+    val processOut = ScriptRunnerUtil.getProcessOutput(
+      cmd.createCommandLine(),
+      ScriptRunnerUtil.STDOUT_OR_STDERR_OUTPUT_KEY_FILTER,
+      500
+    )
+    cmd.parseOutput(processOut)
+  } catch (_: Exception) {
+    null
+  }
 }

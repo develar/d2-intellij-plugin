@@ -21,7 +21,7 @@ private class D2FormatterService : AsyncDocumentFormattingService() {
   override fun createFormattingTask(request: AsyncFormattingRequest): FormattingTask? {
     val service = service<D2Service>()
 
-    if (!service.isCompilerInstalled) {
+    if (!service.isCompilerInstalled()) {
       return null
     }
 

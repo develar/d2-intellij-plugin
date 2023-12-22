@@ -13,7 +13,7 @@ class D2FileCloseListener : FileEditorManagerListener.Before {
     val service = service<D2Service>()
 
     if (!file.isD2) return
-    if (!service.isCompilerInstalled) return
+    if (!service.isCompilerInstalled()) return
 
     val fileEditor = (source.getSelectedEditor(file) as? TextEditorWithPreview)?.previewEditor ?: return
     service.closeFile(fileEditor)

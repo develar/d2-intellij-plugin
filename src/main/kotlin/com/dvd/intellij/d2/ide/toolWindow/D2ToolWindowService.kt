@@ -24,14 +24,15 @@ interface D2ToolWindowService {
   fun update(fileEditor: FileEditor)
 }
 
-class D2ToolWindowServiceImpl(val project: Project) : D2ToolWindowService {
-  private val twm = ToolWindowManager.getInstance(project)
-  private val d2tw = twm.getToolWindow(D2_TOOLWINDOW_ID)
+private class D2ToolWindowServiceImpl(project: Project) : D2ToolWindowService {
+  private val d2tw = ToolWindowManager.getInstance(project).getToolWindow(D2_TOOLWINDOW_ID)
   private val tcb = TextConsoleBuilderFactory.getInstance().createBuilder(project)
   private val fileEditorKey = Key<Int>("d2_content_fileEditor")
 
   override fun editorOpened(fileEditor: FileEditor) {
-    if (!service<D2Service>().isCompilerInstalled) return
+    if (!service<D2Service>().isCompilerInstalled()) {
+      return
+    }
     if (!fileEditor.file.isD2) return
     if (d2tw == null) return
 
@@ -47,7 +48,7 @@ class D2ToolWindowServiceImpl(val project: Project) : D2ToolWindowService {
   }
 
   override fun editorClosed(fileEditor: FileEditor) {
-    if (!service<D2Service>().isCompilerInstalled) return
+    if (!service<D2Service>().isCompilerInstalled()) return
     if (!fileEditor.file.isD2) return
     if (d2tw == null) return
 
@@ -108,7 +109,7 @@ class D2ToolWindowServiceImpl(val project: Project) : D2ToolWindowService {
 
 
 class D2ToolWindow : ToolWindowFactory, DumbAware {
-  override fun isApplicable(project: Project): Boolean = service<D2Service>().isCompilerInstalled
+  override fun isApplicable(project: Project): Boolean = service<D2Service>().isCompilerInstalled()
 
   override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) = Unit
 }

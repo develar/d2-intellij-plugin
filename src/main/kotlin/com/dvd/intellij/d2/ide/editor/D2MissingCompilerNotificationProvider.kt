@@ -15,7 +15,7 @@ import javax.swing.JComponent
 
 private class D2MissingCompilerNotificationProvider : EditorNotificationProvider, DumbAware {
   override fun collectNotificationData(project: Project, file: VirtualFile): Function<in FileEditor, out JComponent?>? {
-    val installed = service<D2Service>().isCompilerInstalled
+    val installed = service<D2Service>().isCompilerInstalled()
 
     return if (file.isD2 && !installed) {
       Function { fileEditor -> D2MissingCompilerNotificationPanel(fileEditor) }

@@ -16,7 +16,7 @@ class D2FileEditorProvider : FileEditorProvider, DumbAware {
   override fun accept(project: Project, file: VirtualFile): Boolean {
     if (!file.isD2) return false
 
-    return service<D2Service>().isCompilerInstalled
+    return service<D2Service>().isCompilerInstalled()
   }
 
   override fun createEditor(project: Project, file: VirtualFile): FileEditor {

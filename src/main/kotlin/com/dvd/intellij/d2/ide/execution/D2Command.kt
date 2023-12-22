@@ -44,13 +44,13 @@ sealed class D2Command<O> {
     override fun parseOutput(output: String): D2CommandOutput.Generate = D2CommandOutput.Generate(this, output)
   }
 
-  /*data*/ object Version : D2Command<D2CommandOutput.Version>() {
+  data object Version : D2Command<D2CommandOutput.Version>() {
     override val args = listOf("--version")
-    override fun parseOutput(output: String): D2CommandOutput.Version =
-      D2CommandOutput.Version(output.removePrefix("v").removeSuffix("\n"))
+
+    override fun parseOutput(output: String): D2CommandOutput.Version = D2CommandOutput.Version(output.removePrefix("v").removeSuffix("\n"))
   }
 
-  /*data*/ object LayoutEngines : D2Command<D2CommandOutput.LayoutEngines>() {
+  data object LayoutEngines : D2Command<D2CommandOutput.LayoutEngines>() {
     private val LAYOUT_ENGINE_REGEX = "(\\w+)(?:\\s(\\(bundled\\)))?\\s-\\s(.*)".toRegex()
 
     override val args = listOf("layout")
@@ -84,5 +84,5 @@ sealed class D2Command<O> {
     }
   }
 
-  val gcl get() = GeneralCommandLine("d2", *args.toTypedArray())
+  fun createCommandLine(): GeneralCommandLine = GeneralCommandLine("d2", *args.toTypedArray())
 }

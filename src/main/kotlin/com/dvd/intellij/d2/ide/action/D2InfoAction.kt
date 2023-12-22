@@ -11,7 +11,7 @@ import com.intellij.openapi.components.service
 
 private class D2InfoAction : AnAction() {
   override fun actionPerformed(e: AnActionEvent) {
-    val version = service<D2Service>().compilerVersion ?: return
+    val version = service<D2Service>().getCompilerVersion() ?: return
     NotificationGroupManager.getInstance()
       .getNotificationGroup(NOTIFICATION_GROUP)
       .createNotification(

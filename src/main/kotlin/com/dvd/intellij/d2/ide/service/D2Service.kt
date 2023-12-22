@@ -8,12 +8,12 @@ import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
 
-
 interface D2Service {
   val map: Map<FileEditor, D2CommandOutput.Generate>
 
-  val isCompilerInstalled: Boolean
-  val compilerVersion: String?
+  fun isCompilerInstalled(): Boolean
+
+  fun getCompilerVersion(): String?
 
   val layoutEngines: List<D2Layout>?
 
