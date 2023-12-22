@@ -8,8 +8,7 @@ import com.intellij.spellchecker.tokenizer.SpellcheckingStrategy
 import com.intellij.spellchecker.tokenizer.TokenConsumer
 import com.intellij.spellchecker.tokenizer.Tokenizer
 
-class D2SpellCheckerStrategy : SpellcheckingStrategy() {
-
+private class D2SpellCheckerStrategy : SpellcheckingStrategy() {
   // todo
   override fun getTokenizer(element: PsiElement?): Tokenizer<*> = when (element) {
     is PsiComment -> D2CommentTokenizer

@@ -7,7 +7,7 @@ import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.fileEditor.TextEditorWithPreview
 import com.intellij.openapi.vfs.VirtualFile
 
-class D2FileToolWindowListener : FileEditorManagerListener, FileEditorManagerListener.Before {
+private class D2FileToolWindowListener : FileEditorManagerListener, FileEditorManagerListener.Before {
   override fun fileOpened(source: FileEditorManager, file: VirtualFile) {
     if (!file.isD2) {
       return

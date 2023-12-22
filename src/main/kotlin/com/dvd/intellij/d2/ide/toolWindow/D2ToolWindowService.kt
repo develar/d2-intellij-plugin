@@ -134,7 +134,6 @@ private class D2ToolWindowServiceImpl(private val project: Project) : D2ToolWind
   }
 }
 
-
 private class D2ToolWindow : ToolWindowFactory, DumbAware {
   override fun isApplicable(project: Project): Boolean = service<D2Service>().isCompilerInstalled()
 
