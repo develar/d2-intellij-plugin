@@ -33,7 +33,7 @@
         FLOAT_LITERAL          = "regexp:\d+\.\d+"
         STRING_LITERAL         = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\\'|\\)*\")"
         // allow `stroke-dash`
-        IDENTIFIER             = "regexp:[a-zA-Z_*0-9]+(?:-[a-zA-Z_*0-9]+)*"
+        IDENTIFIER             = "regexp:[a-zA-Z_*0-9]+(-[a-zA-Z_*0-9]+)*"
         NEWLINE                = "regexp:\r?\n"
         SPACE                  = "regexp:\s+"
     ]
