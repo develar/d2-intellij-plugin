@@ -13,7 +13,7 @@ import com.dvd.intellij.d2.lang.psi.*;
 
 public class D2SubShapeDefinitionImpl extends D2CompositeElementImpl implements D2SubShapeDefinition {
 
-  public D2SubShapeDefinitionImpl(ASTNode node) {
+  public D2SubShapeDefinitionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
