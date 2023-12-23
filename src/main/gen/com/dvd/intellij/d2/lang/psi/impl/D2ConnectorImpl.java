@@ -27,28 +27,4 @@ public class D2ConnectorImpl extends D2CompositeElementImpl implements D2Connect
     else super.accept(visitor);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getArrow() {
-    return findChildByType(ARROW);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getDoubleArrow() {
-    return findChildByType(DOUBLE_ARROW);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getDoubleHyphenArrow() {
-    return findChildByType(DOUBLE_HYPHEN_ARROW);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getReverseArrow() {
-    return findChildByType(REVERSE_ARROW);
-  }
-
 }

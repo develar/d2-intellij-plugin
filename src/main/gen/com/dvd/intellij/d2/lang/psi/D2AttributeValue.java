@@ -8,16 +8,4 @@ import com.dvd.intellij.d2.lang.D2CompositeElement;
 
 public interface D2AttributeValue extends D2CompositeElement {
 
-  @Nullable
-  PsiElement getFloatLiteral();
-
-  @Nullable
-  PsiElement getIdentifier();
-
-  @Nullable
-  PsiElement getNumericLiteral();
-
-  @Nullable
-  PsiElement getStringLiteral();
-
 }

@@ -22,9 +22,6 @@ import static com.dvd.intellij.d2.lang.D2ElementTypes.*;
 %type IElementType
 %unicode
 
-EOL=\R
-WHITE_SPACE=\s+
-
 ARROW=-+>
 REVERSE_ARROW=<-+
 DOUBLE_HYPHEN_ARROW=--+
@@ -34,8 +31,7 @@ NUMERIC_LITERAL=[0-9]+
 FLOAT_LITERAL=[0-9]+\.[0-9]+
 STRING_LITERAL=('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\'|\\)*\")
 IDENTIFIER=[a-zA-Z_*0-9]+(-[a-zA-Z_*0-9]+)*
-NEWLINE=\r?\n
-SPACE=[ \t\n\x0B\f\r]+
+WHITE_SPACE=[ \t\n\x0B\f\r]+
 
 %%
 <YYINITIAL> {
@@ -46,7 +42,6 @@ SPACE=[ \t\n\x0B\f\r]+
   "."                         { return DOT; }
   ";"                         { return SEMICOLON; }
   ":"                         { return COLON; }
-  "*"                         { return STAR; }
   "true"                      { return TRUE; }
   "false"                     { return FALSE; }
 
@@ -59,9 +54,6 @@ SPACE=[ \t\n\x0B\f\r]+
   {FLOAT_LITERAL}             { return FLOAT_LITERAL; }
   {STRING_LITERAL}            { return STRING_LITERAL; }
   {IDENTIFIER}                { return IDENTIFIER; }
-  {NEWLINE}                   { return NEWLINE; }
-  {SPACE}                     { return SPACE; }
-
 }
 
 [^] { return BAD_CHARACTER; }

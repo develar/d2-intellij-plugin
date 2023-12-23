@@ -19,22 +19,21 @@ public interface D2ElementTypes {
   IElementType SUB_SHAPE_DEFINITION = new D2ElementType("SUB_SHAPE_DEFINITION");
 
   IElementType ARROW = new D2TokenType("ARROW");
-  IElementType COLON = new D2TokenType(":");
+  IElementType COLON = new D2TokenType("COLON");
   IElementType COMMENT = new D2TokenType("COMMENT");
-  IElementType DOT = new D2TokenType(".");
+  IElementType DOT = new D2TokenType("DOT");
   IElementType DOUBLE_ARROW = new D2TokenType("DOUBLE_ARROW");
   IElementType DOUBLE_HYPHEN_ARROW = new D2TokenType("DOUBLE_HYPHEN_ARROW");
-  IElementType FALSE = new D2TokenType("false");
+  IElementType FALSE = new D2TokenType("FALSE");
   IElementType FLOAT_LITERAL = new D2TokenType("FLOAT_LITERAL");
   IElementType IDENTIFIER = new D2TokenType("IDENTIFIER");
-  IElementType LBRACE = new D2TokenType("{");
+  IElementType LBRACE = new D2TokenType("LBRACE");
   IElementType NUMERIC_LITERAL = new D2TokenType("NUMERIC_LITERAL");
-  IElementType RBRACE = new D2TokenType("}");
+  IElementType RBRACE = new D2TokenType("RBRACE");
   IElementType REVERSE_ARROW = new D2TokenType("REVERSE_ARROW");
-  IElementType SEMICOLON = new D2TokenType(";");
-  IElementType STAR = new D2TokenType("*");
+  IElementType SEMICOLON = new D2TokenType("SEMICOLON");
   IElementType STRING_LITERAL = new D2TokenType("STRING_LITERAL");
-  IElementType TRUE = new D2TokenType("true");
+  IElementType TRUE = new D2TokenType("TRUE");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

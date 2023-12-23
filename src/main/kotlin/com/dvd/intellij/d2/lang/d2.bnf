@@ -14,32 +14,9 @@
     psiImplClassSuffix="Impl"
     psiPackage="com.dvd.intellij.d2.lang.psi"
     psiImplPackage="com.dvd.intellij.d2.lang.psi.impl"
-
-    tokens=[
-        LBRACE                 = "{"
-        RBRACE                 = "}"
-        DOT                    = "."
-        SEMICOLON              = ";"
-        COLON                  = ":"
-        ARROW                  = "regexp:-+>"
-        REVERSE_ARROW          = "regexp:<-+"
-        DOUBLE_HYPHEN_ARROW    = "regexp:--+"
-        DOUBLE_ARROW           = "regexp:<-+>"
-        COMMENT                = "regexp:#.*"
-        STAR                   = "*"
-        TRUE                   = "true"
-        FALSE                  = "false"
-        NUMERIC_LITERAL        = "regexp:\d+"
-        FLOAT_LITERAL          = "regexp:\d+\.\d+"
-        STRING_LITERAL         = "regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\\'|\\)*\")"
-        // allow `stroke-dash`
-        IDENTIFIER             = "regexp:[a-zA-Z_*0-9]+(-[a-zA-Z_*0-9]+)*"
-        NEWLINE                = "regexp:\r?\n"
-        SPACE                  = "regexp:\s+"
-    ]
 }
 
-File ::= !<<eof>> ShapeDefinitions*
+File ::= !<<eof>> (ShapeDefinitions | COMMENT)*
 
 // bad tree structure: ci.deploys->clouds<-a.sub:test
 ShapeDefinitions ::= ShapeDefinition (ShapeConnection | SubShapeDefinition | InlineShapeDefinition)* ShapeExtras? {

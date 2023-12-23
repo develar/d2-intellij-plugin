@@ -93,7 +93,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !<<eof>> ShapeDefinitions*
+  // !<<eof>> (ShapeDefinitions | COMMENT)*
   static boolean File(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "File")) return false;
     boolean r;
@@ -114,15 +114,24 @@ public class D2Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ShapeDefinitions*
+  // (ShapeDefinitions | COMMENT)*
   private static boolean File_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "File_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!ShapeDefinitions(b, l + 1)) break;
+      if (!File_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "File_1", c)) break;
     }
     return true;
+  }
+
+  // ShapeDefinitions | COMMENT
+  private static boolean File_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "File_1_0")) return false;
+    boolean r;
+    r = ShapeDefinitions(b, l + 1);
+    if (!r) r = consumeToken(b, COMMENT);
+    return r;
   }
 
   /* ********************************************************** */

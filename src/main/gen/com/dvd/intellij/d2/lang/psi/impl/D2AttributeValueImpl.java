@@ -27,28 +27,4 @@ public class D2AttributeValueImpl extends D2CompositeElementImpl implements D2At
     else super.accept(visitor);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getFloatLiteral() {
-    return findChildByType(FLOAT_LITERAL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getNumericLiteral() {
-    return findChildByType(NUMERIC_LITERAL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getStringLiteral() {
-    return findChildByType(STRING_LITERAL);
-  }
-
 }

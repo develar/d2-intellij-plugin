@@ -8,16 +8,4 @@ import com.dvd.intellij.d2.lang.D2CompositeElement;
 
 public interface D2Connector extends D2CompositeElement {
 
-  @Nullable
-  PsiElement getArrow();
-
-  @Nullable
-  PsiElement getDoubleArrow();
-
-  @Nullable
-  PsiElement getDoubleHyphenArrow();
-
-  @Nullable
-  PsiElement getReverseArrow();
-
 }
