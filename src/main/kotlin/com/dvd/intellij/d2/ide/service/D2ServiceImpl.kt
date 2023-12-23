@@ -8,34 +8,88 @@ import com.dvd.intellij.d2.ide.editor.images.D2_FILE_THEME
 import com.dvd.intellij.d2.ide.execution.D2Command
 import com.dvd.intellij.d2.ide.execution.D2CommandOutput
 import com.dvd.intellij.d2.ide.format.D2FormatterResult
+import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.intellij.execution.process.*
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.fileEditor.FileEditor
+import com.intellij.openapi.fileEditor.TextEditor
+import com.intellij.openapi.fileEditor.TextEditorWithPreview
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream
+import com.intellij.openapi.util.removeUserData
+import com.intellij.ui.EditorNotifications
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.net.ServerSocket
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.CancellationException
+import java.util.function.Supplier
 import javax.imageio.ImageIO
 import kotlin.system.measureTimeMillis
 
 private val LOG = logger<D2ServiceImpl>()
 
-private class D2ServiceImpl : D2Service, Disposable {
-  private val _map: MutableMap<FileEditor, D2CommandOutput.Generate> = HashMap()
+val D2_FILE_NOTIFICATION: Key<Supplier<String>> = Key("d2EditorNotification")
 
-  override val map: Map<FileEditor, D2CommandOutput.Generate> = _map
+private class D2ServiceImpl(private val coroutineScope: CoroutineScope) : D2Service, Disposable {
+  private val editorToState: MutableMap<FileEditor, D2CommandOutput.Generate> = HashMap()
 
-  override fun getCompilerVersion(): String? = simpleRun(D2Command.Version)?.version
+  override val map: Map<FileEditor, D2CommandOutput.Generate> = editorToState
+
+  override fun getCompilerVersion(): String? {
+    try {
+      return executeAndGetOutput(D2Command.Version)?.version
+    } catch (ignore: ProcessNotCreatedException) {
+    } catch (e: Throwable) {
+      LOG.error(e)
+    }
+    return null
+  }
 
   override fun isCompilerInstalled() = getCompilerVersion() != null
 
-  override fun getLayoutEngines(): List<D2Layout>? = simpleRun(D2Command.LayoutEngines)?.layouts
+  override fun getLayoutEngines(): List<D2Layout>? = executeAndGetOutputOrNull(D2Command.LayoutEngines)?.layouts
+
+  override fun scheduleCompile(fileEditor: TextEditor) {
+    coroutineScope.launch {
+      if (!fileEditor.isValid) {
+        return@launch
+      }
+
+      val project = fileEditor.editor.project ?: return@launch
+      if (project.isDisposed) {
+        return@launch
+      }
+
+      try {
+        withContext(Dispatchers.IO) {
+          compile(fileEditor)
+        }
+        if (fileEditor.removeUserData(D2_FILE_NOTIFICATION) != null) {
+          EditorNotifications.getInstance(project).updateNotifications(fileEditor.file)
+        }
+      } catch (e: CancellationException) {
+        throw e
+      } catch (e: Exception) {
+        if (getCompilerVersion() == null) {
+          D2_FILE_NOTIFICATION.set(fileEditor, D2Bundle.messagePointer("d2.executable.not.found.notification"))
+        } else {
+          LOG.error(e)
+
+          D2_FILE_NOTIFICATION.set(fileEditor) { "Internal error" }
+          EditorNotifications.getInstance(project).updateNotifications(fileEditor.file)
+        }
+      }
+    }
+  }
 
   override fun compile(fileEditor: FileEditor) {
-    val oldExec = _map[fileEditor]
+    val oldExec = editorToState.get(fileEditor)
     val oldCommand = oldExec?.command
 
     val theme = fileEditor.getUserData(D2_FILE_THEME)
@@ -61,13 +115,13 @@ private class D2ServiceImpl : D2Service, Disposable {
         }
       }
       "[plugin ] [info] D2 process termination ${terminationTime}ms".let { message ->
-        _map[fileEditor] = _map[fileEditor]?.appendLog(message) ?: return
+        editorToState.put(fileEditor, editorToState.get(fileEditor)?.appendLog(message) ?: return)
         LOG.info(message)
       }
     }
     command.process = prepare(command, object : ProcessListener {
       override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
-        onTextAvailable(fileEditor = fileEditor, event = event, outputType = outputType, command = command)
+        onTextAvailable(fileEditor = fileEditor, event = event, outputType = outputType)
       }
 
       override fun processWillTerminate(event: ProcessEvent, willBeDestroyed: Boolean) {
@@ -76,28 +130,28 @@ private class D2ServiceImpl : D2Service, Disposable {
     })
 
     @Suppress("IfThenToElvis")
-    _map[fileEditor] = if (oldExec == null) {
+    editorToState[fileEditor] = if (oldExec == null) {
       command.parseOutput("[plugin ] info: starting process...\n")
     } else {
       oldExec.copy(command = command).appendLog("[plugin ] info: restarting process...\n")
     }
     command.process?.startNotify()
 
-    (fileEditor as D2SvgViewer).refreshD2(command.port)
+    ((fileEditor as TextEditorWithPreview).previewEditor as D2SvgViewer).refreshD2(command.port)
   }
 
   override fun closeFile(fileEditor: FileEditor) {
     fileEditor.putUserData(D2_FILE_LAYOUT, null)
     fileEditor.putUserData(D2_FILE_THEME, null)
 
-    _map[fileEditor]?.command?.process?.destroyProcess()
-    _map -= fileEditor
+    editorToState[fileEditor]?.command?.process?.destroyProcess()
+    editorToState -= fileEditor
 
     LOG.info("[plugin] Closed file")
   }
 
   override fun format(file: File): D2FormatterResult {
-    val out = simpleRun(D2Command.Format(file))?.content
+    val out = executeAndGetOutputOrNull(D2Command.Format(file))?.content
     return when {
       out == null -> D2FormatterResult.Error("Unknown error")
       out.contains("err: failed") -> D2FormatterResult.Error(out)
@@ -124,7 +178,7 @@ private class D2ServiceImpl : D2Service, Disposable {
     return out.toByteArray()
   }
 
-  private fun onTextAvailable(fileEditor: FileEditor, event: ProcessEvent, outputType: Key<*>, command: D2Command.Generate) {
+  private fun onTextAvailable(fileEditor: FileEditor, event: ProcessEvent, outputType: Key<*>) {
     buildString {
       append("[process] ")
       if (outputType == ProcessOutputType.SYSTEM) {
@@ -138,15 +192,15 @@ private class D2ServiceImpl : D2Service, Disposable {
       LOG.info(it)
 
       // null if file editor closed
-      _map[fileEditor] = _map[fileEditor]?.appendLog(it) ?: return
+      editorToState[fileEditor] = editorToState[fileEditor]?.appendLog(it) ?: return
     }
   }
 
   override fun dispose() {
-    for (item in _map.values) {
+    for (item in editorToState.values) {
       deleteFile(item.command)
     }
-    _map.clear()
+    editorToState.clear()
   }
 
   private fun deleteFile(command: D2Command.Generate) {
@@ -161,19 +215,23 @@ private class D2ServiceImpl : D2Service, Disposable {
         addProcessListener(listener)
       }
     }
+}
 
-  // null if d2 executable not found
-  private fun <O> simpleRun(cmd: D2Command<O>): O? {
-    try {
-      val processOut = ScriptRunnerUtil.getProcessOutput(
-        cmd.createCommandLine(),
-        ScriptRunnerUtil.STDOUT_OR_STDERR_OUTPUT_KEY_FILTER,
-        500
-      )
-      return cmd.parseOutput(processOut)
-    } catch (e: Exception) {
-      LOG.error(e)
-      return null
-    }
+// null if d2 executable not found
+private fun <O> executeAndGetOutputOrNull(command: D2Command<O>): O? {
+  try {
+    return executeAndGetOutput(command)
+  } catch (e: Exception) {
+    LOG.error(e)
+    return null
   }
+}
+
+private fun <O> executeAndGetOutput(command: D2Command<O>): O? {
+  val processOut = ScriptRunnerUtil.getProcessOutput(
+    command.createCommandLine(),
+    ScriptRunnerUtil.STDOUT_OR_STDERR_OUTPUT_KEY_FILTER,
+    500
+  )
+  return command.parseOutput(processOut)
 }

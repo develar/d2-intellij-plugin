@@ -25,12 +25,9 @@ private class D2FileEditorProvider : FileEditorProvider, DumbAware {
   override fun createEditor(project: Project, file: VirtualFile): FileEditor {
     val view = D2SvgViewer(project, file)
     val editor = TextEditorProvider.getInstance().createEditor(project, file) as TextEditor
-
-    ApplicationManager.getApplication().executeOnPooledThread {
-      service<D2Service>().compile(view)
-    }
-
-    return TextEditorWithPreview(editor, view, D2_EDITOR_NAME, TextEditorWithPreview.Layout.SHOW_EDITOR_AND_PREVIEW)
+    val editorWithPreview = TextEditorWithPreview(editor, view, D2_EDITOR_NAME, TextEditorWithPreview.Layout.SHOW_EDITOR_AND_PREVIEW)
+    service<D2Service>().scheduleCompile(editorWithPreview)
+    return editorWithPreview
   }
 
   override fun getEditorTypeId(): String = D2_EDITOR_NAME

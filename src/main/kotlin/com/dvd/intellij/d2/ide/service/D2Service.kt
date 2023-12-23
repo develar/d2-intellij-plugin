@@ -5,6 +5,7 @@ import com.dvd.intellij.d2.ide.action.ConversionOutput
 import com.dvd.intellij.d2.ide.execution.D2CommandOutput
 import com.dvd.intellij.d2.ide.format.D2FormatterResult
 import com.intellij.openapi.fileEditor.FileEditor
+import com.intellij.openapi.fileEditor.TextEditor
 import java.io.File
 import java.nio.file.Path
 
@@ -18,6 +19,8 @@ interface D2Service {
   fun getLayoutEngines(): List<D2Layout>?
 
   fun compile(fileEditor: FileEditor)
+
+  fun scheduleCompile(fileEditor: TextEditor)
 
   fun closeFile(fileEditor: FileEditor)
 

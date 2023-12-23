@@ -46,7 +46,7 @@
 
     <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
 
-    <!--<editorNotificationProvider implementation="com.dvd.intellij.d2.ide.editor.D2MissingCompilerNotificationProvider"/>-->
+    <editorNotificationProvider implementation="com.dvd.intellij.d2.ide.editor.D2MissingCompilerNotificationProvider"/>
 
     <applicationService serviceImplementation="com.dvd.intellij.d2.ide.service.D2ServiceImpl"
                         serviceInterface="com.dvd.intellij.d2.ide.service.D2Service"/>
