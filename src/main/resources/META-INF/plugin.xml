@@ -16,7 +16,7 @@
               implementationClass="com.dvd.intellij.d2.ide.file.D2FileType"
               fieldName="INSTANCE"/>
 
-    <lang.parserDefinition language="d2" implementationClass="com.dvd.intellij.d2.ide.parser.D2ParserDefinition"/>
+    <lang.parserDefinition language="d2" implementationClass="org.jetbrains.plugins.d2.lang.D2ParserDefinition"/>
     <lang.braceMatcher language="d2" implementationClass="com.dvd.intellij.d2.ide.editor.D2BraceMatcher"/>
     <lang.commenter language="d2" implementationClass="com.dvd.intellij.d2.ide.editor.D2Commenter"/>
     <lang.syntaxHighlighterFactory language="d2"

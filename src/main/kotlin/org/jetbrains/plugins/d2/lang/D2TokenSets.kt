@@ -1,7 +1,6 @@
-package com.dvd.intellij.d2.ide.parser
+package org.jetbrains.plugins.d2.lang
 
 import com.intellij.psi.tree.TokenSet
-import org.jetbrains.plugins.d2.lang.D2ElementTypes
 
 object D2TokenSets {
   val IDENTIFIERS = TokenSet.create(D2ElementTypes.ID)
@@ -18,5 +17,5 @@ object D2TokenSets {
 
   //  val COLONS = TokenSet.create(D2ElementTypes.COLON, D2ElementTypes.SEMICOLON)
 //  val DOT = TokenSet.create(D2ElementTypes.DOT)
-  val STRING = TokenSet.create(D2ElementTypes.STRING)
+  val STRING = TokenSet.create(D2ElementTypes.STRING, D2ElementTypes.UNQUOTED_STRING)
 }
