@@ -1,4 +1,4 @@
-package com.dvd.intellij.d2.ide.lang
+package org.jetbrains.plugins.d2.lang
 
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
@@ -10,9 +10,6 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.tree.IElementType
-import org.jetbrains.plugins.d2.lang.D2ElementTypes
-import org.jetbrains.plugins.d2.lang.D2LexerAdapter
-import org.jetbrains.plugins.d2.lang.D2TokenSets
 
 class D2SyntaxHighlighter : SyntaxHighlighterBase() {
   companion object {
@@ -27,6 +24,9 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
     internal val STRING = createTextAttributesKey("D2_STRING", DefaultLanguageHighlighterColors.STRING)
     internal val NUMBERS = createTextAttributesKey("D2_NUMBERS", DefaultLanguageHighlighterColors.NUMBER)
     internal val FIELDS = createTextAttributesKey("D2_FIELDS", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
+
+    // added by annotators
+    val PROPERTY_KEY: TextAttributesKey = createTextAttributesKey("D2_PROPERTY_KEY", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
 
     val ATTRIBUTES: Map<IElementType, TextAttributesKey> = buildMap {
       fillMap(this, D2TokenSets.IDENTIFIERS, IDENTIFIERS)

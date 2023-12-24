@@ -1,6 +1,5 @@
 package org.jetbrains.plugins.d2.lang
 
-import com.dvd.intellij.d2.ide.lang.D2Language
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.lexer.FlexAdapter

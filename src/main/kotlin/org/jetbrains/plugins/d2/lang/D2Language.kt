@@ -1,4 +1,4 @@
-package com.dvd.intellij.d2.ide.lang
+package org.jetbrains.plugins.d2.lang
 
 import com.intellij.lang.Language
 

@@ -1,6 +1,5 @@
 package com.dvd.intellij.d2.ide.editor
 
-import com.dvd.intellij.d2.ide.lang.D2Language
 import com.dvd.intellij.d2.ide.utils.ColorStyleValidator
 import com.intellij.openapi.editor.ElementColorProvider
 import com.intellij.psi.PsiElement
@@ -8,6 +7,7 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.impl.PsiFileFactoryImpl
 import com.intellij.psi.util.elementType
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.D2Language
 import java.awt.Color
 
 class D2ColorProvider : ElementColorProvider {

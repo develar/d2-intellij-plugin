@@ -43,8 +43,6 @@ RBrace="}"
 
 UnquotedString=[^ \t\n\r{}]+([ \t]+[^ \n\r{}]+)*
 
-NewLine=[\r\n]+
-
 %states LABEL
 
 %%
@@ -76,6 +74,11 @@ NewLine=[\r\n]+
 }
 
 <LABEL> {
+	{Int} { return INT; }
+	{Float} { return FLOAT; }
+	"true" { return TRUE; }
+	"false" { return FALSE; }
+
 	{UnquotedString} { return UNQUOTED_STRING; }
 	[ \t]+ { return WHITE_SPACE; }
 	[\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }

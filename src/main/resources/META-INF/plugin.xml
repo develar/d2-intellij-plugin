@@ -20,7 +20,7 @@
     <lang.braceMatcher language="d2" implementationClass="com.dvd.intellij.d2.ide.editor.D2BraceMatcher"/>
     <lang.commenter language="d2" implementationClass="com.dvd.intellij.d2.ide.editor.D2Commenter"/>
     <lang.syntaxHighlighterFactory language="d2"
-                                   implementationClass="com.dvd.intellij.d2.ide.lang.D2SyntaxHighlighterFactory"/>
+                                   implementationClass="org.jetbrains.plugins.d2.lang.D2SyntaxHighlighterFactory"/>
 
     <colorSettingsPage implementation="com.dvd.intellij.d2.ide.settings.D2ColorSettingsPage"/>
 
@@ -47,6 +47,8 @@
     <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
 
     <editorNotificationProvider implementation="com.dvd.intellij.d2.ide.editor.D2MissingCompilerNotificationProvider"/>
+
+    <annotator language="d2" implementationClass="org.jetbrains.plugins.d2.lang.D2LiteralAnnotator"/>
   </extensions>
 
   <actions>
