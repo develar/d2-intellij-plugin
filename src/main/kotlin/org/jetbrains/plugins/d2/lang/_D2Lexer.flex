@@ -79,6 +79,7 @@ UnquotedString=[^ \t\n\r{}]+([ \t]+[^ \n\r{}]+)*
 	"true" { return TRUE; }
 	"false" { return FALSE; }
 
+	{String} { return STRING; }
 	{UnquotedString} { return UNQUOTED_STRING; }
 	[ \t]+ { return WHITE_SPACE; }
 	[\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }

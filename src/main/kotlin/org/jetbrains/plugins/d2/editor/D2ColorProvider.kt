@@ -3,25 +3,33 @@ package org.jetbrains.plugins.d2.editor
 import com.dvd.intellij.d2.ide.utils.ColorStyleValidator
 import com.intellij.openapi.editor.ElementColorProvider
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiManager
-import com.intellij.psi.impl.PsiFileFactoryImpl
+import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.util.descendantsOfType
 import com.intellij.psi.util.elementType
+import com.intellij.ui.ColorUtil
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
-import org.jetbrains.plugins.d2.lang.D2Language
+import org.jetbrains.plugins.d2.lang.psi.D2PropertyValue
 import java.awt.Color
-
-private fun getHex(color: Color): String = String.format("#%02x%02x%02x", color.red, color.green, color.blue)
 
 class D2ColorProvider : ElementColorProvider {
   override fun getColorFrom(element: PsiElement): Color? {
-    if (element.elementType !in listOf(D2ElementTypes.ID, D2ElementTypes.STRING)) {
-      return null
-    }
-    if (element.parent.elementType != D2ElementTypes.PROPERTY_VALUE) {
+    // Not a leaf child with a value must be checked, but a holder.
+    // On setColorTo we replace the leaf child, so the holder element will become invalid, and after the first change the PSI element will be invalid (as we replaced it).
+    if (element.elementType != D2ElementTypes.PROPERTY_VALUE) {
       return null
     }
 
-    val text = element.text.removeSurrounding("\"")
+    val firstChild = element.firstChild
+    if (firstChild.elementType != D2ElementTypes.STRING) {
+       return null
+     }
+
+    val textLength = firstChild.textLength
+    if (textLength > 9 || textLength < 4) {
+      return null
+    }
+
+    val text = firstChild.text.removeSurrounding("\"")
     return when {
       ColorStyleValidator.COLOR_REGEX.matches(text) -> Color.decode(text)
       text in ColorStyleValidator.NAMED_COLORS -> ColorStyleValidator.NAMED_COLORS[text]
@@ -29,18 +37,13 @@ class D2ColorProvider : ElementColorProvider {
     }
   }
 
-  // todo set not correctly working due to wrong psi
   override fun setColorTo(element: PsiElement, color: Color) {
-    val psiManager = PsiManager.getInstance(element.project)
-    val factory = PsiFileFactoryImpl(psiManager)
-    val newPsi = factory.createElementFromText(
-      "\"${getHex(color)}\"",
-      D2Language,
-      D2ElementTypes.PROPERTY_VALUE,
-      element.context
+    val project = element.project
+    val newPsi = PsiFileFactory.getInstance(project).createFileFromText(
+      "shapeId.style.stroke: \"#${ColorUtil.toHex(color)}\"",
+      element.containingFile
     ) ?: return
 
-    // write action?
-    element.parent.replace(newPsi)
+    element.firstChild.replace(newPsi.descendantsOfType<D2PropertyValue>().first().firstChild)
   }
 }

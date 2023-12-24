@@ -72,7 +72,7 @@ class IntRangeStyleValidator(
 }
 
 object ColorStyleValidator : StyleValidator {
-  val COLOR_REGEX = "^#(([0-9a-fA-F]{2}){3}|([0-9a-fA-F]){3})\$".toRegex()
+  val COLOR_REGEX = Regex("^#(([0-9a-fA-F]{2}){3}|([0-9a-fA-F]){3})\$")
 
   @Suppress("SpellCheckingInspection")
   val NAMED_COLORS: Map<String, Color?> = mapOf(

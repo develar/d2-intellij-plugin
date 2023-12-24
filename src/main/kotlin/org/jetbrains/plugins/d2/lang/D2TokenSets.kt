@@ -15,7 +15,5 @@ object D2TokenSets {
   val NUMBERS = TokenSet.create(D2ElementTypes.INT, D2ElementTypes.FLOAT)
   val BRACES = TokenSet.create(D2ElementTypes.LBRACE, D2ElementTypes.RBRACE)
 
-  //  val COLONS = TokenSet.create(D2ElementTypes.COLON, D2ElementTypes.SEMICOLON)
-//  val DOT = TokenSet.create(D2ElementTypes.DOT)
   val STRING = TokenSet.create(D2ElementTypes.STRING, D2ElementTypes.UNQUOTED_STRING)
 }

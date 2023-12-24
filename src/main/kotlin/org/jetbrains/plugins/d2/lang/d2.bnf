@@ -16,7 +16,7 @@
     psiImplPackage="org.jetbrains.plugins.d2.lang.psi.impl"
 }
 
-File ::= !<<eof>> (ShapeDefinitions | COMMENT)*
+File ::= !<<eof>> (Property | ShapeDefinitions | COMMENT)*
 
 // bad tree structure: ci.deploys->clouds<-a.sub:test
 ShapeDefinitions ::= ShapeDefinition (ShapeConnection | SubShapeDefinition | InlineShapeDefinition)* ShapeExtras? {
@@ -29,7 +29,7 @@ private ShapeExtras ::= COLON (LabelDefinition BlockDefinition? | BlockDefinitio
   pin=1
 }
 
-ShapeDefinition ::= AttributeValue (DOT PropertyKey)*
+ShapeDefinition ::= AttributeValue
 
 LabelDefinition ::= UNQUOTED_STRING | AttributeValue
 
@@ -41,7 +41,9 @@ left InlineShapeDefinition ::= (SEMICOLON ShapeDefinition)+
 
 PropertyKey ::= (SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS) (DOT ID)*
 PropertyValue ::= UNQUOTED_STRING | AttributeValue
-Property ::= PropertyKey COLON PropertyValue
+
+// logs.style.strokes: "#f4a261"
+Property ::= (AttributeValue (DOT AttributeValue)*)? PropertyKey COLON PropertyValue
 
 BlockDefinition ::= LBRACE (Property | ShapeDefinitions)* RBRACE {
   pin=1

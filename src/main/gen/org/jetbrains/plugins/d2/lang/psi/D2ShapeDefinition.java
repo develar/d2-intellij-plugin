@@ -8,7 +8,4 @@ import org.jetbrains.plugins.d2.lang.D2CompositeElement;
 
 public interface D2ShapeDefinition extends D2CompositeElement {
 
-  @NotNull
-  List<D2PropertyKey> getPropertyKeyList();
-
 }

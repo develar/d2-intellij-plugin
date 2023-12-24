@@ -100,7 +100,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !<<eof>> (ShapeDefinitions | COMMENT)*
+  // !<<eof>> (Property | ShapeDefinitions | COMMENT)*
   static boolean File(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "File")) return false;
     boolean r;
@@ -121,7 +121,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (ShapeDefinitions | COMMENT)*
+  // (Property | ShapeDefinitions | COMMENT)*
   private static boolean File_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "File_1")) return false;
     while (true) {
@@ -132,11 +132,12 @@ public class D2Parser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ShapeDefinitions | COMMENT
+  // Property | ShapeDefinitions | COMMENT
   private static boolean File_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "File_1_0")) return false;
     boolean r;
-    r = ShapeDefinitions(b, l + 1);
+    r = Property(b, l + 1);
+    if (!r) r = ShapeDefinitions(b, l + 1);
     if (!r) r = consumeToken(b, COMMENT);
     return r;
   }
@@ -182,16 +183,56 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PropertyKey COLON PropertyValue
+  // (AttributeValue (DOT AttributeValue)*)? PropertyKey COLON PropertyValue
   public static boolean Property(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Property")) return false;
-    if (!nextTokenIs(b, "<property>", RESERVED_KEYWORD_HOLDERS, SIMPLE_RESERVED_KEYWORDS)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, PROPERTY, "<property>");
-    r = PropertyKey(b, l + 1);
+    r = Property_0(b, l + 1);
+    r = r && PropertyKey(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && PropertyValue(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (AttributeValue (DOT AttributeValue)*)?
+  private static boolean Property_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Property_0")) return false;
+    Property_0_0(b, l + 1);
+    return true;
+  }
+
+  // AttributeValue (DOT AttributeValue)*
+  private static boolean Property_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Property_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = AttributeValue(b, l + 1);
+    r = r && Property_0_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (DOT AttributeValue)*
+  private static boolean Property_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Property_0_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!Property_0_0_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Property_0_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // DOT AttributeValue
+  private static boolean Property_0_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Property_0_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOT);
+    r = r && AttributeValue(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -278,36 +319,13 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AttributeValue (DOT PropertyKey)*
+  // AttributeValue
   public static boolean ShapeDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeDefinition")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SHAPE_DEFINITION, "<shape definition>");
     r = AttributeValue(b, l + 1);
-    r = r && ShapeDefinition_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // (DOT PropertyKey)*
-  private static boolean ShapeDefinition_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeDefinition_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!ShapeDefinition_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ShapeDefinition_1", c)) break;
-    }
-    return true;
-  }
-
-  // DOT PropertyKey
-  private static boolean ShapeDefinition_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeDefinition_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, DOT);
-    r = r && PropertyKey(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
