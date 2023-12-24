@@ -39,7 +39,9 @@ Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
 left InlineShapeDefinition ::= (SEMICOLON ShapeDefinition)+
 
-BlockDefinition ::= LBRACE ShapeDefinitions* RBRACE {
+Property ::= SIMPLE_RESERVED_KEYWORDS COLON AttributeValue
+
+BlockDefinition ::= LBRACE (Property | ShapeDefinitions)* RBRACE {
   pin=1
 }
 

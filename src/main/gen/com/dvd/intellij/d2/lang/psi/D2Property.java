@@ -6,12 +6,9 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.dvd.intellij.d2.lang.D2CompositeElement;
 
-public interface D2BlockDefinition extends D2CompositeElement {
+public interface D2Property extends D2CompositeElement {
 
   @NotNull
-  List<D2Property> getPropertyList();
-
-  @NotNull
-  List<D2ShapeDefinitions> getShapeDefinitionsList();
+  D2AttributeValue getAttributeValue();
 
 }

@@ -16,8 +16,7 @@ import com.intellij.psi.tree.IElementType
 
 class D2SyntaxHighlighter : SyntaxHighlighterBase() {
   companion object {
-    internal val IDENTIFIERS =
-      createTextAttributesKey("D2_IDENTIFIERS", DefaultLanguageHighlighterColors.IDENTIFIER)
+    internal val IDENTIFIERS = createTextAttributesKey("D2_IDENTIFIERS", DefaultLanguageHighlighterColors.IDENTIFIER)
     internal val KEYWORDS = createTextAttributesKey("D2_KEYWORDS", DefaultLanguageHighlighterColors.KEYWORD)
     internal val COMMENT = createTextAttributesKey("D2_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
     internal val ARROWS = createTextAttributesKey("D2_ARROWS", DefaultLanguageHighlighterColors.OPERATION_SIGN)
@@ -29,25 +28,28 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
     internal val NUMBERS = createTextAttributesKey("D2_NUMBERS", DefaultLanguageHighlighterColors.NUMBER)
     internal val FIELDS = createTextAttributesKey("D2_FIELDS", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
 
-    val ATTRIBUTES = buildMap<IElementType, TextAttributesKey> {
+    val ATTRIBUTES: Map<IElementType, TextAttributesKey> = buildMap {
       fillMap(this, D2TokenSets.IDENTIFIERS, IDENTIFIERS)
       fillMap(this, D2TokenSets.KEYWORDS, KEYWORDS)
       fillMap(this, D2TokenSets.ARROWS, ARROWS)
       fillMap(this, D2TokenSets.NUMBERS, NUMBERS)
-      this += (D2ElementTypes.COMMENT to COMMENT)
+      put(D2ElementTypes.COMMENT, COMMENT)
+
+      // shape and other simple keywords highlight as instance field, like JSON_PROPERTY_KEY in a JSON highlighter does
+      put(D2ElementTypes.SIMPLE_RESERVED_KEYWORDS, FIELDS)
+
       this += (D2ElementTypes.DOT to DOT)
       this += (D2ElementTypes.COLON to COLON)
       this += (D2ElementTypes.SEMICOLON to SEMICOLON)
       this += (D2ElementTypes.STRING_LITERAL to STRING)
       this += (D2ElementTypes.LABEL_DEFINITION to STRING)
       fillMap(this, D2TokenSets.BRACES, BRACES)
-      // todo string, fields
     }
   }
 
   override fun getHighlightingLexer(): Lexer = D2LexerAdapter()
 
-  override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> = pack(ATTRIBUTES[tokenType])
+  override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> = pack(ATTRIBUTES.get(tokenType))
 }
 
 class D2SyntaxHighlighterFactory : SyntaxHighlighterFactory() {

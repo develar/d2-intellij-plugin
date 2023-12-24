@@ -22,6 +22,11 @@ import static com.dvd.intellij.d2.lang.D2ElementTypes.*;
 %type IElementType
 %unicode
 
+// non style/holder keywords, see SimpleReservedKeywords in d2 source code
+SimpleReservedKeywords = label | desc | shape | icon | constraint | tooltip | link | near | width | height | direction | top
+// reservedKeywordHolders are reserved keywords that are meaningless on its own and must hold composites
+ReservedKeywordHolders = style | source-arrowhead | target-arrowhead
+
 ARROW=-+>
 REVERSE_ARROW=<-+
 DOUBLE_HYPHEN_ARROW=--+
@@ -52,6 +57,9 @@ WHITE_SPACE=[ \t\n\x0B\f\r]+
   {COMMENT}                   { return COMMENT; }
   {NUMERIC_LITERAL}           { return NUMERIC_LITERAL; }
   {FLOAT_LITERAL}             { return FLOAT_LITERAL; }
+
+		{SimpleReservedKeywords} { return SIMPLE_RESERVED_KEYWORDS; }
+		{ReservedKeywordHolders} { return RESERVED_KEYWOR_HOLDERS; }
   {STRING_LITERAL}            { return STRING_LITERAL; }
   {IDENTIFIER}                { return IDENTIFIER; }
 }

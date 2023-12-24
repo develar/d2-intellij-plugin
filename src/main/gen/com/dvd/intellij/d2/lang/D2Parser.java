@@ -53,7 +53,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LBRACE ShapeDefinitions* RBRACE
+  // LBRACE (Property | ShapeDefinitions)* RBRACE
   public static boolean BlockDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BlockDefinition")) return false;
     if (!nextTokenIs(b, LBRACE)) return false;
@@ -67,15 +67,24 @@ public class D2Parser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // ShapeDefinitions*
+  // (Property | ShapeDefinitions)*
   private static boolean BlockDefinition_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BlockDefinition_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!ShapeDefinitions(b, l + 1)) break;
+      if (!BlockDefinition_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "BlockDefinition_1", c)) break;
     }
     return true;
+  }
+
+  // Property | ShapeDefinitions
+  private static boolean BlockDefinition_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockDefinition_1_0")) return false;
+    boolean r;
+    r = Property(b, l + 1);
+    if (!r) r = ShapeDefinitions(b, l + 1);
+    return r;
   }
 
   /* ********************************************************** */
@@ -170,6 +179,19 @@ public class D2Parser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, LABEL_DEFINITION, "<label definition>");
     r = AttributeValue(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // SIMPLE_RESERVED_KEYWORDS COLON AttributeValue
+  public static boolean Property(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Property")) return false;
+    if (!nextTokenIs(b, SIMPLE_RESERVED_KEYWORDS)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, SIMPLE_RESERVED_KEYWORDS, COLON);
+    r = r && AttributeValue(b, l + 1);
+    exit_section_(b, m, PROPERTY, r);
     return r;
   }
 

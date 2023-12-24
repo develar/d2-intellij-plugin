@@ -11,14 +11,14 @@ import static com.dvd.intellij.d2.lang.D2ElementTypes.*;
 import com.dvd.intellij.d2.lang.D2CompositeElementImpl;
 import com.dvd.intellij.d2.lang.psi.*;
 
-public class D2BlockDefinitionImpl extends D2CompositeElementImpl implements D2BlockDefinition {
+public class D2PropertyImpl extends D2CompositeElementImpl implements D2Property {
 
-  public D2BlockDefinitionImpl(@NotNull ASTNode node) {
+  public D2PropertyImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull D2Visitor visitor) {
-    visitor.visitBlockDefinition(this);
+    visitor.visitProperty(this);
   }
 
   @Override
@@ -29,14 +29,8 @@ public class D2BlockDefinitionImpl extends D2CompositeElementImpl implements D2B
 
   @Override
   @NotNull
-  public List<D2Property> getPropertyList() {
-    return D2PsiTreeUtil.getChildrenOfTypeAsList(this, D2Property.class);
-  }
-
-  @Override
-  @NotNull
-  public List<D2ShapeDefinitions> getShapeDefinitionsList() {
-    return D2PsiTreeUtil.getChildrenOfTypeAsList(this, D2ShapeDefinitions.class);
+  public D2AttributeValue getAttributeValue() {
+    return findNotNullChildByClass(D2AttributeValue.class);
   }
 
 }

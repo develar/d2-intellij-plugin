@@ -13,6 +13,7 @@ public interface D2ElementTypes {
   IElementType CONNECTOR = new D2ElementType("CONNECTOR");
   IElementType INLINE_SHAPE_DEFINITION = new D2ElementType("INLINE_SHAPE_DEFINITION");
   IElementType LABEL_DEFINITION = new D2ElementType("LABEL_DEFINITION");
+  IElementType PROPERTY = new D2ElementType("PROPERTY");
   IElementType SHAPE_CONNECTION = new D2ElementType("SHAPE_CONNECTION");
   IElementType SHAPE_DEFINITION = new D2ElementType("SHAPE_DEFINITION");
   IElementType SHAPE_DEFINITIONS = new D2ElementType("SHAPE_DEFINITIONS");
@@ -32,6 +33,7 @@ public interface D2ElementTypes {
   IElementType RBRACE = new D2TokenType("RBRACE");
   IElementType REVERSE_ARROW = new D2TokenType("REVERSE_ARROW");
   IElementType SEMICOLON = new D2TokenType("SEMICOLON");
+  IElementType SIMPLE_RESERVED_KEYWORDS = new D2TokenType("SIMPLE_RESERVED_KEYWORDS");
   IElementType STRING_LITERAL = new D2TokenType("STRING_LITERAL");
   IElementType TRUE = new D2TokenType("TRUE");
 
@@ -52,6 +54,9 @@ public interface D2ElementTypes {
       }
       else if (type == LABEL_DEFINITION) {
         return new D2LabelDefinitionImpl(node);
+      }
+      else if (type == PROPERTY) {
+        return new D2PropertyImpl(node);
       }
       else if (type == SHAPE_CONNECTION) {
         return new D2ShapeConnectionImpl(node);

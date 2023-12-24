@@ -27,6 +27,10 @@ public class D2Visitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitProperty(@NotNull D2Property o) {
+    visitCompositeElement(o);
+  }
+
   public void visitShapeConnection(@NotNull D2ShapeConnection o) {
     visitCompositeElement(o);
   }
