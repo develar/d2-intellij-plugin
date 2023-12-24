@@ -1,4 +1,4 @@
-package com.dvd.intellij.d2.ide.editor
+package org.jetbrains.plugins.d2.editor
 
 import com.dvd.intellij.d2.ide.utils.ColorStyleValidator
 import com.intellij.openapi.editor.ElementColorProvider
@@ -10,10 +10,9 @@ import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import org.jetbrains.plugins.d2.lang.D2Language
 import java.awt.Color
 
-class D2ColorProvider : ElementColorProvider {
-  private val Color.hex: String
-    get() = String.format("#%02x%02x%02x", red, green, blue)
+private fun getHex(color: Color): String = String.format("#%02x%02x%02x", color.red, color.green, color.blue)
 
+class D2ColorProvider : ElementColorProvider {
   override fun getColorFrom(element: PsiElement): Color? {
     if (element.elementType !in listOf(D2ElementTypes.ID, D2ElementTypes.STRING)) {
       return null
@@ -35,7 +34,7 @@ class D2ColorProvider : ElementColorProvider {
     val psiManager = PsiManager.getInstance(element.project)
     val factory = PsiFileFactoryImpl(psiManager)
     val newPsi = factory.createElementFromText(
-      "\"${color.hex}\"",
+      "\"${getHex(color)}\"",
       D2Language,
       D2ElementTypes.PROPERTY_VALUE,
       element.context

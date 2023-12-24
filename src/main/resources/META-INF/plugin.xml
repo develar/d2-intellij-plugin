@@ -1,7 +1,7 @@
 <idea-plugin>
-  <id>com.dvd.intellij.d2</id>
+  <id>org.jetbrains.plugins.d2</id>
   <name>D2</name>
-  <vendor url="https://github.com/dvdandroid/d2-intellij">dvdandroid</vendor>
+  <vendor url="https://github.com/develar/d2-intellij-plugin">Vladimir Krivosheev</vendor>
   <description>--replaced by plugin--</description>
 
   <depends>com.intellij.modules.platform</depends>
@@ -24,7 +24,7 @@
 
     <colorSettingsPage implementation="com.dvd.intellij.d2.ide.settings.D2ColorSettingsPage"/>
 
-    <colorProvider implementation="com.dvd.intellij.d2.ide.editor.D2ColorProvider"/>
+    <colorProvider implementation="org.jetbrains.plugins.d2.editor.D2ColorProvider"/>
 
     <fileEditorProvider implementation="com.dvd.intellij.d2.ide.editor.D2FileEditorProvider"/>
 
