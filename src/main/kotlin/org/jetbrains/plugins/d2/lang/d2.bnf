@@ -1,0 +1,49 @@
+//noinspection SpellCheckingInspectionForFile
+{
+    parserClass="org.jetbrains.plugins.d2.lang.D2Parser"
+
+    implements="org.jetbrains.plugins.d2.lang.D2CompositeElement"
+    extends="org.jetbrains.plugins.d2.lang.D2CompositeElementImpl"
+
+    elementTypeHolderClass="org.jetbrains.plugins.d2.lang.D2ElementTypes"
+    elementTypeClass="org.jetbrains.plugins.d2.lang.D2ElementType"
+    tokenTypeClass="org.jetbrains.plugins.d2.lang.D2TokenType"
+    psiTreeUtilClass="org.jetbrains.plugins.d2.lang.D2PsiTreeUtil"
+
+    psiClassPrefix="D2"
+    psiImplClassSuffix="Impl"
+    psiPackage="org.jetbrains.plugins.d2.lang.psi"
+    psiImplPackage="org.jetbrains.plugins.d2.lang.psi.impl"
+}
+
+File ::= !<<eof>> (ShapeDefinitions | COMMENT)*
+
+// bad tree structure: ci.deploys->clouds<-a.sub:test
+ShapeDefinitions ::= ShapeDefinition (ShapeConnection | SubShapeDefinition | InlineShapeDefinition)* ShapeExtras? {
+  pin=1
+}
+
+left SubShapeDefinition ::= DOT ShapeDefinition ShapeExtras?
+
+private ShapeExtras ::= COLON (LabelDefinition BlockDefinition? | BlockDefinition) {
+  pin=1
+}
+
+ShapeDefinition ::= AttributeValue
+
+LabelDefinition ::= UNQUOTED_STRING | AttributeValue
+
+left ShapeConnection ::= (Connector ShapeDefinition)+
+
+Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
+
+left InlineShapeDefinition ::= (SEMICOLON ShapeDefinition)+
+
+PropertyKey ::= (SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS) (DOT ID)*
+Property ::= PropertyKey COLON (UNQUOTED_STRING | AttributeValue)
+
+BlockDefinition ::= LBRACE (Property | ShapeDefinitions)* RBRACE {
+  pin=1
+}
+
+AttributeValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT

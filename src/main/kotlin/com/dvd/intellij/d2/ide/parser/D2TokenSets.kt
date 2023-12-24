@@ -1,6 +1,6 @@
 package com.dvd.intellij.d2.ide.parser
 
-import com.dvd.intellij.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import com.intellij.psi.tree.TokenSet
 
 object D2TokenSets {

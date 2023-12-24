@@ -83,21 +83,21 @@ tasks {
     gradleVersion = properties("gradleVersion")
   }
 
-  val generateParser = withType<GenerateParserTask> {
-    sourceFile.set(File("./src/main/kotlin/com/dvd/intellij/d2/lang/d2.bnf"))
-    targetRoot.set("./src/main/gen")
-    pathToParser.set("/com/dvd/intellij/d2/lang/D2Parser.java")
-    pathToPsiRoot.set("/com/dvd/intellij/d2/lang/psi")
-    purgeOldFiles.set(true)
-  }
-  val generateLexer = withType<GenerateLexerTask> {
-    sourceFile.set(File("./src/main/kotlin/com/dvd/intellij/d2/lang/_D2Lexer.flex"))
-    targetDir.set("./src/main/gen/com/dvd/intellij/d2/lang/")
-    targetClass.set("_D2Lexer")
-    purgeOldFiles.set(true)
-  }
+//  val generateParser = withType<GenerateParserTask> {
+//    sourceFile.set(File("./src/main/kotlin/com/dvd/intellij/d2/lang/d2.bnf"))
+//    targetRoot.set("./src/main/gen")
+//    pathToParser.set("/com/dvd/intellij/d2/lang/D2Parser.java")
+//    pathToPsiRoot.set("/com/dvd/intellij/d2/lang/psi")
+//    purgeOldFiles.set(true)
+//  }
+//  val generateLexer = withType<GenerateLexerTask> {
+//    sourceFile.set(File("./src/main/kotlin/com/dvd/intellij/d2/lang/_D2Lexer.flex"))
+//    targetDir.set("./src/main/gen/com/dvd/intellij/d2/lang/")
+//    targetClass.set("_D2Lexer")
+//    purgeOldFiles.set(true)
+//  }
   withType<KotlinCompile> {
-//    dependsOn(generateParser, generateLexer)
+    //dependsOn(generateParser, generateLexer)
 
     kotlinOptions {
       jvmTarget = properties("jvm.target")

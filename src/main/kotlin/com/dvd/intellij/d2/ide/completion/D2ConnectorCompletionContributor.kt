@@ -1,6 +1,6 @@
 package com.dvd.intellij.d2.ide.completion
 
-import com.dvd.intellij.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns

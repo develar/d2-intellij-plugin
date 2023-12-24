@@ -2,9 +2,9 @@ package com.dvd.intellij.d2.ide.parser
 
 import com.dvd.intellij.d2.ide.file.D2File
 import com.dvd.intellij.d2.ide.lang.D2Language
-import com.dvd.intellij.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import com.dvd.intellij.d2.lang.D2LexerAdapter
-import com.dvd.intellij.d2.lang.D2Parser
+import org.jetbrains.plugins.d2.lang.D2Parser
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiParser

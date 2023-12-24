@@ -1,6 +1,6 @@
 package com.dvd.intellij.d2.ide.reference
 
-import com.dvd.intellij.d2.lang.psi.D2AttributeValue
+import org.jetbrains.plugins.d2.lang.psi.D2AttributeValue
 import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiReferenceContributor
 import com.intellij.psi.PsiReferenceRegistrar

@@ -1,10 +1,10 @@
 package com.dvd.intellij.d2.ide.completion
 
 import com.dvd.intellij.d2.ide.utils.ShapeStyles
-import com.dvd.intellij.d2.lang.D2ElementTypes
-import com.dvd.intellij.d2.lang.psi.impl.D2ShapeDefinitionImpl
-import com.dvd.intellij.d2.lang.psi.impl.D2ShapeDefinitionsImpl
-import com.dvd.intellij.d2.lang.psi.impl.D2SubShapeDefinitionImpl
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionImpl
+import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionsImpl
+import org.jetbrains.plugins.d2.lang.psi.impl.D2SubShapeDefinitionImpl
 import com.intellij.codeInsight.AutoPopupController
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder

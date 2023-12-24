@@ -1,6 +1,6 @@
 package com.dvd.intellij.d2.ide.editor
 
-import com.dvd.intellij.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import com.intellij.lang.BracePair
 import com.intellij.lang.PairedBraceMatcher
 import com.intellij.psi.PsiFile

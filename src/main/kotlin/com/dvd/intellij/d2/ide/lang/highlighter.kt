@@ -1,7 +1,7 @@
 package com.dvd.intellij.d2.ide.lang
 
 import com.dvd.intellij.d2.ide.parser.D2TokenSets
-import com.dvd.intellij.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import com.dvd.intellij.d2.lang.D2LexerAdapter
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
