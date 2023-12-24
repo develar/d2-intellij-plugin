@@ -1,10 +1,10 @@
 package com.dvd.intellij.d2.ide.reference
 
-import org.jetbrains.plugins.d2.lang.psi.D2AttributeValue
 import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiReferenceContributor
 import com.intellij.psi.PsiReferenceRegistrar
 import com.intellij.psi.impl.source.resolve.reference.CommentsReferenceContributor
+import org.jetbrains.plugins.d2.lang.psi.D2AttributeValue
 
 // todo not working in strings
 class D2UrlReferenceContributor : PsiReferenceContributor() {

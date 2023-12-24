@@ -4,7 +4,6 @@ import com.dvd.intellij.d2.ide.editor.images.D2SvgViewer
 import com.dvd.intellij.d2.ide.service.D2Service
 import com.dvd.intellij.d2.ide.utils.D2_EDITOR_NAME
 import com.dvd.intellij.d2.ide.utils.isD2
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.*
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider

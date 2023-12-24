@@ -1,10 +1,10 @@
 package com.dvd.intellij.d2.ide.completion
 
-import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
 
 class D2ConnectorCompletionContributor : CompletionContributor() {
   init {

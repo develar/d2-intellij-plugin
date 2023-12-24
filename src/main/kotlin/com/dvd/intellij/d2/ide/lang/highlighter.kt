@@ -1,8 +1,6 @@
 package com.dvd.intellij.d2.ide.lang
 
 import com.dvd.intellij.d2.ide.parser.D2TokenSets
-import org.jetbrains.plugins.d2.lang.D2ElementTypes
-import com.dvd.intellij.d2.lang.D2LexerAdapter
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
@@ -13,6 +11,8 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.tree.IElementType
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.D2LexerAdapter
 
 class D2SyntaxHighlighter : SyntaxHighlighterBase() {
   companion object {

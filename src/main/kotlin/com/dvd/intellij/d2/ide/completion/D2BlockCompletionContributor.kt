@@ -3,11 +3,11 @@ package com.dvd.intellij.d2.ide.completion
 import com.dvd.intellij.d2.ide.utils.D2Icons
 import com.dvd.intellij.d2.ide.utils.KEYWORD_HOLDERS
 import com.dvd.intellij.d2.ide.utils.RESERVED_KEYWORDS
-import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
 
 class D2BlockCompletionContributor : CompletionContributor() {
   private val keywords = listOf(*RESERVED_KEYWORDS, *KEYWORD_HOLDERS).map {

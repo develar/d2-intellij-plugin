@@ -4,14 +4,12 @@ package org.jetbrains.plugins.d2.lang.psi.impl;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.dvd.intellij.d2.lang.D2PsiTreeUtil;
-import com.dvd.intellij.d2.lang.D2CompositeElementImpl;
-import com.dvd.intellij.d2.lang.psi.*;
-import org.jetbrains.plugins.d2.lang.psi.D2BlockDefinition;
-import org.jetbrains.plugins.d2.lang.psi.D2Property;
-import org.jetbrains.plugins.d2.lang.psi.D2ShapeDefinitions;
-import org.jetbrains.plugins.d2.lang.psi.D2Visitor;
+import org.jetbrains.plugins.d2.lang.D2PsiTreeUtil;
+import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
+import org.jetbrains.plugins.d2.lang.D2CompositeElementImpl;
+import org.jetbrains.plugins.d2.lang.psi.*;
 
 public class D2BlockDefinitionImpl extends D2CompositeElementImpl implements D2BlockDefinition {
 

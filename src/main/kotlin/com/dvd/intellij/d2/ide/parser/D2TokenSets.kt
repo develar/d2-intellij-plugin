@@ -1,7 +1,7 @@
 package com.dvd.intellij.d2.ide.parser
 
-import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import com.intellij.psi.tree.TokenSet
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
 
 object D2TokenSets {
   val IDENTIFIERS = TokenSet.create(D2ElementTypes.ID)

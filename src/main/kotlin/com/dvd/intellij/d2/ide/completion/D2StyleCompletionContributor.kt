@@ -1,10 +1,6 @@
 package com.dvd.intellij.d2.ide.completion
 
 import com.dvd.intellij.d2.ide.utils.ShapeStyles
-import org.jetbrains.plugins.d2.lang.D2ElementTypes
-import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionImpl
-import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionsImpl
-import org.jetbrains.plugins.d2.lang.psi.impl.D2SubShapeDefinitionImpl
 import com.intellij.codeInsight.AutoPopupController
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
@@ -13,6 +9,10 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionImpl
+import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionsImpl
+import org.jetbrains.plugins.d2.lang.psi.impl.D2SubShapeDefinitionImpl
 
 class D2StyleCompletionContributor : CompletionContributor() {
   private val styleAttrs = ShapeStyles.values().map {

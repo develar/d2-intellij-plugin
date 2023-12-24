@@ -1,8 +1,6 @@
 package com.dvd.intellij.d2.ide.completion
 
 import com.dvd.intellij.d2.ide.utils.Shapes
-import org.jetbrains.plugins.d2.lang.D2ElementTypes
-import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionImpl
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
@@ -10,6 +8,8 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionImpl
 
 class D2ShapesTypesCompletionContributor : CompletionContributor() {
 
