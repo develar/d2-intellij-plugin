@@ -40,10 +40,11 @@ Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 left InlineShapeDefinition ::= (SEMICOLON ShapeDefinition)+
 
 PropertyKey ::= (SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS) (DOT ID)*
-Property ::= PropertyKey COLON (UNQUOTED_STRING | AttributeValue)
+PropertyValue ::= UNQUOTED_STRING | AttributeValue
+Property ::= PropertyKey COLON PropertyValue
 
 BlockDefinition ::= LBRACE (Property | ShapeDefinitions)* RBRACE {
   pin=1
 }
 
-AttributeValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT
+private AttributeValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT

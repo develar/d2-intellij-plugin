@@ -8,10 +8,10 @@ import org.jetbrains.plugins.d2.lang.D2CompositeElement;
 
 public interface D2Property extends D2CompositeElement {
 
-  @Nullable
-  D2AttributeValue getAttributeValue();
-
   @NotNull
   D2PropertyKey getPropertyKey();
+
+  @NotNull
+  D2PropertyValue getPropertyValue();
 
 }

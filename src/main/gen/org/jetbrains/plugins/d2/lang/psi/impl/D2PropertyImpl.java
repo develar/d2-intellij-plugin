@@ -28,15 +28,15 @@ public class D2PropertyImpl extends D2CompositeElementImpl implements D2Property
   }
 
   @Override
-  @Nullable
-  public D2AttributeValue getAttributeValue() {
-    return findChildByClass(D2AttributeValue.class);
+  @NotNull
+  public D2PropertyKey getPropertyKey() {
+    return findNotNullChildByClass(D2PropertyKey.class);
   }
 
   @Override
   @NotNull
-  public D2PropertyKey getPropertyKey() {
-    return findNotNullChildByClass(D2PropertyKey.class);
+  public D2PropertyValue getPropertyValue() {
+    return findNotNullChildByClass(D2PropertyValue.class);
   }
 
 }

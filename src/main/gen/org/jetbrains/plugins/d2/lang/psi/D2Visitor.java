@@ -7,10 +7,6 @@ import org.jetbrains.plugins.d2.lang.D2CompositeElement;
 
 public class D2Visitor extends PsiElementVisitor {
 
-  public void visitAttributeValue(@NotNull D2AttributeValue o) {
-    visitCompositeElement(o);
-  }
-
   public void visitBlockDefinition(@NotNull D2BlockDefinition o) {
     visitCompositeElement(o);
   }
@@ -32,6 +28,10 @@ public class D2Visitor extends PsiElementVisitor {
   }
 
   public void visitPropertyKey(@NotNull D2PropertyKey o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitPropertyValue(@NotNull D2PropertyValue o) {
     visitCompositeElement(o);
   }
 

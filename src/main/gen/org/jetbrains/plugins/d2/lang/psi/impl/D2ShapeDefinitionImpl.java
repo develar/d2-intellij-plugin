@@ -27,10 +27,4 @@ public class D2ShapeDefinitionImpl extends D2CompositeElementImpl implements D2S
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public D2AttributeValue getAttributeValue() {
-    return findNotNullChildByClass(D2AttributeValue.class);
-  }
-
 }

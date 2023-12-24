@@ -18,7 +18,7 @@ class D2ColorProvider : ElementColorProvider {
     if (element.elementType !in listOf(D2ElementTypes.ID, D2ElementTypes.STRING)) {
       return null
     }
-    if (element.parent.elementType != D2ElementTypes.ATTRIBUTE_VALUE) {
+    if (element.parent.elementType != D2ElementTypes.PROPERTY_VALUE) {
       return null
     }
 
@@ -37,7 +37,7 @@ class D2ColorProvider : ElementColorProvider {
     val newPsi = factory.createElementFromText(
       "\"${color.hex}\"",
       D2Language,
-      D2ElementTypes.ATTRIBUTE_VALUE,
+      D2ElementTypes.PROPERTY_VALUE,
       element.context
     ) ?: return
 

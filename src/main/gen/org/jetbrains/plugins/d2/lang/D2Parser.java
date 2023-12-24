@@ -37,10 +37,9 @@ public class D2Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // STRING | ID | INT | FLOAT | TRUE | FALSE | DOT
-  public static boolean AttributeValue(PsiBuilder b, int l) {
+  static boolean AttributeValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AttributeValue")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, ATTRIBUTE_VALUE, "<attribute value>");
     r = consumeToken(b, STRING);
     if (!r) r = consumeToken(b, ID);
     if (!r) r = consumeToken(b, INT);
@@ -48,7 +47,6 @@ public class D2Parser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, TRUE);
     if (!r) r = consumeToken(b, FALSE);
     if (!r) r = consumeToken(b, DOT);
-    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -184,7 +182,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PropertyKey COLON (UNQUOTED_STRING | AttributeValue)
+  // PropertyKey COLON PropertyValue
   public static boolean Property(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Property")) return false;
     if (!nextTokenIs(b, "<property>", RESERVED_KEYWORD_HOLDERS, SIMPLE_RESERVED_KEYWORDS)) return false;
@@ -192,17 +190,8 @@ public class D2Parser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, PROPERTY, "<property>");
     r = PropertyKey(b, l + 1);
     r = r && consumeToken(b, COLON);
-    r = r && Property_2(b, l + 1);
+    r = r && PropertyValue(b, l + 1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // UNQUOTED_STRING | AttributeValue
-  private static boolean Property_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Property_2")) return false;
-    boolean r;
-    r = consumeToken(b, UNQUOTED_STRING);
-    if (!r) r = AttributeValue(b, l + 1);
     return r;
   }
 
@@ -246,6 +235,18 @@ public class D2Parser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, DOT, ID);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // UNQUOTED_STRING | AttributeValue
+  public static boolean PropertyValue(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyValue")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PROPERTY_VALUE, "<property value>");
+    r = consumeToken(b, UNQUOTED_STRING);
+    if (!r) r = AttributeValue(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

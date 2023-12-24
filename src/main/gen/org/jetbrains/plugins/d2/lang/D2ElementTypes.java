@@ -8,13 +8,13 @@ import org.jetbrains.plugins.d2.lang.psi.impl.*;
 
 public interface D2ElementTypes {
 
-  IElementType ATTRIBUTE_VALUE = new D2ElementType("ATTRIBUTE_VALUE");
   IElementType BLOCK_DEFINITION = new D2ElementType("BLOCK_DEFINITION");
   IElementType CONNECTOR = new D2ElementType("CONNECTOR");
   IElementType INLINE_SHAPE_DEFINITION = new D2ElementType("INLINE_SHAPE_DEFINITION");
   IElementType LABEL_DEFINITION = new D2ElementType("LABEL_DEFINITION");
   IElementType PROPERTY = new D2ElementType("PROPERTY");
   IElementType PROPERTY_KEY = new D2ElementType("PROPERTY_KEY");
+  IElementType PROPERTY_VALUE = new D2ElementType("PROPERTY_VALUE");
   IElementType SHAPE_CONNECTION = new D2ElementType("SHAPE_CONNECTION");
   IElementType SHAPE_DEFINITION = new D2ElementType("SHAPE_DEFINITION");
   IElementType SHAPE_DEFINITIONS = new D2ElementType("SHAPE_DEFINITIONS");
@@ -43,10 +43,7 @@ public interface D2ElementTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == ATTRIBUTE_VALUE) {
-        return new D2AttributeValueImpl(node);
-      }
-      else if (type == BLOCK_DEFINITION) {
+      if (type == BLOCK_DEFINITION) {
         return new D2BlockDefinitionImpl(node);
       }
       else if (type == CONNECTOR) {
@@ -63,6 +60,9 @@ public interface D2ElementTypes {
       }
       else if (type == PROPERTY_KEY) {
         return new D2PropertyKeyImpl(node);
+      }
+      else if (type == PROPERTY_VALUE) {
+        return new D2PropertyValueImpl(node);
       }
       else if (type == SHAPE_CONNECTION) {
         return new D2ShapeConnectionImpl(node);

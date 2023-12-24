@@ -27,10 +27,4 @@ public class D2LabelDefinitionImpl extends D2CompositeElementImpl implements D2L
     else super.accept(visitor);
   }
 
-  @Override
-  @Nullable
-  public D2AttributeValue getAttributeValue() {
-    return findChildByClass(D2AttributeValue.class);
-  }
-
 }
