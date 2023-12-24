@@ -11,26 +11,20 @@ import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
 import org.jetbrains.plugins.d2.lang.D2CompositeElementImpl;
 import org.jetbrains.plugins.d2.lang.psi.*;
 
-public class D2ShapeDefinitionImpl extends D2CompositeElementImpl implements D2ShapeDefinition {
+public class D2PropertyValueImpl extends D2CompositeElementImpl implements D2PropertyValue {
 
-  public D2ShapeDefinitionImpl(@NotNull ASTNode node) {
+  public D2PropertyValueImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull D2Visitor visitor) {
-    visitor.visitShapeDefinition(this);
+    visitor.visitPropertyValue(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof D2Visitor) accept((D2Visitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<D2PropertyKey> getPropertyKeyList() {
-    return D2PsiTreeUtil.getChildrenOfTypeAsList(this, D2PropertyKey.class);
   }
 
 }

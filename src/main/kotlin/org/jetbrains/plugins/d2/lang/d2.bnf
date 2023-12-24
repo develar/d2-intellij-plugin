@@ -29,7 +29,7 @@ private ShapeExtras ::= COLON (LabelDefinition BlockDefinition? | BlockDefinitio
   pin=1
 }
 
-ShapeDefinition ::= AttributeValue
+ShapeDefinition ::= AttributeValue (DOT PropertyKey)*
 
 LabelDefinition ::= UNQUOTED_STRING | AttributeValue
 

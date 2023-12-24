@@ -278,13 +278,36 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AttributeValue
+  // AttributeValue (DOT PropertyKey)*
   public static boolean ShapeDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeDefinition")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SHAPE_DEFINITION, "<shape definition>");
     r = AttributeValue(b, l + 1);
+    r = r && ShapeDefinition_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (DOT PropertyKey)*
+  private static boolean ShapeDefinition_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeDefinition_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!ShapeDefinition_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ShapeDefinition_1", c)) break;
+    }
+    return true;
+  }
+
+  // DOT PropertyKey
+  private static boolean ShapeDefinition_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeDefinition_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOT);
+    r = r && PropertyKey(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 

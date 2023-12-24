@@ -1,0 +1,53 @@
+# comments are supported
+logs: {
+  # proper highlighting of special keywords as "fields" (like a JSON),
+  # and unquoted string literal for values as string,
+  shape: page
+  # still boolean or int literals is properly highlighted
+  style.multiple: true
+}
+
+# color on a gutter is supported, including changing;
+# proper highlighting of special keywords works also for inline form
+logs.style.stroke: "#f4a261"
+
+user: User {shape: person}
+network: Network {
+  tower: Cell Tower {
+    satellites: {
+      shape: stored_data
+      style.multiple: true
+    }
+
+    satellites -> transmitter
+    satellites -> transmitter
+    satellites -> transmitter
+    transmitter
+  }
+  processor: Data Processor {
+    storage: Storage {
+      shape: cylinder
+      style.multiple: true
+    }
+  }
+  portal: Online Portal {
+    UI
+  }
+
+  tower.transmitter -> processor: phone logs
+}
+server: API Server
+
+user -> network.tower: Make call
+network.processor -> server
+network.processor -> server
+network.processor -> server
+
+server -> logs
+server -> logs
+server -> logs: persist
+
+server -> network.portal.UI: display
+user -> network.portal.UI: access {
+  style.stroke-dash: 3
+}
