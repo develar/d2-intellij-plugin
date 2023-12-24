@@ -31,7 +31,7 @@ private ShapeExtras ::= COLON (LabelDefinition BlockDefinition? | BlockDefinitio
 
 ShapeDefinition ::= AttributeValue
 
-LabelDefinition ::= AttributeValue
+LabelDefinition ::= UNQUOTED_STRING | AttributeValue
 
 left ShapeConnection ::= (Connector ShapeDefinition)+
 
@@ -39,10 +39,11 @@ Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
 left InlineShapeDefinition ::= (SEMICOLON ShapeDefinition)+
 
-Property ::= SIMPLE_RESERVED_KEYWORDS COLON AttributeValue
+PropertyKey ::= (SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS) (DOT ID)*
+Property ::= PropertyKey COLON (UNQUOTED_STRING | AttributeValue)
 
 BlockDefinition ::= LBRACE (Property | ShapeDefinitions)* RBRACE {
   pin=1
 }
 
-AttributeValue ::= STRING_LITERAL | IDENTIFIER | NUMERIC_LITERAL | FLOAT_LITERAL | TRUE | FALSE | DOT
+AttributeValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT

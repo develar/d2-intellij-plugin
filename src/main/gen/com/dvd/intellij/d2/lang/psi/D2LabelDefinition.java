@@ -8,7 +8,7 @@ import com.dvd.intellij.d2.lang.D2CompositeElement;
 
 public interface D2LabelDefinition extends D2CompositeElement {
 
-  @NotNull
+  @Nullable
   D2AttributeValue getAttributeValue();
 
 }

@@ -31,22 +31,31 @@ ARROW=-+>
 REVERSE_ARROW=<-+
 DOUBLE_HYPHEN_ARROW=--+
 DOUBLE_ARROW=<-+>
-COMMENT=#.*
-NUMERIC_LITERAL=[0-9]+
-FLOAT_LITERAL=[0-9]+\.[0-9]+
-STRING_LITERAL=('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\'|\\)*\")
-IDENTIFIER=[a-zA-Z_*0-9]+(-[a-zA-Z_*0-9]+)*
-WHITE_SPACE=[ \t\n\x0B\f\r]+
+Comment=#.*
+Int=[0-9]+
+Float=[0-9]+\.[0-9]+
+String=('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\'|\\)*\")
+Id=[a-zA-Z_*0-9]+(-[a-zA-Z_*0-9]+)*
+WhiteSpace=[ \t\n\x0B\f\r]+
+
+LBrace="{"
+RBrace="}"
+
+UnquotedString=[^ \t\n\r{}]+([ \t]+[^ \n\r{}]+)*
+
+NewLine=[\r\n]+
+
+%states LABEL
 
 %%
 <YYINITIAL> {
-  {WHITE_SPACE}               { return WHITE_SPACE; }
+  {WhiteSpace} { return WHITE_SPACE; }
 
-  "{"                         { return LBRACE; }
-  "}"                         { return RBRACE; }
+  {LBrace} { return LBRACE; }
+  {RBrace} { return RBRACE; }
   "."                         { return DOT; }
   ";"                         { return SEMICOLON; }
-  ":"                         { return COLON; }
+  ":"                         { yybegin(LABEL); return COLON; }
   "true"                      { return TRUE; }
   "false"                     { return FALSE; }
 
@@ -54,14 +63,25 @@ WHITE_SPACE=[ \t\n\x0B\f\r]+
   {REVERSE_ARROW}             { return REVERSE_ARROW; }
   {DOUBLE_HYPHEN_ARROW}       { return DOUBLE_HYPHEN_ARROW; }
   {DOUBLE_ARROW}              { return DOUBLE_ARROW; }
-  {COMMENT}                   { return COMMENT; }
-  {NUMERIC_LITERAL}           { return NUMERIC_LITERAL; }
-  {FLOAT_LITERAL}             { return FLOAT_LITERAL; }
+  {Comment}                   { return COMMENT; }
+  {Int} { return INT; }
+  {Float} { return FLOAT; }
 
 		{SimpleReservedKeywords} { return SIMPLE_RESERVED_KEYWORDS; }
-		{ReservedKeywordHolders} { return RESERVED_KEYWOR_HOLDERS; }
-  {STRING_LITERAL}            { return STRING_LITERAL; }
-  {IDENTIFIER}                { return IDENTIFIER; }
+		{ReservedKeywordHolders} { return RESERVED_KEYWORD_HOLDERS; }
+
+  {Id} { return ID; }
+
+  {String} { return STRING; }
+}
+
+<LABEL> {
+	{UnquotedString} { return UNQUOTED_STRING; }
+	[ \t]+ { return WHITE_SPACE; }
+	[\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }
+	{LBrace} { yybegin(YYINITIAL); return LBRACE; }
+	// inline shape definition: {shape: person}
+	{RBrace} { yybegin(YYINITIAL); return RBRACE; }
 }
 
 [^] { return BAD_CHARACTER; }

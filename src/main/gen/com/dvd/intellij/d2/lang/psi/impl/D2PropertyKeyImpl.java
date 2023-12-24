@@ -11,32 +11,20 @@ import static com.dvd.intellij.d2.lang.D2ElementTypes.*;
 import com.dvd.intellij.d2.lang.D2CompositeElementImpl;
 import com.dvd.intellij.d2.lang.psi.*;
 
-public class D2PropertyImpl extends D2CompositeElementImpl implements D2Property {
+public class D2PropertyKeyImpl extends D2CompositeElementImpl implements D2PropertyKey {
 
-  public D2PropertyImpl(@NotNull ASTNode node) {
+  public D2PropertyKeyImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull D2Visitor visitor) {
-    visitor.visitProperty(this);
+    visitor.visitPropertyKey(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof D2Visitor) accept((D2Visitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public D2AttributeValue getAttributeValue() {
-    return findChildByClass(D2AttributeValue.class);
-  }
-
-  @Override
-  @NotNull
-  public D2PropertyKey getPropertyKey() {
-    return findNotNullChildByClass(D2PropertyKey.class);
   }
 
 }

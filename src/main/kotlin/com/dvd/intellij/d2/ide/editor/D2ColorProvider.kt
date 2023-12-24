@@ -15,8 +15,12 @@ class D2ColorProvider : ElementColorProvider {
     get() = String.format("#%02x%02x%02x", red, green, blue)
 
   override fun getColorFrom(element: PsiElement): Color? {
-    if (element.elementType !in listOf(D2ElementTypes.IDENTIFIER, D2ElementTypes.STRING_LITERAL)) return null
-    if (element.parent.elementType != D2ElementTypes.ATTRIBUTE_VALUE) return null
+    if (element.elementType !in listOf(D2ElementTypes.ID, D2ElementTypes.STRING)) {
+      return null
+    }
+    if (element.parent.elementType != D2ElementTypes.ATTRIBUTE_VALUE) {
+      return null
+    }
 
     val text = element.text.removeSurrounding("\"")
     return when {

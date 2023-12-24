@@ -11,14 +11,18 @@ import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
 import javax.swing.Icon
 
-class D2ColorSettingsPage : ColorSettingsPage {
+private class D2ColorSettingsPage : ColorSettingsPage {
   override fun getColorDescriptors(): Array<ColorDescriptor> = ColorDescriptor.EMPTY_ARRAY
+
   override fun getDisplayName(): String = D2Language.id
+
   override fun getIcon(): Icon = D2Icons.FILE
+
   override fun getHighlighter(): SyntaxHighlighter = D2SyntaxHighlighter()
+
   override fun getAdditionalHighlightingTagToDescriptorMap(): MutableMap<String, TextAttributesKey>? = null
 
-  override fun getAttributeDescriptors(): Array<AttributesDescriptor> = attributesDescriptors {
+  override fun getAttributeDescriptors(): Array<AttributesDescriptor> = attributeDescriptors {
     descriptor {
       displayName = D2Bundle.messagePointer("descriptor.comment")
       attrKey = D2SyntaxHighlighter.COMMENT

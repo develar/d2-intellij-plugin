@@ -14,9 +14,7 @@ import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 
-
 class D2StyleCompletionContributor : CompletionContributor() {
-
   private val styleAttrs = ShapeStyles.values().map {
     LookupElementBuilder.create(it.keyword)
       .withIcon(AllIcons.Actions.Show)
@@ -40,7 +38,7 @@ class D2StyleCompletionContributor : CompletionContributor() {
     // list style attributes
     extend(
       CompletionType.BASIC,
-      PlatformPatterns.psiElement(D2ElementTypes.IDENTIFIER),
+      PlatformPatterns.psiElement(D2ElementTypes.ID),
       object : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(
           parameters: CompletionParameters,
@@ -77,8 +75,8 @@ class D2StyleCompletionContributor : CompletionContributor() {
         result.addAllElements(elements)
       }
     }
-    extend(CompletionType.BASIC, PlatformPatterns.psiElement(D2ElementTypes.IDENTIFIER), styleValueCompletion)
-    extend(CompletionType.SMART, PlatformPatterns.psiElement(D2ElementTypes.IDENTIFIER), styleValueCompletion)
+    extend(CompletionType.BASIC, PlatformPatterns.psiElement(D2ElementTypes.ID), styleValueCompletion)
+    extend(CompletionType.SMART, PlatformPatterns.psiElement(D2ElementTypes.ID), styleValueCompletion)
   }
 
 }

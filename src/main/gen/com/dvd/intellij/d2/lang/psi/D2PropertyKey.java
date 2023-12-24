@@ -6,12 +6,6 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.dvd.intellij.d2.lang.D2CompositeElement;
 
-public interface D2Property extends D2CompositeElement {
-
-  @Nullable
-  D2AttributeValue getAttributeValue();
-
-  @NotNull
-  D2PropertyKey getPropertyKey();
+public interface D2PropertyKey extends D2CompositeElement {
 
 }

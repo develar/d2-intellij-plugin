@@ -14,6 +14,7 @@ public interface D2ElementTypes {
   IElementType INLINE_SHAPE_DEFINITION = new D2ElementType("INLINE_SHAPE_DEFINITION");
   IElementType LABEL_DEFINITION = new D2ElementType("LABEL_DEFINITION");
   IElementType PROPERTY = new D2ElementType("PROPERTY");
+  IElementType PROPERTY_KEY = new D2ElementType("PROPERTY_KEY");
   IElementType SHAPE_CONNECTION = new D2ElementType("SHAPE_CONNECTION");
   IElementType SHAPE_DEFINITION = new D2ElementType("SHAPE_DEFINITION");
   IElementType SHAPE_DEFINITIONS = new D2ElementType("SHAPE_DEFINITIONS");
@@ -26,16 +27,18 @@ public interface D2ElementTypes {
   IElementType DOUBLE_ARROW = new D2TokenType("DOUBLE_ARROW");
   IElementType DOUBLE_HYPHEN_ARROW = new D2TokenType("DOUBLE_HYPHEN_ARROW");
   IElementType FALSE = new D2TokenType("FALSE");
-  IElementType FLOAT_LITERAL = new D2TokenType("FLOAT_LITERAL");
-  IElementType IDENTIFIER = new D2TokenType("IDENTIFIER");
+  IElementType FLOAT = new D2TokenType("FLOAT");
+  IElementType ID = new D2TokenType("ID");
+  IElementType INT = new D2TokenType("INT");
   IElementType LBRACE = new D2TokenType("LBRACE");
-  IElementType NUMERIC_LITERAL = new D2TokenType("NUMERIC_LITERAL");
   IElementType RBRACE = new D2TokenType("RBRACE");
+  IElementType RESERVED_KEYWORD_HOLDERS = new D2TokenType("RESERVED_KEYWORD_HOLDERS");
   IElementType REVERSE_ARROW = new D2TokenType("REVERSE_ARROW");
   IElementType SEMICOLON = new D2TokenType("SEMICOLON");
   IElementType SIMPLE_RESERVED_KEYWORDS = new D2TokenType("SIMPLE_RESERVED_KEYWORDS");
-  IElementType STRING_LITERAL = new D2TokenType("STRING_LITERAL");
+  IElementType STRING = new D2TokenType("STRING");
   IElementType TRUE = new D2TokenType("TRUE");
+  IElementType UNQUOTED_STRING = new D2TokenType("UNQUOTED_STRING");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -57,6 +60,9 @@ public interface D2ElementTypes {
       }
       else if (type == PROPERTY) {
         return new D2PropertyImpl(node);
+      }
+      else if (type == PROPERTY_KEY) {
+        return new D2PropertyKeyImpl(node);
       }
       else if (type == SHAPE_CONNECTION) {
         return new D2ShapeConnectionImpl(node);

@@ -28,9 +28,9 @@ public class D2LabelDefinitionImpl extends D2CompositeElementImpl implements D2L
   }
 
   @Override
-  @NotNull
+  @Nullable
   public D2AttributeValue getAttributeValue() {
-    return findNotNullChildByClass(D2AttributeValue.class);
+    return findChildByClass(D2AttributeValue.class);
   }
 
 }

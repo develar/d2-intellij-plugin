@@ -36,15 +36,15 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // STRING_LITERAL | IDENTIFIER | NUMERIC_LITERAL | FLOAT_LITERAL | TRUE | FALSE | DOT
+  // STRING | ID | INT | FLOAT | TRUE | FALSE | DOT
   public static boolean AttributeValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AttributeValue")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ATTRIBUTE_VALUE, "<attribute value>");
-    r = consumeToken(b, STRING_LITERAL);
-    if (!r) r = consumeToken(b, IDENTIFIER);
-    if (!r) r = consumeToken(b, NUMERIC_LITERAL);
-    if (!r) r = consumeToken(b, FLOAT_LITERAL);
+    r = consumeToken(b, STRING);
+    if (!r) r = consumeToken(b, ID);
+    if (!r) r = consumeToken(b, INT);
+    if (!r) r = consumeToken(b, FLOAT);
     if (!r) r = consumeToken(b, TRUE);
     if (!r) r = consumeToken(b, FALSE);
     if (!r) r = consumeToken(b, DOT);
@@ -172,26 +172,80 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AttributeValue
+  // UNQUOTED_STRING | AttributeValue
   public static boolean LabelDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelDefinition")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LABEL_DEFINITION, "<label definition>");
-    r = AttributeValue(b, l + 1);
+    r = consumeToken(b, UNQUOTED_STRING);
+    if (!r) r = AttributeValue(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // SIMPLE_RESERVED_KEYWORDS COLON AttributeValue
+  // PropertyKey COLON (UNQUOTED_STRING | AttributeValue)
   public static boolean Property(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Property")) return false;
-    if (!nextTokenIs(b, SIMPLE_RESERVED_KEYWORDS)) return false;
+    if (!nextTokenIs(b, "<property>", RESERVED_KEYWORD_HOLDERS, SIMPLE_RESERVED_KEYWORDS)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PROPERTY, "<property>");
+    r = PropertyKey(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    r = r && Property_2(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // UNQUOTED_STRING | AttributeValue
+  private static boolean Property_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Property_2")) return false;
+    boolean r;
+    r = consumeToken(b, UNQUOTED_STRING);
+    if (!r) r = AttributeValue(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS) (DOT ID)*
+  public static boolean PropertyKey(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKey")) return false;
+    if (!nextTokenIs(b, "<property key>", RESERVED_KEYWORD_HOLDERS, SIMPLE_RESERVED_KEYWORDS)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PROPERTY_KEY, "<property key>");
+    r = PropertyKey_0(b, l + 1);
+    r = r && PropertyKey_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS
+  private static boolean PropertyKey_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKey_0")) return false;
+    boolean r;
+    r = consumeToken(b, SIMPLE_RESERVED_KEYWORDS);
+    if (!r) r = consumeToken(b, RESERVED_KEYWORD_HOLDERS);
+    return r;
+  }
+
+  // (DOT ID)*
+  private static boolean PropertyKey_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKey_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!PropertyKey_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "PropertyKey_1", c)) break;
+    }
+    return true;
+  }
+
+  // DOT ID
+  private static boolean PropertyKey_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKey_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, SIMPLE_RESERVED_KEYWORDS, COLON);
-    r = r && AttributeValue(b, l + 1);
-    exit_section_(b, m, PROPERTY, r);
+    r = consumeTokens(b, 0, DOT, ID);
+    exit_section_(b, m, null, r);
     return r;
   }
 

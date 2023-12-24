@@ -21,7 +21,7 @@ class D2ShapesTypesCompletionContributor : CompletionContributor() {
   init {
     extend(
       CompletionType.BASIC,
-      PlatformPatterns.psiElement(D2ElementTypes.IDENTIFIER),
+      PlatformPatterns.psiElement(D2ElementTypes.ID),
       object : CompletionProvider<CompletionParameters>() {
         override fun addCompletions(
           parameters: CompletionParameters,

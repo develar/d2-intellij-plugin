@@ -4,14 +4,15 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.options.colors.AttributesDescriptor
 import java.util.function.Supplier
 
-fun attributesDescriptors(block: AttributesDescriptorsBuilder.() -> Unit): Array<AttributesDescriptor> =
-  AttributesDescriptorsBuilder().apply(block).build()
+fun attributeDescriptors(block: AttributeDescriptorsBuilder.() -> Unit): Array<AttributesDescriptor> {
+  return AttributeDescriptorsBuilder().apply(block).build()
+}
 
 @DslMarker
 annotation class DescriptorDsl
 
 @DescriptorDsl
-class AttributesDescriptorsBuilder {
+class AttributeDescriptorsBuilder {
   private val attrs = mutableListOf<AttributesDescriptor>()
 
   fun descriptor(block: DescriptorBuilder.() -> Unit) = attrs.add(DescriptorBuilder().apply(block).build())
