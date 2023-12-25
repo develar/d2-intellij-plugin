@@ -26,14 +26,15 @@ private class D2FormatterService : AsyncDocumentFormattingService() {
   override fun canFormat(file: PsiFile): Boolean = file is D2File
 
   override fun createFormattingTask(request: AsyncFormattingRequest): FormattingTask? {
-    val service = service<D2Service>()
-    if (!service.isCompilerInstalled()) {
-      return null
-    }
-
     val file = request.ioFile ?: return null
     return object : FormattingTask {
       override fun run() {
+        val service = service<D2Service>()
+        if (!service.isCompilerInstalled()) {
+          request.onError("", D2Bundle.message("d2.executable.not.found.format.notification"))
+          return
+        }
+
         when (val result = service.format(file)) {
           is D2FormatterResult.Error -> {
             val error = ERROR_REGEX.find(result.error)?.groupValues?.get(1) ?: result.error
