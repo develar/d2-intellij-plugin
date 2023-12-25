@@ -3,6 +3,7 @@ package com.dvd.intellij.d2.ide.editor.images
 import com.dvd.intellij.d2.components.D2Layout
 import com.dvd.intellij.d2.components.D2Theme
 import com.dvd.intellij.d2.ide.service.D2Service
+import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.dvd.intellij.d2.ide.utils.D2_EDITOR_NAME
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter
 import com.intellij.ide.structureView.StructureViewBuilder
@@ -20,6 +21,8 @@ import com.intellij.ui.jcef.JBCefApp
 import com.intellij.ui.jcef.JBCefBrowser
 import com.intellij.ui.jcef.JBCefBrowserBuilder
 import com.intellij.util.EventDispatcher
+import java.awt.event.ComponentAdapter
+import java.awt.event.ComponentEvent
 import java.beans.PropertyChangeListener
 import javax.swing.JComponent
 import javax.swing.JLabel
@@ -42,9 +45,15 @@ class D2SvgViewer(
       browser = JBCefBrowserBuilder()
         .build()
       component = browser.component
+
+      component.addComponentListener(object : ComponentAdapter() {
+        override fun componentShown(e: ComponentEvent?) {
+          // if preview was hidden initially (mode without preview)
+          browser.cefBrowser.reload()
+        }
+      })
     } else {
-      @Suppress("HardCodedStringLiteral")
-      component = JLabel("Preview requires an IntelliJ platform IDE with JCEF support.")
+      component = JLabel(D2Bundle.message("preview.requires.an.intellij.platform.ide.with.jcef.support"))
       browser = null
     }
 
