@@ -2,9 +2,11 @@ package com.dvd.intellij.d2.ide.editor.images
 
 import com.dvd.intellij.d2.components.D2Layout
 import com.dvd.intellij.d2.components.D2Theme
+import com.dvd.intellij.d2.ide.service.D2Service
 import com.dvd.intellij.d2.ide.utils.D2_EDITOR_NAME
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter
 import com.intellij.ide.structureView.StructureViewBuilder
+import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorLocation
 import com.intellij.openapi.fileEditor.FileEditorState
@@ -45,6 +47,8 @@ class D2SvgViewer(
       component = JLabel("Preview requires an IntelliJ platform IDE with JCEF support.")
       browser = null
     }
+
+    service<D2Service>().scheduleCompile(this, project)
   }
 
   fun refreshD2(port: Int) {
@@ -105,8 +109,12 @@ class D2SvgViewer(
   override fun getStructureViewBuilder(): StructureViewBuilder? = null
 
   override fun dispose() {
-    browser?.let {
-      Disposer.dispose(it)
+    try {
+      browser?.let {
+        Disposer.dispose(it)
+      }
+    } finally {
+      service<D2Service>().closeFile(this)
     }
   }
 

@@ -14,8 +14,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.fileEditor.FileEditor
-import com.intellij.openapi.fileEditor.TextEditor
-import com.intellij.openapi.fileEditor.TextEditorWithPreview
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream
 import com.intellij.openapi.util.removeUserData
@@ -57,13 +56,12 @@ class D2Service(private val coroutineScope: CoroutineScope) : Disposable {
 
   fun getLayoutEngines(): List<D2Layout>? = executeAndGetOutputOrNull(D2Command.LayoutEngines)?.layouts
 
-  fun scheduleCompile(fileEditor: TextEditor) {
+  fun scheduleCompile(fileEditor: D2SvgViewer, project: Project) {
     coroutineScope.launch {
       if (!fileEditor.isValid) {
         return@launch
       }
 
-      val project = fileEditor.editor.project ?: return@launch
       if (project.isDisposed) {
         return@launch
       }
@@ -90,7 +88,7 @@ class D2Service(private val coroutineScope: CoroutineScope) : Disposable {
     }
   }
 
-  fun compile(fileEditor: FileEditor) {
+  fun compile(fileEditor: D2SvgViewer) {
     val oldExec = editorToState.get(fileEditor)
     val oldCommand = oldExec?.command
 
@@ -139,17 +137,14 @@ class D2Service(private val coroutineScope: CoroutineScope) : Disposable {
     }
     command.process?.startNotify()
 
-    ((fileEditor as TextEditorWithPreview).previewEditor as D2SvgViewer).refreshD2(command.port)
+    fileEditor.refreshD2(command.port)
   }
 
   fun closeFile(fileEditor: FileEditor) {
     fileEditor.putUserData(D2_FILE_LAYOUT, null)
     fileEditor.putUserData(D2_FILE_THEME, null)
 
-    editorToState[fileEditor]?.command?.process?.destroyProcess()
-    editorToState -= fileEditor
-
-    LOG.info("[plugin] Closed file")
+    editorToState.remove(fileEditor)?.command?.process?.destroyProcess()
   }
 
   fun format(file: File): D2FormatterResult {

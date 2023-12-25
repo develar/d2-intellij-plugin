@@ -1,17 +1,23 @@
 package com.dvd.intellij.d2.ide.action
 
+import com.dvd.intellij.d2.ide.execution.D2Command
 import com.dvd.intellij.d2.ide.service.D2Service
-import com.dvd.intellij.d2.ide.utils.*
+import com.dvd.intellij.d2.ide.utils.D2Bundle
+import com.dvd.intellij.d2.ide.utils.d2FileEditor
+import com.dvd.intellij.d2.ide.utils.file
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileChooser.FileChooserFactory
 import com.intellij.openapi.fileChooser.FileSaverDescriptor
+import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.util.io.FileUtilRt
 import java.nio.file.Files
 
 enum class ConversionOutput { SVG, PNG, JPG, TIFF }
+
+private fun getGeneratedCommand(fileEditor: FileEditor): D2Command.Generate? = service<D2Service>().map.get(fileEditor)?.command
 
 @OptIn(ExperimentalStdlibApi::class)
 private class D2ExportAction : AnAction() {
@@ -27,7 +33,7 @@ private class D2ExportAction : AnAction() {
       e.project
     ).save(e.file.parent, defaultFileName) ?: return
 
-    val d2File = e.d2FileEditor.generatedFile ?: error("no d2 file")
+    val d2File = getGeneratedCommand(e.d2FileEditor)?.targetFile ?: error("no d2 file")
     val converted = service<D2Service>().convert(d2File, ConversionOutput.valueOf(fileWrapper.file.extension.uppercase()))
     Files.write(fileWrapper.file.toPath(), converted)
   }
@@ -35,7 +41,7 @@ private class D2ExportAction : AnAction() {
 
 private class D2LiveBrowserAction : AnAction() {
   override fun actionPerformed(e: AnActionEvent) {
-    val port = e.d2FileEditor.generatedCommand?.port ?: error("port not found")
+    val port = getGeneratedCommand(e.d2FileEditor)?.port ?: error("port not found")
     BrowserUtil.browse("http://localhost:$port")
   }
 }

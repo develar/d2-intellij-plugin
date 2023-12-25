@@ -1,4 +1,4 @@
-package com.dvd.intellij.d2.ide.editor
+package org.jetbrains.plugins.d2.editor
 
 import com.dvd.intellij.d2.ide.service.D2_FILE_NOTIFICATION
 import com.dvd.intellij.d2.ide.utils.isD2

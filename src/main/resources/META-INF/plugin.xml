@@ -46,7 +46,7 @@
 
     <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
 
-    <editorNotificationProvider implementation="com.dvd.intellij.d2.ide.editor.D2MissingCompilerNotificationProvider"/>
+    <editorNotificationProvider implementation="org.jetbrains.plugins.d2.editor.D2MissingCompilerNotificationProvider"/>
 
     <annotator language="d2" implementationClass="org.jetbrains.plugins.d2.lang.D2LiteralAnnotator"/>
   </extensions>
