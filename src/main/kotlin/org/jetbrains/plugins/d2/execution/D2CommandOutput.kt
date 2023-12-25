@@ -1,4 +1,4 @@
-package com.dvd.intellij.d2.ide.execution
+package org.jetbrains.plugins.d2.execution
 
 import com.dvd.intellij.d2.components.D2Layout
 

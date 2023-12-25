@@ -1,4 +1,4 @@
-package com.dvd.intellij.d2.ide.completion
+package org.jetbrains.plugins.d2.completion
 
 import com.dvd.intellij.d2.ide.utils.ShapeStyles
 import com.intellij.codeInsight.AutoPopupController

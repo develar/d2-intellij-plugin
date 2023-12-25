@@ -1,8 +1,8 @@
 package com.dvd.intellij.d2.ide.utils
 
-import com.dvd.intellij.d2.ide.completion.BOOLEAN_COMPLETION
-import com.dvd.intellij.d2.ide.completion.COLOR_COMPLETION
-import com.dvd.intellij.d2.ide.completion.FONT_COMPLETION
+import org.jetbrains.plugins.d2.completion.BOOLEAN_COMPLETION
+import org.jetbrains.plugins.d2.completion.COLOR_COMPLETION
+import org.jetbrains.plugins.d2.completion.FONT_COMPLETION
 import java.awt.Color
 
 // https://github.com/terrastruct/d2/blob/eb55a49559fe933b3846094d8af01496ed55d037/d2graph/d2graph.go#L1061-L1087

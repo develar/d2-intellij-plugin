@@ -2,8 +2,6 @@ package org.jetbrains.plugins.d2.editor
 
 import com.dvd.intellij.d2.components.D2Layout
 import com.dvd.intellij.d2.ide.action.ConversionOutput
-import com.dvd.intellij.d2.ide.execution.D2Command
-import com.dvd.intellij.d2.ide.execution.D2CommandOutput
 import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.intellij.execution.process.*
 import com.intellij.openapi.Disposable
@@ -19,6 +17,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.plugins.d2.execution.D2Command
+import org.jetbrains.plugins.d2.execution.D2CommandOutput
 import java.io.File
 import java.net.ServerSocket
 import java.nio.file.Files

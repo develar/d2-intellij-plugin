@@ -13,7 +13,7 @@
     <fileType name="D2"
               language="d2"
               extensions="d2"
-              implementationClass="com.dvd.intellij.d2.ide.file.D2FileType"
+              implementationClass="org.jetbrains.plugins.d2.file.D2FileType"
               fieldName="INSTANCE"/>
 
     <lang.parserDefinition language="d2" implementationClass="org.jetbrains.plugins.d2.lang.D2ParserDefinition"/>
@@ -34,13 +34,13 @@
     <formattingService implementation="org.jetbrains.plugins.d2.editor.D2FormatterService"/>
 
     <completion.contributor language="d2"
-                            implementationClass="com.dvd.intellij.d2.ide.completion.D2ShapesTypesCompletionContributor"/>
+                            implementationClass="org.jetbrains.plugins.d2.completion.D2ShapesTypesCompletionContributor"/>
     <completion.contributor language="d2"
-                            implementationClass="com.dvd.intellij.d2.ide.completion.D2StyleCompletionContributor"/>
+                            implementationClass="org.jetbrains.plugins.d2.completion.D2StyleCompletionContributor"/>
     <completion.contributor language="d2"
-                            implementationClass="com.dvd.intellij.d2.ide.completion.D2BlockCompletionContributor"/>
+                            implementationClass="org.jetbrains.plugins.d2.completion.D2BlockCompletionContributor"/>
     <completion.contributor language="d2"
-                            implementationClass="com.dvd.intellij.d2.ide.completion.D2ConnectorCompletionContributor"/>
+                            implementationClass="org.jetbrains.plugins.d2.completion.D2ConnectorCompletionContributor"/>
 
     <spellchecker.support language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2SpellCheckerStrategy"/>
 

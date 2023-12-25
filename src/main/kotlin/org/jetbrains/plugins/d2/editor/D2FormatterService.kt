@@ -1,6 +1,5 @@
 package org.jetbrains.plugins.d2.editor
 
-import com.dvd.intellij.d2.ide.file.D2File
 import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.dvd.intellij.d2.ide.utils.NOTIFICATION_GROUP
 import com.intellij.formatting.service.AsyncDocumentFormattingService
@@ -8,6 +7,7 @@ import com.intellij.formatting.service.AsyncFormattingRequest
 import com.intellij.formatting.service.FormattingService
 import com.intellij.openapi.components.service
 import com.intellij.psi.PsiFile
+import org.jetbrains.plugins.d2.file.D2File
 
 private val ERROR_REGEX = "err: failed to fmt: .*:\\d*:?\\d*: (.*)".toRegex()
 

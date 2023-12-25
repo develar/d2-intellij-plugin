@@ -1,6 +1,5 @@
 package com.dvd.intellij.d2.ide.action
 
-import com.dvd.intellij.d2.ide.execution.D2Command
 import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.dvd.intellij.d2.ide.utils.d2FileEditor
 import com.dvd.intellij.d2.ide.utils.file
@@ -13,6 +12,7 @@ import com.intellij.openapi.fileChooser.FileSaverDescriptor
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.util.io.FileUtilRt
 import org.jetbrains.plugins.d2.editor.D2Service
+import org.jetbrains.plugins.d2.execution.D2Command
 import java.nio.file.Files
 
 enum class ConversionOutput { SVG, PNG, JPG, TIFF }
