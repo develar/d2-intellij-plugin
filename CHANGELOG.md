@@ -6,7 +6,7 @@
 
 ## [0.0.3-eap] - 2023-12-24
 - Highlighting works for most D2 syntax.
-- Fix element color provider (`logs.style.stroke: "#f4a261"`)
+- Fix element color provider (`logs.style.stroke: "#f4a261"`).
 
 ## [0.0.2-eap] - 2022-12-13
 

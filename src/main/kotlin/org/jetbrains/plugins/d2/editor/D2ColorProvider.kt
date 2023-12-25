@@ -11,7 +11,7 @@ import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import org.jetbrains.plugins.d2.lang.psi.D2PropertyValue
 import java.awt.Color
 
-class D2ColorProvider : ElementColorProvider {
+private class D2ColorProvider : ElementColorProvider {
   override fun getColorFrom(element: PsiElement): Color? {
     // Not a leaf child with a value must be checked, but a holder.
     // On setColorTo we replace the leaf child, so the holder element will become invalid, and after the first change the PSI element will be invalid (as we replaced it).

@@ -42,7 +42,7 @@
     <completion.contributor language="d2"
                             implementationClass="com.dvd.intellij.d2.ide.completion.D2ConnectorCompletionContributor"/>
 
-    <spellchecker.support language="d2" implementationClass="com.dvd.intellij.d2.ide.spell.D2SpellCheckerStrategy"/>
+    <spellchecker.support language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2SpellCheckerStrategy"/>
 
     <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
 
