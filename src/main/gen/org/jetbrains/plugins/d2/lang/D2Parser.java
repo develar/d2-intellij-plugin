@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package org.jetbrains.plugins.d2.lang;
 
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
+import com.intellij.psi.tree.IElementType;
+
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class D2Parser implements PsiParser, LightPsiParser {
@@ -331,10 +331,10 @@ public class D2Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // ShapeDefinition (ShapeConnection | SubShapeDefinition | InlineShapeDefinition)* ShapeExtras?
-  public static boolean ShapeDefinitions(PsiBuilder b, int l) {
+  static boolean ShapeDefinitions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeDefinitions")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, SHAPE_DEFINITIONS, "<shape definitions>");
+    Marker m = enter_section_(b, l, _NONE_);
     r = ShapeDefinition(b, l + 1);
     p = r; // pin = 1
     r = r && report_error_(b, ShapeDefinitions_1(b, l + 1));

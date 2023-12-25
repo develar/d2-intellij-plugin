@@ -10,8 +10,8 @@ import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
+import org.jetbrains.plugins.d2.lang.psi.D2ShapeDefinition
 import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionImpl
-import org.jetbrains.plugins.d2.lang.psi.impl.D2ShapeDefinitionsImpl
 import org.jetbrains.plugins.d2.lang.psi.impl.D2SubShapeDefinitionImpl
 
 class D2StyleCompletionContributor : CompletionContributor() {
@@ -65,7 +65,7 @@ class D2StyleCompletionContributor : CompletionContributor() {
         context: ProcessingContext,
         result: CompletionResultSet
       ) {
-        val parent = parameters.position.parentOfType<D2ShapeDefinitionsImpl>() ?: return
+        val parent = parameters.position.parentOfType<D2ShapeDefinition>() ?: return
         val subShapes = parent.childrenOfType<D2SubShapeDefinitionImpl>().firstOrNull()?.children ?: return
         subShapes.firstOrNull { it.text == "style" } ?: return
 
