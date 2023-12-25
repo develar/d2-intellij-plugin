@@ -27,6 +27,11 @@ repositories {
   maven(url = "https://cache-redirector.jetbrains.com/intellij-repository/snapshots")
 }
 
+dependencies {
+  testImplementation("org.assertj:assertj-core:3.11.1")
+  testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+}
+
 kotlin {
   jvmToolchain {
     languageVersion.set(JavaLanguageVersion.of(properties("jvm.target")))
@@ -81,6 +86,10 @@ configurations.getByName(GrammarKitConstants.GRAMMAR_KIT_CLASS_PATH_CONFIGURATIO
 tasks {
   wrapper {
     gradleVersion = properties("gradleVersion")
+  }
+
+  test {
+    useJUnitPlatform()
   }
 
   val generateParser = withType<GenerateParserTask> {

@@ -22,8 +22,13 @@ import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
 %type IElementType
 %unicode
 
-// non style/holder keywords, see SimpleReservedKeywords in d2 source code
-SimpleReservedKeywords = label | desc | shape | icon | constraint | tooltip | link | near | width | height | direction | top
+// non style/holder keywords, see SimpleReservedKeywords in d2 source code,
+// `classes` is not SimpleReservedKeyword, from CompositeReservedKeywords
+SimpleReservedKeywords = label | desc | shape | icon | constraint | tooltip | link | near | width | height | direction | top | left |
+grid-rows | grid-columns | grid-gap |
+vertical-gap | horizontal-gap |
+class | vars | classes
+
 // reservedKeywordHolders are reserved keywords that are meaningless on its own and must hold composites
 ReservedKeywordHolders = style | source-arrowhead | target-arrowhead
 

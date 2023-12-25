@@ -19,7 +19,7 @@
 File ::= !<<eof>> (Property | ShapeDefinitions | COMMENT)*
 
 // bad tree structure: ci.deploys->clouds<-a.sub:test
-ShapeDefinitions ::= ShapeDefinition (ShapeConnection | SubShapeDefinition | InlineShapeDefinition)* ShapeExtras? {
+private ShapeDefinitions ::= ShapeDefinition (ShapeConnection | SubShapeDefinition | InlineShapeDefinition)* ShapeExtras? {
   pin=1
 }
 

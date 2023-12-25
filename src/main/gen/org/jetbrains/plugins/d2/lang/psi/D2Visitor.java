@@ -1,8 +1,8 @@
 // This is a generated file. Not intended for manual editing.
 package org.jetbrains.plugins.d2.lang.psi;
 
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.d2.lang.D2CompositeElement;
 
 public class D2Visitor extends PsiElementVisitor {
@@ -40,10 +40,6 @@ public class D2Visitor extends PsiElementVisitor {
   }
 
   public void visitShapeDefinition(@NotNull D2ShapeDefinition o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitShapeDefinitions(@NotNull D2ShapeDefinitions o) {
     visitCompositeElement(o);
   }
 
