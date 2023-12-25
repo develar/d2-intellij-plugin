@@ -1,6 +1,5 @@
 package org.jetbrains.plugins.d2.editor
 
-import com.dvd.intellij.d2.ide.service.D2_FILE_NOTIFICATION
 import com.dvd.intellij.d2.ide.utils.isD2
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.project.DumbAware

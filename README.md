@@ -5,7 +5,7 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/20630.svg)](https://plugins.jetbrains.com/plugin/20630)
 
 <!-- Plugin description -->
-Language support for D2 for JetBrains IDEs.
+The language support for D2, a modern language that turns text to diagrams.
 <!-- Plugin description end -->
 
 ## Installation

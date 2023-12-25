@@ -1,7 +1,6 @@
-package com.dvd.intellij.d2.ide.format
+package org.jetbrains.plugins.d2.editor
 
 import com.dvd.intellij.d2.ide.file.D2File
-import com.dvd.intellij.d2.ide.service.D2Service
 import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.dvd.intellij.d2.ide.utils.NOTIFICATION_GROUP
 import com.intellij.formatting.service.AsyncDocumentFormattingService
@@ -12,15 +11,22 @@ import com.intellij.psi.PsiFile
 
 private val ERROR_REGEX = "err: failed to fmt: .*:\\d*:?\\d*: (.*)".toRegex()
 
+sealed class D2FormatterResult {
+  data class Success(val content: String) : D2FormatterResult()
+  data class Error(val error: String) : D2FormatterResult()
+}
+
 private class D2FormatterService : AsyncDocumentFormattingService() {
   override fun getName(): String = D2Bundle.message("d2.formatter")
+
   override fun getNotificationGroupId(): String = NOTIFICATION_GROUP
-  override fun getFeatures(): MutableSet<FormattingService.Feature> = mutableSetOf()
+
+  override fun getFeatures() = emptySet<FormattingService.Feature>()
+
   override fun canFormat(file: PsiFile): Boolean = file is D2File
 
   override fun createFormattingTask(request: AsyncFormattingRequest): FormattingTask? {
     val service = service<D2Service>()
-
     if (!service.isCompilerInstalled()) {
       return null
     }

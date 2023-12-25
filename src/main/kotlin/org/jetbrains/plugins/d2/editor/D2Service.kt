@@ -1,13 +1,9 @@
-package com.dvd.intellij.d2.ide.service
+package org.jetbrains.plugins.d2.editor
 
 import com.dvd.intellij.d2.components.D2Layout
 import com.dvd.intellij.d2.ide.action.ConversionOutput
-import com.dvd.intellij.d2.ide.editor.images.D2SvgViewer
-import com.dvd.intellij.d2.ide.editor.images.D2_FILE_LAYOUT
-import com.dvd.intellij.d2.ide.editor.images.D2_FILE_THEME
 import com.dvd.intellij.d2.ide.execution.D2Command
 import com.dvd.intellij.d2.ide.execution.D2CommandOutput
-import com.dvd.intellij.d2.ide.format.D2FormatterResult
 import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.intellij.execution.process.*
 import com.intellij.openapi.Disposable

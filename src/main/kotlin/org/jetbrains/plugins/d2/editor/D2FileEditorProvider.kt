@@ -1,6 +1,5 @@
-package com.dvd.intellij.d2.ide.editor
+package org.jetbrains.plugins.d2.editor
 
-import com.dvd.intellij.d2.ide.editor.images.D2SvgViewer
 import com.dvd.intellij.d2.ide.utils.D2_EDITOR_NAME
 import com.dvd.intellij.d2.ide.utils.isD2
 import com.intellij.openapi.fileEditor.*

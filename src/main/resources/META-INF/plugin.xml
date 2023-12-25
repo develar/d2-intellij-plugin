@@ -26,12 +26,12 @@
 
     <colorProvider implementation="org.jetbrains.plugins.d2.editor.D2ColorProvider"/>
 
-    <fileEditorProvider implementation="com.dvd.intellij.d2.ide.editor.D2FileEditorProvider"/>
+    <fileEditorProvider implementation="org.jetbrains.plugins.d2.editor.D2FileEditorProvider"/>
 
     <psi.referenceContributor language="d2"
                               implementation="com.dvd.intellij.d2.ide.reference.D2UrlReferenceContributor"/>
 
-    <formattingService implementation="com.dvd.intellij.d2.ide.format.D2FormatterService"/>
+    <formattingService implementation="org.jetbrains.plugins.d2.editor.D2FormatterService"/>
 
     <completion.contributor language="d2"
                             implementationClass="com.dvd.intellij.d2.ide.completion.D2ShapesTypesCompletionContributor"/>

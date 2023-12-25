@@ -1,8 +1,7 @@
-package com.dvd.intellij.d2.ide.editor.images
+package org.jetbrains.plugins.d2.editor
 
 import com.dvd.intellij.d2.components.D2Layout
 import com.dvd.intellij.d2.components.D2Theme
-import com.dvd.intellij.d2.ide.service.D2Service
 import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.dvd.intellij.d2.ide.utils.D2_EDITOR_NAME
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter

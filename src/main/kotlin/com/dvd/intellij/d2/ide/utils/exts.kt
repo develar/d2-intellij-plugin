@@ -1,11 +1,11 @@
 package com.dvd.intellij.d2.ide.utils
 
-import com.dvd.intellij.d2.ide.editor.images.D2SvgViewer
 import com.dvd.intellij.d2.ide.file.D2FileType
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.fileEditor.TextEditorWithPreview
 import com.intellij.openapi.vfs.VirtualFile
+import org.jetbrains.plugins.d2.editor.D2SvgViewer
 
 val VirtualFile.isD2: Boolean
   get() = fileType == D2FileType
