@@ -10,7 +10,7 @@ import org.jetbrains.plugins.d2.lang.psi.D2ShapeDefinition
 
 private val BRACE_PAIRS = arrayOf(BracePair(D2ElementTypes.LBRACE, D2ElementTypes.RBRACE, true))
 
-class D2BraceMatcher : PairedBraceMatcher {
+private class D2BraceMatcher : PairedBraceMatcher {
   override fun getPairs() = BRACE_PAIRS
 
   override fun isPairedBracesAllowedBeforeType(type: IElementType, tokenType: IElementType?): Boolean = true

@@ -1,8 +1,8 @@
-package com.dvd.intellij.d2.ide.editor
+package org.jetbrains.plugins.d2.editor
 
 import com.intellij.lang.Commenter
 
-class D2Commenter : Commenter {
+private class D2Commenter : Commenter {
   override fun getLineCommentPrefix(): String = "# "
 
   override fun getBlockCommentPrefix(): String = "# "
