@@ -6,6 +6,8 @@
 
 <!-- Plugin description -->
 The language support for D2, a modern language that turns text to diagrams.
+
+The plugin is in active development. Don't hesitate to [file issues](https://github.com/develar/d2-intellij-plugin/issues).
 <!-- Plugin description end -->
 
 ## Installation
