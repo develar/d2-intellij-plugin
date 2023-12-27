@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package org.jetbrains.plugins.d2.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.plugins.d2.lang.D2PsiTreeUtil;
-import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.d2.lang.D2CompositeElementImpl;
+import org.jetbrains.plugins.d2.lang.D2PsiTreeUtil;
 import org.jetbrains.plugins.d2.lang.psi.*;
+
+import java.util.List;
 
 public class D2ShapeConnectionImpl extends D2CompositeElementImpl implements D2ShapeConnection {
 
@@ -28,6 +28,12 @@ public class D2ShapeConnectionImpl extends D2CompositeElementImpl implements D2S
   }
 
   @Override
+  @Nullable
+  public D2BlockDefinition getBlockDefinition() {
+    return findChildByClass(D2BlockDefinition.class);
+  }
+
+  @Override
   @NotNull
   public List<D2Connector> getConnectorList() {
     return D2PsiTreeUtil.getChildrenOfTypeAsList(this, D2Connector.class);
@@ -41,6 +47,12 @@ public class D2ShapeConnectionImpl extends D2CompositeElementImpl implements D2S
 
   @Override
   @Nullable
+  public D2LabelDefinition getLabelDefinition() {
+    return findChildByClass(D2LabelDefinition.class);
+  }
+
+  @Override
+  @Nullable
   public D2ShapeConnection getShapeConnection() {
     return findChildByClass(D2ShapeConnection.class);
   }
@@ -49,12 +61,6 @@ public class D2ShapeConnectionImpl extends D2CompositeElementImpl implements D2S
   @NotNull
   public List<D2ShapeDefinition> getShapeDefinitionList() {
     return D2PsiTreeUtil.getChildrenOfTypeAsList(this, D2ShapeDefinition.class);
-  }
-
-  @Override
-  @Nullable
-  public D2SubShapeDefinition getSubShapeDefinition() {
-    return findChildByClass(D2SubShapeDefinition.class);
   }
 
 }

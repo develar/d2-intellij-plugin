@@ -40,7 +40,6 @@
     <spellchecker.support language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2SpellCheckerStrategy"/>
 
     <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
-
     <editorNotificationProvider implementation="org.jetbrains.plugins.d2.editor.D2MissingCompilerNotificationProvider"/>
 
     <annotator language="d2" implementationClass="org.jetbrains.plugins.d2.lang.D2LiteralAnnotator"/>

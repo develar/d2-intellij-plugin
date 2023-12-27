@@ -58,9 +58,17 @@ private class D2BasicCompletionContributor : CompletionContributor() {
     }
 
     val position = parameters.position
-    val parent = position.context
+    var parent = position.context
     if (parent !is D2ShapeDefinition) {
       return
+    }
+    if (parent.firstChild == parent.lastChild && position.textMatches(CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED)) {
+      // for `test.<caret> ->` a new "shape" is created, so, we must resolve parent for it,
+      // otherwise we cannot check siblings (to forbid reserved keyword completion in edges)
+      val newParent = parent.parent
+      if (newParent is D2ShapeDefinition) {
+        parent = newParent
+      }
     }
 
     // see D2CompletionTest.connection

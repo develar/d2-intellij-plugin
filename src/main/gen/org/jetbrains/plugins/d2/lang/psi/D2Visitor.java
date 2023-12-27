@@ -43,10 +43,6 @@ public class D2Visitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitSubShapeDefinition(@NotNull D2SubShapeDefinition o) {
-    visitCompositeElement(o);
-  }
-
   public void visitCompositeElement(@NotNull D2CompositeElement o) {
     visitElement(o);
   }

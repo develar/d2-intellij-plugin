@@ -31,7 +31,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
   }
 
   @Test
-  fun `no completion on edge (left)`() {
+  fun `no completion on edge (connector caret)`() {
     fixture.configureByText(
       "test.d2",
       "test -> <caret>"
@@ -42,7 +42,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
   }
 
   @Test
-  fun `no completion on edge (right)`() {
+  fun `no completion on edge (caret connector)`() {
     fixture.configureByText(
       "test.d2",
       "test.<caret> ->"

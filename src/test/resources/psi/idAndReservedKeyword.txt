@@ -1,0 +1,13 @@
+D2 File
+  D2ShapeDefinitionImpl(D2ElementType.SHAPE_DEFINITION)
+    PsiElement(D2TokenType.ID)('logs')
+  D2PropertyImpl(D2ElementType.PROPERTY)
+    PsiElement(D2TokenType.DOT)('.')
+    D2PropertyKeyImpl(D2ElementType.PROPERTY_KEY)
+      PsiElement(D2TokenType.RESERVED_KEYWORD_HOLDERS)('style')
+      PsiElement(D2TokenType.DOT)('.')
+      PsiElement(D2TokenType.ID)('stroke')
+    PsiElement(D2TokenType.COLON)(':')
+    PsiWhiteSpace(' ')
+    D2PropertyValueImpl(D2ElementType.PROPERTY_VALUE)
+      PsiElement(D2TokenType.STRING)('"#694024"')

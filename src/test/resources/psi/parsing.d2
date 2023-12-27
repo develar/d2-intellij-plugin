@@ -3,13 +3,17 @@ logs: {
   # proper highlighting of special keywords as "fields" (like a JSON),
   # and unquoted string literal for values as string,
   shape: page
+
   # still boolean or int literals is properly highlighted
   style.multiple: true
 }
 
+# shape id with space is supported
+logs foo bar -> logs
+
 # color on a gutter is supported, including changing;
 # proper highlighting of special keywords works also for inline form
-logs.style.stroke: "#f4a261"
+logs.style.stroke: "#694024"
 
 user: User {shape: person}
 network: Network {

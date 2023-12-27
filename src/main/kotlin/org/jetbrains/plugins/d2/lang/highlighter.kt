@@ -25,6 +25,8 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
     internal val NUMBERS = createTextAttributesKey("D2_NUMBERS", DefaultLanguageHighlighterColors.NUMBER)
     internal val FIELDS = createTextAttributesKey("D2_FIELDS", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
 
+    internal val SHAPE_IDS = createTextAttributesKey("D2_SHAPE_IDS", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
+
     // added by annotators
     val PROPERTY_KEY: TextAttributesKey = createTextAttributesKey("D2_PROPERTY_KEY", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
 

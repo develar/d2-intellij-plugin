@@ -17,7 +17,6 @@ public interface D2ElementTypes {
   IElementType PROPERTY_VALUE = new D2ElementType("PROPERTY_VALUE");
   IElementType SHAPE_CONNECTION = new D2ElementType("SHAPE_CONNECTION");
   IElementType SHAPE_DEFINITION = new D2ElementType("SHAPE_DEFINITION");
-  IElementType SUB_SHAPE_DEFINITION = new D2ElementType("SUB_SHAPE_DEFINITION");
 
   IElementType ARROW = new D2TokenType("ARROW");
   IElementType COLON = new D2TokenType("COLON");
@@ -68,9 +67,6 @@ public interface D2ElementTypes {
       }
       else if (type == SHAPE_DEFINITION) {
         return new D2ShapeDefinitionImpl(node);
-      }
-      else if (type == SUB_SHAPE_DEFINITION) {
-        return new D2SubShapeDefinitionImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

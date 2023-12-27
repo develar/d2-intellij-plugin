@@ -26,7 +26,4 @@ public interface D2BlockDefinition extends D2CompositeElement {
   @NotNull
   List<D2ShapeDefinition> getShapeDefinitionList();
 
-  @NotNull
-  List<D2SubShapeDefinition> getSubShapeDefinitionList();
-
 }

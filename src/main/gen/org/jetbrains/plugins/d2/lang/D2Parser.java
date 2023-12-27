@@ -319,7 +319,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (AttributeValue | SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS)+
+  // (STRING | ID | INT | FLOAT | TRUE | FALSE)+
   public static boolean ShapeDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeDefinition")) return false;
     boolean r;
@@ -334,13 +334,16 @@ public class D2Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // AttributeValue | SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS
+  // STRING | ID | INT | FLOAT | TRUE | FALSE
   private static boolean ShapeDefinition_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeDefinition_0")) return false;
     boolean r;
-    r = AttributeValue(b, l + 1);
-    if (!r) r = consumeToken(b, SIMPLE_RESERVED_KEYWORDS);
-    if (!r) r = consumeToken(b, RESERVED_KEYWORD_HOLDERS);
+    r = consumeToken(b, STRING);
+    if (!r) r = consumeToken(b, ID);
+    if (!r) r = consumeToken(b, INT);
+    if (!r) r = consumeToken(b, FLOAT);
+    if (!r) r = consumeToken(b, TRUE);
+    if (!r) r = consumeToken(b, FALSE);
     return r;
   }
 
@@ -431,11 +434,11 @@ public class D2Parser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // DOT ShapeDefinition ShapeExtras?
-  public static boolean SubShapeDefinition(PsiBuilder b, int l) {
+  static boolean SubShapeDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SubShapeDefinition")) return false;
     if (!nextTokenIs(b, DOT)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _LEFT_, SUB_SHAPE_DEFINITION, null);
+    Marker m = enter_section_(b, l, _LEFT_INNER_);
     r = consumeToken(b, DOT);
     r = r && ShapeDefinition(b, l + 1);
     r = r && SubShapeDefinition_2(b, l + 1);

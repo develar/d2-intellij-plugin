@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package org.jetbrains.plugins.d2.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.plugins.d2.lang.D2PsiTreeUtil;
-import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.d2.lang.D2CompositeElementImpl;
+import org.jetbrains.plugins.d2.lang.D2PsiTreeUtil;
 import org.jetbrains.plugins.d2.lang.psi.*;
+
+import java.util.List;
 
 public class D2InlineShapeDefinitionImpl extends D2CompositeElementImpl implements D2InlineShapeDefinition {
 
@@ -29,8 +29,20 @@ public class D2InlineShapeDefinitionImpl extends D2CompositeElementImpl implemen
 
   @Override
   @Nullable
+  public D2BlockDefinition getBlockDefinition() {
+    return findChildByClass(D2BlockDefinition.class);
+  }
+
+  @Override
+  @Nullable
   public D2InlineShapeDefinition getInlineShapeDefinition() {
     return findChildByClass(D2InlineShapeDefinition.class);
+  }
+
+  @Override
+  @Nullable
+  public D2LabelDefinition getLabelDefinition() {
+    return findChildByClass(D2LabelDefinition.class);
   }
 
   @Override
@@ -43,12 +55,6 @@ public class D2InlineShapeDefinitionImpl extends D2CompositeElementImpl implemen
   @NotNull
   public List<D2ShapeDefinition> getShapeDefinitionList() {
     return D2PsiTreeUtil.getChildrenOfTypeAsList(this, D2ShapeDefinition.class);
-  }
-
-  @Override
-  @Nullable
-  public D2SubShapeDefinition getSubShapeDefinition() {
-    return findChildByClass(D2SubShapeDefinition.class);
   }
 
 }

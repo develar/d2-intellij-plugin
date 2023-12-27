@@ -23,14 +23,14 @@ private ShapeDefinitions ::= ShapeDefinition (ShapeConnection | SubShapeDefiniti
   pin=1
 }
 
-left SubShapeDefinition ::= DOT ShapeDefinition ShapeExtras?
+left private SubShapeDefinition ::= DOT ShapeDefinition ShapeExtras?
 
 private ShapeExtras ::= COLON (LabelDefinition BlockDefinition? | BlockDefinition) {
   pin=1
 }
 
 // `foo bar -> shape2` - here `foo bar` is shape id
-ShapeDefinition ::= (AttributeValue | SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS)+
+ShapeDefinition ::= (STRING | ID | INT | FLOAT | TRUE | FALSE)+
 
 LabelDefinition ::= UNQUOTED_STRING | AttributeValue
 
