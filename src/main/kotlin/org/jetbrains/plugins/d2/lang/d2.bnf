@@ -29,7 +29,8 @@ private ShapeExtras ::= COLON (LabelDefinition BlockDefinition? | BlockDefinitio
   pin=1
 }
 
-ShapeDefinition ::= AttributeValue
+// `foo bar -> shape2` - here `foo bar` is shape id
+ShapeDefinition ::= (AttributeValue | SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS)+
 
 LabelDefinition ::= UNQUOTED_STRING | AttributeValue
 
