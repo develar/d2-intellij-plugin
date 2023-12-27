@@ -31,6 +31,28 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
   }
 
   @Test
+  fun `no completion on edge (left)`() {
+    fixture.configureByText(
+      "test.d2",
+      "test -> <caret>"
+    )
+    fixture.complete(CompletionType.BASIC)
+    val lookupElementStrings = fixture.lookupElementStrings
+    assertThat(lookupElementStrings).isEmpty()
+  }
+
+  @Test
+  fun `no completion on edge (right)`() {
+    fixture.configureByText(
+      "test.d2",
+      "test.<caret> ->"
+    )
+    fixture.complete(CompletionType.BASIC)
+    val lookupElementStrings = fixture.lookupElementStrings
+    assertThat(lookupElementStrings).isEmpty()
+  }
+
+  @Test
   fun file() {
     fixture.configureByText(
       "test.d2",

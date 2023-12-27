@@ -6,9 +6,14 @@ import com.dvd.intellij.d2.ide.utils.SIMPLE_RESERVED_KEYWORDS
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.util.elementType
+import com.intellij.psi.util.siblings
 import org.jetbrains.annotations.VisibleForTesting
+import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import org.jetbrains.plugins.d2.lang.psi.D2BlockDefinition
+import org.jetbrains.plugins.d2.lang.psi.D2Connector
 import org.jetbrains.plugins.d2.lang.psi.D2ShapeDefinition
 
 private val keywords = (SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).map {
@@ -62,13 +67,18 @@ private class D2BasicCompletionContributor : CompletionContributor() {
     if (position.prevSibling is PsiWhiteSpace) {
       result.addAllElements(connections)
     } else {
-      // todo check next sibling  - reserved keywords are prohibited in edges
-      val inMap = parent.context is D2BlockDefinition
-      result.addAllElements(keywords)
-      if (!inMap) {
-        // classes and vars only in a file context
-        result.addAllElements(varsAndClasses)
+      // reserved keywords are prohibited in edges
+      if (parent.siblings(withSelf = false).none(::notConnectorOrArrow) &&
+        parent.siblings(withSelf = false, forward = false).none(::notConnectorOrArrow)) {
+        val inMap = parent.context is D2BlockDefinition
+        result.addAllElements(keywords)
+        if (!inMap) {
+          // classes and vars only in a file context
+          result.addAllElements(varsAndClasses)
+        }
       }
     }
   }
 }
+
+private fun notConnectorOrArrow(it: PsiElement) = it is D2Connector || it.elementType == D2ElementTypes.ARROW
