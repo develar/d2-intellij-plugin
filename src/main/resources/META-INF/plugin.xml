@@ -49,6 +49,7 @@
     <editorNotificationProvider implementation="org.jetbrains.plugins.d2.editor.D2MissingCompilerNotificationProvider"/>
 
     <annotator language="d2" implementationClass="org.jetbrains.plugins.d2.lang.D2LiteralAnnotator"/>
+    <lang.formatter language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2FormattingModelBuilder"/>
   </extensions>
 
   <actions>
