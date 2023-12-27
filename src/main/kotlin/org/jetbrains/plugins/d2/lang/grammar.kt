@@ -18,7 +18,5 @@ class D2LexerAdapter : FlexAdapter(_D2Lexer(null))
 
 interface D2CompositeElement : PsiElement
 
-open class D2CompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node), D2CompositeElement {
-
-}
+open class D2CompositeElementImpl(node: ASTNode) : ASTWrapperPsiElement(node), D2CompositeElement
 

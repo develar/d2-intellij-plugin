@@ -1,17 +1,9 @@
 package com.dvd.intellij.d2.ide.utils
 
-internal const val D2_TOOLWINDOW_ID = "D2ToolWindow"
 internal const val D2_EDITOR_NAME = "D2FileEditor"
-internal const val D2_EDITOR_ID = "D2Editor"
-
-internal const val D2_GROUP_TOOLBAR = "D2.EditorToolbar"
-internal const val D2_GROUP_POPUP = "D2.EditorPopupMenu"
-internal const val D2_ACTION_PLACE = "D2.Editor"
-
 internal const val NOTIFICATION_GROUP = "D2_INFO"
 
-// https://github.com/terrastruct/d2/blob/eb55a49559fe933b3846094d8af01496ed55d037/d2graph/d2graph.go#L1040-L1050
-internal val RESERVED_KEYWORDS = arrayOf(
+val SIMPLE_RESERVED_KEYWORDS: Array<String> = arrayOf(
   "label",
   "desc",
   "shape",
@@ -22,6 +14,15 @@ internal val RESERVED_KEYWORDS = arrayOf(
   "near",
   "width",
   "height",
+  "direction",
+  "top",
+  "left",
+  "grid-rows",
+  "grid-columns",
+  "grid-gap",
+  "vertical-gap",
+  "horizontal-gap",
+  "class",
 )
 
 // https://github.com/terrastruct/d2/blob/eb55a49559fe933b3846094d8af01496ed55d037/d2graph/d2graph.go#L1054-L1057
