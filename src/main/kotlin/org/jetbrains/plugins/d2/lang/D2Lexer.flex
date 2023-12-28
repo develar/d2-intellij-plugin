@@ -2,6 +2,7 @@ package org.jetbrains.plugins.d2.lang;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.openapi.util.text.StringUtilRt;
 
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
@@ -10,13 +11,15 @@ import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
 %%
 
 %{
-  public _D2Lexer() {
+  public D2FlexLexer() {
     this((java.io.Reader)null);
   }
+
+  private StringBuilder blockStringToken;
 %}
 
 %public
-%class _D2Lexer
+%class D2FlexLexer
 %implements FlexLexer
 %function advance
 %type IElementType
@@ -46,9 +49,7 @@ WhiteSpace=[ \t\n\x0B\f\r]+
 LBrace="{"
 RBrace="}"
 
-UnquotedString=[^ \t\n\r{}]+([ \t]+[^ \n\r{}]+)*
-
-%states LABEL
+%states LABEL BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE
 
 %%
 <YYINITIAL> {
@@ -79,18 +80,54 @@ UnquotedString=[^ \t\n\r{}]+([ \t]+[^ \n\r{}]+)*
 }
 
 <LABEL> {
-	{Int} { return INT; }
-	{Float} { return FLOAT; }
-	"true" { return TRUE; }
-	"false" { return FALSE; }
+		{Int} { return INT; }
+		{Float} { return FLOAT; }
+		"true" { return TRUE; }
+		"false" { return FALSE; }
 
-	{String} { return STRING; }
-	{UnquotedString} { return UNQUOTED_STRING; }
-	[ \t]+ { return WHITE_SPACE; }
-	[\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }
-	{LBrace} { yybegin(YYINITIAL); return LBRACE; }
-	// inline shape definition: {shape: person}
-	{RBrace} { yybegin(YYINITIAL); return RBRACE; }
+		// docs: D2 actually allows you to use any special symbols (not alphanumeric, space, or _) after the first pipe
+		\|+[^a-zA-Z0-9\s_|]* {
+								yybegin(BLOCK_STRING_LANG_STATE);
+								blockStringToken = new StringBuilder(yytext()).reverse();
+								return BLOCK_STRING_OPEN;
+      }
+
+	 {String} { return STRING; }
+	 [^\s{}|]+([ \t]+[^\s{}]+)* { return UNQUOTED_STRING; }
+	 [ \t]+ { return WHITE_SPACE; }
+	 [\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }
+	 {LBrace} { yybegin(YYINITIAL); return LBRACE; }
+	 // inline shape definition: {shape: person}
+	 {RBrace} { yybegin(YYINITIAL); return RBRACE; }
+}
+
+<BLOCK_STRING_LANG_STATE> {
+		[^\s|]+ { yybegin(BLOCK_STRING_BODY_STATE); return BLOCK_STRING_LANG; }
+
+		\s+ { return WHITE_SPACE; }
+
+  <<EOF>> { yybegin(YYINITIAL); return BAD_CHARACTER; }
+}
+
+// IntelliJ incremental lexer restores only zero state,
+// so, we can be sure that lexing will be never performed in the middle of block string (always from BLOCK_STRING_OPEN)
+<BLOCK_STRING_BODY_STATE> {
+	[^|]*\|+ {
+									if (blockStringToken == null) {
+											yybegin(YYINITIAL);
+											blockStringToken = null;
+											return BLOCK_STRING_CLOSE;
+									}
+									else if (StringUtilRt.endsWith(yytext(), blockStringToken)) {
+											// push back to register on next step as a BLOCK_STRING_CLOSE token,
+											// (we neeed it to easily implement embededed language, brace matcher and so on)
+											yypushback(blockStringToken.length());
+											blockStringToken = null;
+											return BLOCK_STRING_BODY;
+									}
+							}
+
+  <<EOF>> { yybegin(YYINITIAL); return BAD_CHARACTER; }
 }
 
 [^] { return BAD_CHARACTER; }

@@ -34,6 +34,12 @@ public class D2BlockDefinitionImpl extends D2CompositeElementImpl implements D2B
 
   @Override
   @NotNull
+  public List<D2BlockString> getBlockStringList() {
+    return D2PsiTreeUtil.getChildrenOfTypeAsList(this, D2BlockString.class);
+  }
+
+  @Override
+  @NotNull
   public List<D2InlineShapeDefinition> getInlineShapeDefinitionList() {
     return D2PsiTreeUtil.getChildrenOfTypeAsList(this, D2InlineShapeDefinition.class);
   }

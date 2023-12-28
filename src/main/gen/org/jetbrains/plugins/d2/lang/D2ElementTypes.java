@@ -8,41 +8,49 @@ import org.jetbrains.plugins.d2.lang.psi.impl.*;
 
 public interface D2ElementTypes {
 
-  IElementType BLOCK_DEFINITION = new D2ElementType("BLOCK_DEFINITION");
-  IElementType CONNECTOR = new D2ElementType("CONNECTOR");
-  IElementType INLINE_SHAPE_DEFINITION = new D2ElementType("INLINE_SHAPE_DEFINITION");
-  IElementType LABEL_DEFINITION = new D2ElementType("LABEL_DEFINITION");
-  IElementType PROPERTY = new D2ElementType("PROPERTY");
-  IElementType PROPERTY_KEY = new D2ElementType("PROPERTY_KEY");
-  IElementType PROPERTY_VALUE = new D2ElementType("PROPERTY_VALUE");
-  IElementType SHAPE_CONNECTION = new D2ElementType("SHAPE_CONNECTION");
-  IElementType SHAPE_DEFINITION = new D2ElementType("SHAPE_DEFINITION");
+  IElementType BLOCK_DEFINITION = D2ElementTypeFactory.element("BLOCK_DEFINITION");
+  IElementType BLOCK_STRING = D2ElementTypeFactory.element("BLOCK_STRING");
+  IElementType CONNECTOR = D2ElementTypeFactory.element("CONNECTOR");
+  IElementType INLINE_SHAPE_DEFINITION = D2ElementTypeFactory.element("INLINE_SHAPE_DEFINITION");
+  IElementType LABEL_DEFINITION = D2ElementTypeFactory.element("LABEL_DEFINITION");
+  IElementType PROPERTY = D2ElementTypeFactory.element("PROPERTY");
+  IElementType PROPERTY_KEY = D2ElementTypeFactory.element("PROPERTY_KEY");
+  IElementType PROPERTY_VALUE = D2ElementTypeFactory.element("PROPERTY_VALUE");
+  IElementType SHAPE_CONNECTION = D2ElementTypeFactory.element("SHAPE_CONNECTION");
+  IElementType SHAPE_DEFINITION = D2ElementTypeFactory.element("SHAPE_DEFINITION");
 
-  IElementType ARROW = new D2TokenType("ARROW");
-  IElementType COLON = new D2TokenType("COLON");
-  IElementType COMMENT = new D2TokenType("COMMENT");
-  IElementType DOT = new D2TokenType("DOT");
-  IElementType DOUBLE_ARROW = new D2TokenType("DOUBLE_ARROW");
-  IElementType DOUBLE_HYPHEN_ARROW = new D2TokenType("DOUBLE_HYPHEN_ARROW");
-  IElementType FALSE = new D2TokenType("FALSE");
-  IElementType FLOAT = new D2TokenType("FLOAT");
-  IElementType ID = new D2TokenType("ID");
-  IElementType INT = new D2TokenType("INT");
-  IElementType LBRACE = new D2TokenType("LBRACE");
-  IElementType RBRACE = new D2TokenType("RBRACE");
-  IElementType RESERVED_KEYWORD_HOLDERS = new D2TokenType("RESERVED_KEYWORD_HOLDERS");
-  IElementType REVERSE_ARROW = new D2TokenType("REVERSE_ARROW");
-  IElementType SEMICOLON = new D2TokenType("SEMICOLON");
-  IElementType SIMPLE_RESERVED_KEYWORDS = new D2TokenType("SIMPLE_RESERVED_KEYWORDS");
-  IElementType STRING = new D2TokenType("STRING");
-  IElementType TRUE = new D2TokenType("TRUE");
-  IElementType UNQUOTED_STRING = new D2TokenType("UNQUOTED_STRING");
+  IElementType ARROW = D2ElementTypeFactory.token("ARROW");
+  IElementType BLOCK_STRING_BODY = D2ElementTypeFactory.token("BLOCK_STRING_BODY");
+  IElementType BLOCK_STRING_CLOSE = D2ElementTypeFactory.token("BLOCK_STRING_CLOSE");
+  IElementType BLOCK_STRING_LANG = D2ElementTypeFactory.token("BLOCK_STRING_LANG");
+  IElementType BLOCK_STRING_OPEN = D2ElementTypeFactory.token("BLOCK_STRING_OPEN");
+  IElementType COLON = D2ElementTypeFactory.token("COLON");
+  IElementType COMMENT = D2ElementTypeFactory.token("COMMENT");
+  IElementType DOT = D2ElementTypeFactory.token("DOT");
+  IElementType DOUBLE_ARROW = D2ElementTypeFactory.token("DOUBLE_ARROW");
+  IElementType DOUBLE_HYPHEN_ARROW = D2ElementTypeFactory.token("DOUBLE_HYPHEN_ARROW");
+  IElementType FALSE = D2ElementTypeFactory.token("FALSE");
+  IElementType FLOAT = D2ElementTypeFactory.token("FLOAT");
+  IElementType ID = D2ElementTypeFactory.token("ID");
+  IElementType INT = D2ElementTypeFactory.token("INT");
+  IElementType LBRACE = D2ElementTypeFactory.token("LBRACE");
+  IElementType RBRACE = D2ElementTypeFactory.token("RBRACE");
+  IElementType RESERVED_KEYWORD_HOLDERS = D2ElementTypeFactory.token("RESERVED_KEYWORD_HOLDERS");
+  IElementType REVERSE_ARROW = D2ElementTypeFactory.token("REVERSE_ARROW");
+  IElementType SEMICOLON = D2ElementTypeFactory.token("SEMICOLON");
+  IElementType SIMPLE_RESERVED_KEYWORDS = D2ElementTypeFactory.token("SIMPLE_RESERVED_KEYWORDS");
+  IElementType STRING = D2ElementTypeFactory.token("STRING");
+  IElementType TRUE = D2ElementTypeFactory.token("TRUE");
+  IElementType UNQUOTED_STRING = D2ElementTypeFactory.token("UNQUOTED_STRING");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
       if (type == BLOCK_DEFINITION) {
         return new D2BlockDefinitionImpl(node);
+      }
+      else if (type == BLOCK_STRING) {
+        return new D2BlockStringImpl(node);
       }
       else if (type == CONNECTOR) {
         return new D2ConnectorImpl(node);

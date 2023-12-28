@@ -13,6 +13,9 @@ public interface D2InlineShapeDefinition extends D2CompositeElement {
   D2BlockDefinition getBlockDefinition();
 
   @Nullable
+  D2BlockString getBlockString();
+
+  @Nullable
   D2InlineShapeDefinition getInlineShapeDefinition();
 
   @Nullable

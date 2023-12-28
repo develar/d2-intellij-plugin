@@ -6,6 +6,7 @@
 
   <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.platform.images</depends>
+  <depends>org.intellij.plugins.markdown</depends>
 
   <resource-bundle>messages.D2Bundle</resource-bundle>
 

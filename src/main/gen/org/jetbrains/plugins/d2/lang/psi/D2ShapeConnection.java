@@ -12,6 +12,9 @@ public interface D2ShapeConnection extends D2CompositeElement {
   @Nullable
   D2BlockDefinition getBlockDefinition();
 
+  @Nullable
+  D2BlockString getBlockString();
+
   @NotNull
   List<D2Connector> getConnectorList();
 

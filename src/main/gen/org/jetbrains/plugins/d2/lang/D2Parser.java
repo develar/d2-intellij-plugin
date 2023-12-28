@@ -86,6 +86,27 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // BLOCK_STRING_OPEN BLOCK_STRING_LANG? BLOCK_STRING_BODY BLOCK_STRING_CLOSE
+  public static boolean BlockString(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockString")) return false;
+    if (!nextTokenIs(b, BLOCK_STRING_OPEN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BLOCK_STRING_OPEN);
+    r = r && BlockString_1(b, l + 1);
+    r = r && consumeTokens(b, 0, BLOCK_STRING_BODY, BLOCK_STRING_CLOSE);
+    exit_section_(b, m, BLOCK_STRING, r);
+    return r;
+  }
+
+  // BLOCK_STRING_LANG?
+  private static boolean BlockString_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockString_1")) return false;
+    consumeToken(b, BLOCK_STRING_LANG);
+    return true;
+  }
+
+  /* ********************************************************** */
   // ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
   public static boolean Connector(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Connector")) return false;
@@ -280,13 +301,14 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // UNQUOTED_STRING | AttributeValue
+  // UNQUOTED_STRING | AttributeValue | BlockString
   public static boolean PropertyValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PropertyValue")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, PROPERTY_VALUE, "<property value>");
     r = consumeToken(b, UNQUOTED_STRING);
     if (!r) r = AttributeValue(b, l + 1);
+    if (!r) r = BlockString(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -390,7 +412,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // COLON (LabelDefinition BlockDefinition? | BlockDefinition)
+  // COLON ((LabelDefinition | BlockString) BlockDefinition? | BlockDefinition)
   static boolean ShapeExtras(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeExtras")) return false;
     if (!nextTokenIs(b, COLON)) return false;
@@ -403,7 +425,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // LabelDefinition BlockDefinition? | BlockDefinition
+  // (LabelDefinition | BlockString) BlockDefinition? | BlockDefinition
   private static boolean ShapeExtras_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeExtras_1")) return false;
     boolean r;
@@ -414,14 +436,23 @@ public class D2Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // LabelDefinition BlockDefinition?
+  // (LabelDefinition | BlockString) BlockDefinition?
   private static boolean ShapeExtras_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeExtras_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = LabelDefinition(b, l + 1);
+    r = ShapeExtras_1_0_0(b, l + 1);
     r = r && ShapeExtras_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LabelDefinition | BlockString
+  private static boolean ShapeExtras_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeExtras_1_0_0")) return false;
+    boolean r;
+    r = LabelDefinition(b, l + 1);
+    if (!r) r = BlockString(b, l + 1);
     return r;
   }
 

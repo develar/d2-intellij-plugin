@@ -8,7 +8,10 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import org.jetbrains.plugins.d2.lang.psi.D2ShapeDefinition
 
-private val BRACE_PAIRS = arrayOf(BracePair(D2ElementTypes.LBRACE, D2ElementTypes.RBRACE, true))
+private val BRACE_PAIRS = arrayOf(
+  BracePair(D2ElementTypes.LBRACE, D2ElementTypes.RBRACE, true),
+  BracePair(D2ElementTypes.BLOCK_STRING_OPEN, D2ElementTypes.BLOCK_STRING_CLOSE, true),
+)
 
 private class D2BraceMatcher : PairedBraceMatcher {
   override fun getPairs() = BRACE_PAIRS

@@ -34,6 +34,12 @@ public class D2ShapeConnectionImpl extends D2CompositeElementImpl implements D2S
   }
 
   @Override
+  @Nullable
+  public D2BlockString getBlockString() {
+    return findChildByClass(D2BlockString.class);
+  }
+
+  @Override
   @NotNull
   public List<D2Connector> getConnectorList() {
     return D2PsiTreeUtil.getChildrenOfTypeAsList(this, D2Connector.class);

@@ -11,7 +11,7 @@ import org.jetbrains.plugins.d2.file.D2File
 private val D2_FILE = IFileElementType(D2Language)
 
 class D2ParserDefinition : ParserDefinition {
-  override fun createLexer(p: Project?) = D2LexerAdapter()
+  override fun createLexer(p: Project?) = createD2Lexer()
 
   override fun getCommentTokens() = D2TokenSets.COMMENT
 

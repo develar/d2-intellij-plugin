@@ -81,7 +81,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
   }
 }
 
-abstract class D2LightCodeInsightFixtureTestCase() {
+abstract class D2LightCodeInsightFixtureTestCase {
   @Suppress("JUnitMalformedDeclaration")
   @RegisterExtension
   private val testCase = object : BasePlatformTestCase(), BeforeEachCallback, AfterEachCallback {

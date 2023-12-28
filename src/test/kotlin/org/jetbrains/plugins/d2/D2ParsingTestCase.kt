@@ -3,6 +3,7 @@ package org.jetbrains.plugins.d2
 import com.intellij.testFramework.ParsingTestCase
 import com.intellij.testFramework.rules.TestNameExtension
 import com.intellij.testFramework.runInEdtAndWait
+import org.intellij.plugins.markdown.lang.parser.MarkdownParserDefinition
 import org.jetbrains.plugins.d2.lang.D2ParserDefinition
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
@@ -19,7 +20,7 @@ abstract class D2ParsingTestCase() {
 
   @Suppress("JUnitMalformedDeclaration")
   @RegisterExtension
-  private val testCase = object : ParsingTestCase("psi", "d2", D2ParserDefinition()), BeforeEachCallback, AfterEachCallback {
+  private val testCase = object : ParsingTestCase("psi", "d2", D2ParserDefinition(), MarkdownParserDefinition()), BeforeEachCallback, AfterEachCallback {
     override fun getTestDataPath() = "src/test/resources"
 
     override fun beforeEach(context: ExtensionContext?) {

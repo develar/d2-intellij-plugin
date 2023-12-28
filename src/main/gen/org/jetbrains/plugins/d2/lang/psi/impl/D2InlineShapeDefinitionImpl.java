@@ -35,6 +35,12 @@ public class D2InlineShapeDefinitionImpl extends D2CompositeElementImpl implemen
 
   @Override
   @Nullable
+  public D2BlockString getBlockString() {
+    return findChildByClass(D2BlockString.class);
+  }
+
+  @Override
+  @Nullable
   public D2InlineShapeDefinition getInlineShapeDefinition() {
     return findChildByClass(D2InlineShapeDefinition.class);
   }

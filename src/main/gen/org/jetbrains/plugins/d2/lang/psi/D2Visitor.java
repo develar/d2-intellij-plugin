@@ -11,6 +11,10 @@ public class D2Visitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitBlockString(@NotNull D2BlockString o) {
+    visitCompositeElement(o);
+  }
+
   public void visitConnector(@NotNull D2Connector o) {
     visitCompositeElement(o);
   }

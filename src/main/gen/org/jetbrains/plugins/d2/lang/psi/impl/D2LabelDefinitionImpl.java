@@ -1,15 +1,12 @@
 // This is a generated file. Not intended for manual editing.
 package org.jetbrains.plugins.d2.lang.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.plugins.d2.lang.D2PsiTreeUtil;
-import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.d2.lang.D2CompositeElementImpl;
-import org.jetbrains.plugins.d2.lang.psi.*;
+import org.jetbrains.plugins.d2.lang.psi.D2LabelDefinition;
+import org.jetbrains.plugins.d2.lang.psi.D2Visitor;
 
 public class D2LabelDefinitionImpl extends D2CompositeElementImpl implements D2LabelDefinition {
 

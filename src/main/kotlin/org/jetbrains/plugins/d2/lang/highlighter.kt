@@ -25,6 +25,9 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
     internal val NUMBERS = createTextAttributesKey("D2_NUMBERS", DefaultLanguageHighlighterColors.NUMBER)
     internal val FIELDS = createTextAttributesKey("D2_FIELDS", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
 
+    // KEYWORD - as Markdown CODE_FENCE_MARKER
+    internal val BLOCK_STRING_MARKER: TextAttributesKey = createTextAttributesKey("D2_BLOCK_STRING_MARKER", DefaultLanguageHighlighterColors.KEYWORD)
+
     internal val SHAPE_IDS = createTextAttributesKey("D2_SHAPE_IDS", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
 
     // added by annotators
@@ -35,6 +38,7 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
       fillMap(this, D2TokenSets.KEYWORDS, KEYWORDS)
       fillMap(this, D2TokenSets.ARROWS, ARROWS)
       fillMap(this, D2TokenSets.NUMBERS, NUMBERS)
+
       put(D2ElementTypes.COMMENT, COMMENT)
 
       // shape and other simple keywords highlight as instance field, like JSON_PROPERTY_KEY in a JSON highlighter does
@@ -44,15 +48,22 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
       put(D2ElementTypes.STRING, STRING)
       put(D2ElementTypes.UNQUOTED_STRING, STRING)
 
-      this += (D2ElementTypes.DOT to DOT)
-      this += (D2ElementTypes.COLON to COLON)
-      this += (D2ElementTypes.SEMICOLON to SEMICOLON)
-      this += (D2ElementTypes.LABEL_DEFINITION to STRING)
-      fillMap(this, D2TokenSets.BRACES, BRACES)
+      put(D2ElementTypes.DOT, DOT)
+
+      put(D2ElementTypes.COLON, COLON)
+      put(D2ElementTypes.SEMICOLON, SEMICOLON)
+      put(D2ElementTypes.LABEL_DEFINITION, STRING)
+
+      put(D2ElementTypes.LBRACE, BRACES)
+      put(D2ElementTypes.RBRACE, BRACES)
+
+      put(D2ElementTypes.BLOCK_STRING_OPEN, BLOCK_STRING_MARKER)
+      put(D2ElementTypes.BLOCK_STRING_CLOSE, BLOCK_STRING_MARKER)
+      put(D2ElementTypes.BLOCK_STRING_LANG, IDENTIFIERS)
     }
   }
 
-  override fun getHighlightingLexer(): Lexer = D2LexerAdapter()
+  override fun getHighlightingLexer(): Lexer = createD2Lexer()
 
   override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> = pack(ATTRIBUTES.get(tokenType))
 }

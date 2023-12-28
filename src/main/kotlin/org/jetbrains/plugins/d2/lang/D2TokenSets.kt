@@ -13,7 +13,6 @@ object D2TokenSets {
     D2ElementTypes.DOUBLE_HYPHEN_ARROW
   )
   val NUMBERS = TokenSet.create(D2ElementTypes.INT, D2ElementTypes.FLOAT)
-  val BRACES = TokenSet.create(D2ElementTypes.LBRACE, D2ElementTypes.RBRACE)
 
   val STRING = TokenSet.create(D2ElementTypes.STRING, D2ElementTypes.UNQUOTED_STRING)
 }

@@ -1,19 +1,23 @@
 //noinspection SpellCheckingInspectionForFile
 {
-    parserClass="org.jetbrains.plugins.d2.lang.D2Parser"
+		parserClass="org.jetbrains.plugins.d2.lang.D2Parser"
 
-    implements="org.jetbrains.plugins.d2.lang.D2CompositeElement"
-    extends="org.jetbrains.plugins.d2.lang.D2CompositeElementImpl"
+		implements="org.jetbrains.plugins.d2.lang.D2CompositeElement"
+		extends="org.jetbrains.plugins.d2.lang.D2CompositeElementImpl"
 
-    elementTypeHolderClass="org.jetbrains.plugins.d2.lang.D2ElementTypes"
-    elementTypeClass="org.jetbrains.plugins.d2.lang.D2ElementType"
-    tokenTypeClass="org.jetbrains.plugins.d2.lang.D2TokenType"
-    psiTreeUtilClass="org.jetbrains.plugins.d2.lang.D2PsiTreeUtil"
+		elementTypeHolderClass="org.jetbrains.plugins.d2.lang.D2ElementTypes"
+		elementTypeClass="org.jetbrains.plugins.d2.lang.D2ElementType"
+		elementTypeFactory="org.jetbrains.plugins.d2.lang.D2ElementTypeFactory.element"
 
-    psiClassPrefix="D2"
-    psiImplClassSuffix="Impl"
-    psiPackage="org.jetbrains.plugins.d2.lang.psi"
-    psiImplPackage="org.jetbrains.plugins.d2.lang.psi.impl"
+		tokenTypeClass="com.intellij.psi.tree.IElementType"
+		tokenTypeFactory="org.jetbrains.plugins.d2.lang.D2ElementTypeFactory.token"
+
+		psiTreeUtilClass="org.jetbrains.plugins.d2.lang.D2PsiTreeUtil"
+
+		psiClassPrefix="D2"
+		psiImplClassSuffix="Impl"
+		psiPackage="org.jetbrains.plugins.d2.lang.psi"
+		psiImplPackage="org.jetbrains.plugins.d2.lang.psi.impl"
 }
 
 File ::= !<<eof>> (Property | ShapeDefinitions | COMMENT)*
@@ -25,7 +29,7 @@ private ShapeDefinitions ::= ShapeDefinition (ShapeConnection | SubShapeDefiniti
 
 left private SubShapeDefinition ::= DOT ShapeDefinition ShapeExtras?
 
-private ShapeExtras ::= COLON (LabelDefinition BlockDefinition? | BlockDefinition) {
+private ShapeExtras ::= COLON ((LabelDefinition | BlockString) BlockDefinition? | BlockDefinition) {
   pin=1
 }
 
@@ -40,8 +44,10 @@ Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
 left InlineShapeDefinition ::= (SEMICOLON ShapeDefinition)+
 
+BlockString ::= BLOCK_STRING_OPEN BLOCK_STRING_LANG? BLOCK_STRING_BODY BLOCK_STRING_CLOSE
+
 PropertyKey ::= (SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS) (DOT ID)*
-PropertyValue ::= UNQUOTED_STRING | AttributeValue
+PropertyValue ::= UNQUOTED_STRING | AttributeValue | BlockString
 
 // logs.style.strokes: "#f4a261"
 Property ::= (AttributeValue (DOT AttributeValue)*)? PropertyKey COLON PropertyValue

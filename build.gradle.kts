@@ -91,6 +91,9 @@ tasks {
 
   test {
     useJUnitPlatform()
+
+    val overwriteData = providers.gradleProperty("idea.tests.overwrite.data").getOrNull() == "true"
+    systemProperty("idea.tests.overwrite.data", overwriteData)
   }
 
   val generateParser = withType<GenerateParserTask> {
