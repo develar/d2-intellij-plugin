@@ -1,7 +1,7 @@
-package com.dvd.intellij.d2.ide.utils
+package org.jetbrains.plugins.d2
 
 internal const val D2_EDITOR_NAME = "D2FileEditor"
-internal const val NOTIFICATION_GROUP = "D2_INFO"
+internal const val D2_NOTIFICATION_GROUP = "D2_INFO"
 
 val SIMPLE_RESERVED_KEYWORDS: Array<String> = arrayOf(
   "label",
@@ -56,10 +56,6 @@ enum class Shapes(val value: String) {
   SQL_TABLE("sql_table"),
   IMAGE("image"),
   ;
-
-  companion object {
-    val EDGES = arrayOf(SQUARE, RECTANGLE, PARALLELOGRAM, DIAMOND, HEXAGON)
-  }
 
   val prettyName = value.replace("_", " ")
 }

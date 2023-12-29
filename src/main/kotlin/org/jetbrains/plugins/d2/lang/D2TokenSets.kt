@@ -10,9 +10,16 @@ object D2TokenSets {
     D2ElementTypes.ARROW,
     D2ElementTypes.REVERSE_ARROW,
     D2ElementTypes.DOUBLE_ARROW,
-    D2ElementTypes.DOUBLE_HYPHEN_ARROW
+    D2ElementTypes.DOUBLE_HYPHEN_ARROW,
   )
   val NUMBERS = TokenSet.create(D2ElementTypes.INT, D2ElementTypes.FLOAT)
 
   val STRING = TokenSet.create(D2ElementTypes.STRING, D2ElementTypes.UNQUOTED_STRING)
+
+  val PROPERTY_VALUE: TokenSet = TokenSet.create(
+    D2ElementTypes.UNQUOTED_STRING_VALUE,
+    D2ElementTypes.STRING_VALUE,
+    D2ElementTypes.COLOR_VALUE,
+    D2ElementTypes.OTHER_VALUE,
+  )
 }

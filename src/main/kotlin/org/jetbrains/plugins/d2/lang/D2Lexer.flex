@@ -32,8 +32,14 @@ grid-rows | grid-columns | grid-gap |
 vertical-gap | horizontal-gap |
 class | vars | classes
 
+StyleKeyword = style
+
+// StyleKeywords are reserved keywords which cannot exist outside of the "style" keyword
+StyleKeywords = opacity | stroke | fill | fill-pattern | stroke-width | stroke-dash | border-radius | font | font-size | font-color |
+bold | italic | underline | text-transform | shadow | multiple | double-border | 3d | animated | filled
+
 // reservedKeywordHolders are reserved keywords that are meaningless on its own and must hold composites
-ReservedKeywordHolders = style | source-arrowhead | target-arrowhead
+ReservedKeywordHolders = source-arrowhead | target-arrowhead
 
 ARROW=-+>
 REVERSE_ARROW=<-+
@@ -42,14 +48,23 @@ DOUBLE_ARROW=<-+>
 Comment=#.*
 Int=[0-9]+
 Float=[0-9]+\.[0-9]+
-String=('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\'|\\)*\")
-Id=[a-zA-Z_*0-9]+(-[a-zA-Z_*0-9]+)*
-WhiteSpace=[ \t\n\x0B\f\r]+
+Semicolon=";"
+
+String='([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\'|\\)*\"
+Color=\"#(([a-fA-F0-9]{2}){3}|([a-fA-F0-9]){3})\"
+
+// exclude `-`, `<` and `>` also - to not match connector (`-` is allowed only if surrounded by other symbols)
+IdFragment=[^\s{}|:;.<>-]+
+Id={IdFragment}([ \t-]+{IdFragment})*
+WhiteSpace=\s+
 
 LBrace="{"
 RBrace="}"
 
-%states LABEL BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE
+UnquotedStringFragment=[^\s{}|;]+
+UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
+
+%states LABEL_STATE PROPERTY_VALUE_STATE BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE
 
 %%
 <YYINITIAL> {
@@ -57,34 +72,50 @@ RBrace="}"
 
   {LBrace} { return LBRACE; }
   {RBrace} { return RBRACE; }
-  "."                         { return DOT; }
-  ";"                         { return SEMICOLON; }
-  ":"                         { yybegin(LABEL); return COLON; }
-  "true"                      { return TRUE; }
-  "false"                     { return FALSE; }
+  "." { return DOT; }
+  {Semicolon} { return SEMICOLON; }
+  ":"                         { yybegin(LABEL_STATE); return COLON; }
 
   {ARROW}                     { return ARROW; }
   {REVERSE_ARROW}             { return REVERSE_ARROW; }
   {DOUBLE_HYPHEN_ARROW}       { return DOUBLE_HYPHEN_ARROW; }
   {DOUBLE_ARROW}              { return DOUBLE_ARROW; }
   {Comment}                   { return COMMENT; }
-  {Int} { return INT; }
-  {Float} { return FLOAT; }
 
-		{SimpleReservedKeywords} { return SIMPLE_RESERVED_KEYWORDS; }
+		{SimpleReservedKeywords} { yybegin(PROPERTY_VALUE_STATE); return SIMPLE_RESERVED_KEYWORDS; }
 		{ReservedKeywordHolders} { return RESERVED_KEYWORD_HOLDERS; }
+		{StyleKeyword} { return STYLE_KEYWORD; }
+		{StyleKeywords} { yybegin(PROPERTY_VALUE_STATE); return STYLE_KEYWORDS; }
 
   {Id} { return ID; }
 
   {String} { return STRING; }
+		// allows to avoid using regex for completion/color provider and other functionality that utilizes color
+  {Color} { return COLOR; }
 }
 
-<LABEL> {
+// block string is not allowed for property value
+<PROPERTY_VALUE_STATE> {
+  ":" { return COLON; }
+
 		{Int} { return INT; }
 		{Float} { return FLOAT; }
 		"true" { return TRUE; }
 		"false" { return FALSE; }
+		{Color} { return COLOR; }
+		{String} { return STRING; }
+		// unquoted string - opposite to LABEL_STATE, `:` is not allowed (otherwise, we match `:` as UNQUOTED_STRING instead of COLON)
+		[^\s{}|:;]+([ \t]+[^\s{}|:;]+)* { return UNQUOTED_STRING; }
 
+		[ \t]+ { return WHITE_SPACE; }
+		[\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }
+		{Semicolon} { yybegin(YYINITIAL); return SEMICOLON; }
+
+		// inline shape definition: {shape: person}
+		{RBrace} { yybegin(YYINITIAL); return RBRACE; }
+}
+
+<LABEL_STATE> {
 		// docs: D2 actually allows you to use any special symbols (not alphanumeric, space, or _) after the first pipe
 		\|+[^a-zA-Z0-9\s_|]* {
 								yybegin(BLOCK_STRING_LANG_STATE);
@@ -93,7 +124,7 @@ RBrace="}"
       }
 
 	 {String} { return STRING; }
-	 [^\s{}|]+([ \t]+[^\s{}]+)* { return UNQUOTED_STRING; }
+	 {UnquotedString} { return UNQUOTED_STRING; }
 	 [ \t]+ { return WHITE_SPACE; }
 	 [\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }
 	 {LBrace} { yybegin(YYINITIAL); return LBRACE; }

@@ -2,7 +2,6 @@ package org.jetbrains.plugins.d2.editor
 
 import com.dvd.intellij.d2.components.D2Layout
 import com.dvd.intellij.d2.ide.action.ConversionOutput
-import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.intellij.execution.process.*
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
@@ -17,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.plugins.d2.D2Bundle
 import org.jetbrains.plugins.d2.execution.D2Command
 import org.jetbrains.plugins.d2.execution.D2CommandOutput
 import java.io.File
@@ -30,7 +30,7 @@ import kotlin.system.measureTimeMillis
 
 private val LOG = logger<D2Service>()
 
-val D2_FILE_NOTIFICATION: Key<Supplier<String>> = Key("d2EditorNotification")
+internal val D2_FILE_NOTIFICATION: Key<Supplier<String>> = Key("d2EditorNotification")
 
 @Service
 class D2Service(private val coroutineScope: CoroutineScope) : Disposable {

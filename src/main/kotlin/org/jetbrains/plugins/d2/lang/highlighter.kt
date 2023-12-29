@@ -10,6 +10,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.tree.IElementType
+import java.util.*
 
 class D2SyntaxHighlighter : SyntaxHighlighterBase() {
   companion object {
@@ -26,33 +27,34 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
     internal val FIELDS = createTextAttributesKey("D2_FIELDS", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
 
     // KEYWORD - as Markdown CODE_FENCE_MARKER
-    internal val BLOCK_STRING_MARKER: TextAttributesKey = createTextAttributesKey("D2_BLOCK_STRING_MARKER", DefaultLanguageHighlighterColors.KEYWORD)
+    private val BLOCK_STRING_MARKER: TextAttributesKey = createTextAttributesKey("D2_BLOCK_STRING_MARKER", DefaultLanguageHighlighterColors.KEYWORD)
 
-    internal val SHAPE_IDS = createTextAttributesKey("D2_SHAPE_IDS", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
+    private val SHAPE_IDS = createTextAttributesKey("D2_SHAPE_IDS", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
 
-    // added by annotators
-    val PROPERTY_KEY: TextAttributesKey = createTextAttributesKey("D2_PROPERTY_KEY", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
-
-    val ATTRIBUTES: Map<IElementType, TextAttributesKey> = buildMap {
+    val ATTRIBUTES: Map<IElementType, TextAttributesKey> = IdentityHashMap<IElementType, TextAttributesKey>().apply {
       fillMap(this, D2TokenSets.IDENTIFIERS, IDENTIFIERS)
       fillMap(this, D2TokenSets.KEYWORDS, KEYWORDS)
       fillMap(this, D2TokenSets.ARROWS, ARROWS)
       fillMap(this, D2TokenSets.NUMBERS, NUMBERS)
 
+      put(D2ElementTypes.ID, SHAPE_IDS)
+
       put(D2ElementTypes.COMMENT, COMMENT)
 
       // shape and other simple keywords highlight as instance field, like JSON_PROPERTY_KEY in a JSON highlighter does
       put(D2ElementTypes.SIMPLE_RESERVED_KEYWORDS, FIELDS)
-      put(D2ElementTypes.PROPERTY_KEY, FIELDS)
+      put(D2ElementTypes.STYLE_KEYWORD, FIELDS)
+      put(D2ElementTypes.STYLE_KEYWORDS, FIELDS)
+      put(D2ElementTypes.RESERVED_KEYWORD_HOLDERS, FIELDS)
 
       put(D2ElementTypes.STRING, STRING)
       put(D2ElementTypes.UNQUOTED_STRING, STRING)
+      put(D2ElementTypes.COLOR, STRING)
 
       put(D2ElementTypes.DOT, DOT)
 
       put(D2ElementTypes.COLON, COLON)
       put(D2ElementTypes.SEMICOLON, SEMICOLON)
-      put(D2ElementTypes.LABEL_DEFINITION, STRING)
 
       put(D2ElementTypes.LBRACE, BRACES)
       put(D2ElementTypes.RBRACE, BRACES)

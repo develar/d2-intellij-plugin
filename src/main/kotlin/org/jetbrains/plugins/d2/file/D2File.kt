@@ -1,10 +1,10 @@
 package org.jetbrains.plugins.d2.file
 
-import com.dvd.intellij.d2.ide.utils.D2Bundle
-import com.dvd.intellij.d2.ide.utils.D2Icons
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.psi.FileViewProvider
+import org.jetbrains.plugins.d2.D2Bundle
+import org.jetbrains.plugins.d2.D2Icons
 import org.jetbrains.plugins.d2.lang.D2Language
 
 class D2File(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, D2Language) {

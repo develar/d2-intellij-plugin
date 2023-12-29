@@ -1,7 +1,5 @@
 package org.jetbrains.plugins.d2
 
-import com.dvd.intellij.d2.ide.utils.KEYWORD_HOLDERS
-import com.dvd.intellij.d2.ide.utils.SIMPLE_RESERVED_KEYWORDS
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
@@ -25,9 +23,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       """
     )
     fixture.complete(CompletionType.BASIC)
-    val lookupElementStrings = fixture.lookupElementStrings
-    assertThat(lookupElementStrings).isNotNull()
-    assertThat(lookupElementStrings).containsOnlyElementsOf((SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).toList())
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf((SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).toList())
   }
 
   @Test
@@ -37,8 +33,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       "test -> <caret>"
     )
     fixture.complete(CompletionType.BASIC)
-    val lookupElementStrings = fixture.lookupElementStrings
-    assertThat(lookupElementStrings).isEmpty()
+    assertThat(fixture.lookupElementStrings).isEmpty()
   }
 
   @Test
@@ -48,8 +43,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       "test.<caret> ->"
     )
     fixture.complete(CompletionType.BASIC)
-    val lookupElementStrings = fixture.lookupElementStrings
-    assertThat(lookupElementStrings).isEmpty()
+    assertThat(fixture.lookupElementStrings).isEmpty()
   }
 
   @Test
@@ -61,9 +55,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       """
     )
     fixture.complete(CompletionType.BASIC)
-    val lookupElementStrings = fixture.lookupElementStrings
-    assertThat(lookupElementStrings).isNotNull()
-    assertThat(lookupElementStrings).containsOnlyElementsOf((SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).toList() + varsAndClasses.map { it.lookupString })
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf((SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).toList() + varsAndClasses.map { it.lookupString })
   }
 
   @Test
@@ -75,11 +67,111 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       """
     )
     fixture.complete(CompletionType.BASIC)
-    val lookupElementStrings = fixture.lookupElementStrings
-    assertThat(lookupElementStrings).isNotNull()
-    assertThat(lookupElementStrings).containsOnlyElementsOf(listOf("--", "->", "<-", "<->"))
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(listOf("--", "->", "<-", "<->"))
+  }
+
+  @Test
+  fun `style sub properties for existing color value`() {
+    fixture.configureByText(
+      "test.d2",
+      """
+        logs.style.<caret>: "#694024"
+      """
+    )
+    fixture.complete(CompletionType.BASIC)
+    // listOf("fill", "font-color", "stroke")
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(allShapeStyleKeywords())
+  }
+
+  @Test
+  fun `style sub properties for existing float value`() {
+    fixture.configureByText(
+      "test.d2",
+      """
+        logs.style.<caret>: 0.1
+      """
+    )
+    fixture.complete(CompletionType.BASIC)
+    // listOf("opacity")
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(allShapeStyleKeywords())
+  }
+
+  @Test
+  fun `style sub properties for existing int value`() {
+    fixture.configureByText(
+      "test.d2",
+      """
+        logs.style.<caret>: 1
+      """
+    )
+    fixture.complete(CompletionType.BASIC)
+    // listOf("border-radius", "font-size", "opacity", "stroke-dash", "stroke-width")
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(allShapeStyleKeywords())
+  }
+
+  @Test
+  fun `style sub properties for existing boolean value`() {
+    fixture.configureByText(
+      "test.d2",
+      """
+        logs.style.<caret>: true
+      """
+    )
+    fixture.complete(CompletionType.BASIC)
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(
+      //listOf(
+      //  "3d",
+      //  "animated",
+      //  "bold",
+      //  "double-border",
+      //  "filled",
+      //  "italic",
+      //  "multiple",
+      //  "shadow",
+      //  "underline"
+      //)
+      allShapeStyleKeywords()
+    )
+  }
+
+  @Test
+  fun `style sub properties without value`() {
+    fixture.configureByText(
+      "test.d2",
+      """
+        logs.style.<caret>
+      """
+    )
+    fixture.complete(CompletionType.BASIC)
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(allShapeStyleKeywords())
+  }
+
+  @Test
+  fun `style font`() {
+    fixture.configureByText(
+      "test.d2",
+      """
+        logs.style.font: <caret>
+      """
+    )
+    fixture.complete(CompletionType.BASIC)
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(listOf("mono"))
+  }
+
+  @Test
+  fun `style font with valid prefix`() {
+    fixture.configureByText(
+      "test.d2",
+      """
+        logs.style.font: mo<caret>
+      """
+    )
+    fixture.complete(CompletionType.BASIC)
+    assertThat(fixture.lookupElementStrings).isNull()
   }
 }
+
+private fun allShapeStyleKeywords() = ShapeStyles.values().map { it.keyword }
 
 abstract class D2LightCodeInsightFixtureTestCase {
   @Suppress("JUnitMalformedDeclaration")

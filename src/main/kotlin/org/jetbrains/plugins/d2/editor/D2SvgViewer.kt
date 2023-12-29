@@ -2,8 +2,6 @@ package org.jetbrains.plugins.d2.editor
 
 import com.dvd.intellij.d2.components.D2Layout
 import com.dvd.intellij.d2.components.D2Theme
-import com.dvd.intellij.d2.ide.utils.D2Bundle
-import com.dvd.intellij.d2.ide.utils.D2_EDITOR_NAME
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter
 import com.intellij.ide.structureView.StructureViewBuilder
 import com.intellij.openapi.components.service
@@ -20,6 +18,8 @@ import com.intellij.ui.jcef.JBCefApp
 import com.intellij.ui.jcef.JBCefBrowser
 import com.intellij.ui.jcef.JBCefBrowserBuilder
 import com.intellij.util.EventDispatcher
+import org.jetbrains.plugins.d2.D2Bundle
+import org.jetbrains.plugins.d2.D2_EDITOR_NAME
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
 import java.beans.PropertyChangeListener

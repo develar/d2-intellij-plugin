@@ -34,8 +34,6 @@
 
     <formattingService implementation="org.jetbrains.plugins.d2.editor.D2FormatterService"/>
 
-    <!--<completion.contributor language="d2" implementationClass="org.jetbrains.plugins.d2.completion.D2ShapesTypesCompletionContributor"/>-->
-    <!--<completion.contributor language="d2" implementationClass="org.jetbrains.plugins.d2.completion.D2StyleCompletionContributor"/>-->
     <completion.contributor language="d2" implementationClass="org.jetbrains.plugins.d2.completion.D2BasicCompletionContributor"/>
 
     <spellchecker.support language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2SpellCheckerStrategy"/>
@@ -43,7 +41,6 @@
     <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
     <editorNotificationProvider implementation="org.jetbrains.plugins.d2.editor.D2MissingCompilerNotificationProvider"/>
 
-    <annotator language="d2" implementationClass="org.jetbrains.plugins.d2.lang.D2LiteralAnnotator"/>
     <lang.formatter language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2FormattingModelBuilder"/>
   </extensions>
 

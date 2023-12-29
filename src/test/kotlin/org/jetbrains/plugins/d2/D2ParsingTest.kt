@@ -9,6 +9,27 @@ class D2ParsingTest : D2ParsingTestCase() {
   }
 
   @Test
+  fun `label with dot`() {
+    test("""
+      s: 1.2
+    """.trimIndent())
+  }
+
+  @Test
+  fun `id with spaces`() {
+    test("""
+      logs foo bar -> logs
+    """.trimIndent())
+  }
+
+  @Test
+  fun `id with spaces and dash`() {
+    test("""
+      logs-foo bar - dash -> logs
+    """.trimIndent())
+  }
+
+  @Test
   fun idAndReservedKeyword() {
     test("""
       logs.style.stroke: "#694024"

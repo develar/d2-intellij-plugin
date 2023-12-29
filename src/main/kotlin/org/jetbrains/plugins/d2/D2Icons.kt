@@ -1,4 +1,4 @@
-package com.dvd.intellij.d2.ide.utils
+package org.jetbrains.plugins.d2
 
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.util.IconLoader

@@ -1,6 +1,5 @@
 package org.jetbrains.plugins.d2.editor
 
-import com.dvd.intellij.d2.ide.utils.isD2
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
@@ -8,6 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.EditorNotificationPanel
 import com.intellij.ui.EditorNotificationProvider
 import org.jetbrains.annotations.Nls
+import org.jetbrains.plugins.d2.isD2
 import java.util.function.Function
 import java.util.function.Supplier
 import javax.swing.JComponent

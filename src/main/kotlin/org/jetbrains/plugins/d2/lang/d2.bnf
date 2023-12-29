@@ -2,12 +2,11 @@
 {
 		parserClass="org.jetbrains.plugins.d2.lang.D2Parser"
 
-		implements="org.jetbrains.plugins.d2.lang.D2CompositeElement"
-		extends="org.jetbrains.plugins.d2.lang.D2CompositeElementImpl"
-
 		elementTypeHolderClass="org.jetbrains.plugins.d2.lang.D2ElementTypes"
 		elementTypeClass="org.jetbrains.plugins.d2.lang.D2ElementType"
 		elementTypeFactory="org.jetbrains.plugins.d2.lang.D2ElementTypeFactory.element"
+
+		generatePsi=false
 
 		tokenTypeClass="com.intellij.psi.tree.IElementType"
 		tokenTypeFactory="org.jetbrains.plugins.d2.lang.D2ElementTypeFactory.token"
@@ -20,40 +19,45 @@
 		psiImplPackage="org.jetbrains.plugins.d2.lang.psi.impl"
 }
 
-File ::= !<<eof>> (Property | ShapeDefinitions | COMMENT)*
+File ::= !<<eof>> (ShapeIdWithPropery | ShapeDefinitions | COMMENT | SEMICOLON)*
+
+// logs.style.strokes: "#f4a261"
+private ShapeIdWithPropery ::= (ShapeId (DOT ShapeId)* DOT)? Property
 
 // bad tree structure: ci.deploys->clouds<-a.sub:test
-private ShapeDefinitions ::= ShapeDefinition (ShapeConnection | SubShapeDefinition | InlineShapeDefinition)* ShapeExtras? {
+private ShapeDefinitions ::= ShapeId (ShapeConnection | SubShapeDefinition)* ShapeExtras? {
   pin=1
 }
 
-left private SubShapeDefinition ::= DOT ShapeDefinition ShapeExtras?
+left private SubShapeDefinition ::= DOT ShapeId ShapeExtras?
 
-private ShapeExtras ::= COLON ((LabelDefinition | BlockString) BlockDefinition? | BlockDefinition) {
+private ShapeExtras ::= COLON ((ShapeLabel | BlockString) BlockDefinition? | BlockDefinition) {
   pin=1
 }
 
-// `foo bar -> shape2` - here `foo bar` is shape id
-ShapeDefinition ::= (STRING | ID | INT | FLOAT | TRUE | FALSE)+
+ShapeId ::= ID+ | STRING
 
-LabelDefinition ::= UNQUOTED_STRING | AttributeValue
+ShapeLabel ::= UNQUOTED_STRING | STRING
 
-left ShapeConnection ::= (Connector ShapeDefinition)+
+left ShapeConnection ::= (Connector ShapeId)+
 
 Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
-left InlineShapeDefinition ::= (SEMICOLON ShapeDefinition)+
-
 BlockString ::= BLOCK_STRING_OPEN BLOCK_STRING_LANG? BLOCK_STRING_BODY BLOCK_STRING_CLOSE
 
-PropertyKey ::= (SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS) (DOT ID)*
-PropertyValue ::= UNQUOTED_STRING | AttributeValue | BlockString
+UnquotedStringValue ::= UNQUOTED_STRING
+StringValue ::= STRING
+ColorValue ::= COLOR
+OtherValue ::= AttributeValue | BlockString
 
-// logs.style.strokes: "#f4a261"
-Property ::= (AttributeValue (DOT AttributeValue)*)? PropertyKey COLON PropertyValue
+// todo: handle RESERVED_KEYWORD_HOLDERS in the same way as style (do not allow arbitrary ID)
+PropertyKey ::= SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS)
+private PropertyValue ::= UnquotedStringValue | StringValue | ColorValue | OtherValue
 
-BlockDefinition ::= LBRACE (Property | ShapeDefinitions)* RBRACE {
+Property ::= PropertyKey COLON PropertyValue
+
+BlockDefinition ::= LBRACE (ShapeIdWithPropery | ShapeDefinitions)* RBRACE {
   pin=1
 }
 
-private AttributeValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT
+private AttributeValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT | COLOR

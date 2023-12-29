@@ -3,16 +3,13 @@ package org.jetbrains.plugins.d2.editor
 import com.intellij.formatting.*
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.formatter.FormatterUtil.isWhitespaceOrEmpty
-import com.intellij.psi.util.childrenOfType
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import org.jetbrains.plugins.d2.lang.D2Language
-import org.jetbrains.plugins.d2.lang.psi.D2Property
-import org.jetbrains.plugins.d2.lang.psi.D2PropertyValue
+import org.jetbrains.plugins.d2.lang.D2TokenSets
 
 private class D2FormattingModelBuilder : FormattingModelBuilder {
   override fun createModel(formattingContext: FormattingContext): FormattingModel {
@@ -50,8 +47,6 @@ private class D2Block(
   private val wrap: Wrap?,
   private val spacingBuilder: SpacingBuilder
 ) : ASTBlock {
-  private val psiElement: PsiElement = node.psi
-
   // lazy initialized on first call to #getSubBlocks()
   private var subBlocks: MutableList<Block>? = null
 
@@ -123,10 +118,18 @@ private class D2Block(
     val elementType = node.elementType
     if (elementType == D2ElementTypes.BLOCK_DEFINITION) {
       return lastChildNode != null && lastChildNode.elementType !== D2ElementTypes.RBRACE
-    } else if (psiElement is D2Property) {
-      return psiElement.childrenOfType<D2PropertyValue>().isEmpty()
+    } else if (node.elementType == D2ElementTypes.PROPERTY) {
+      var child: ASTNode? = node.firstChildNode
+      while (child != null) {
+        if (D2TokenSets.PROPERTY_VALUE.contains(child.elementType)) {
+          return false
+        }
+        child = child.treeNext
+      }
+      return true
+    } else {
+      return false
     }
-    return false
   }
 
   override fun isLeaf(): Boolean = node.firstChildNode == null

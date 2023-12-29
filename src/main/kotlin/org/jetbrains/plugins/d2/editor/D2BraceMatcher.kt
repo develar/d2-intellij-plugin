@@ -6,7 +6,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
-import org.jetbrains.plugins.d2.lang.psi.D2ShapeDefinition
+import org.jetbrains.plugins.d2.lang.psi.ShapeId
 
 private val BRACE_PAIRS = arrayOf(
   BracePair(D2ElementTypes.LBRACE, D2ElementTypes.RBRACE, true),
@@ -24,7 +24,7 @@ private class D2BraceMatcher : PairedBraceMatcher {
       return openingBraceOffset
     }
 
-    val closestRuleset = PsiTreeUtil.getParentOfType(element, D2ShapeDefinition::class.java)
+    val closestRuleset = PsiTreeUtil.getParentOfType(element, ShapeId::class.java)
     return closestRuleset?.textRange?.startOffset ?: openingBraceOffset
   }
 }

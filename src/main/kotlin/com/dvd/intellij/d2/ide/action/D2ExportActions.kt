@@ -1,16 +1,17 @@
 package com.dvd.intellij.d2.ide.action
 
-import com.dvd.intellij.d2.ide.utils.D2Bundle
-import com.dvd.intellij.d2.ide.utils.d2FileEditor
-import com.dvd.intellij.d2.ide.utils.file
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileChooser.FileChooserFactory
 import com.intellij.openapi.fileChooser.FileSaverDescriptor
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.util.io.FileUtilRt
+import com.intellij.openapi.vfs.VirtualFile
+import org.jetbrains.plugins.d2.D2Bundle
+import org.jetbrains.plugins.d2.d2FileEditor
 import org.jetbrains.plugins.d2.editor.D2Service
 import org.jetbrains.plugins.d2.execution.D2Command
 import java.nio.file.Files
@@ -22,7 +23,7 @@ private fun getGeneratedCommand(fileEditor: FileEditor): D2Command.Generate? = s
 @OptIn(ExperimentalStdlibApi::class)
 private class D2ExportAction : AnAction() {
   override fun actionPerformed(e: AnActionEvent) {
-    val defaultFileName = FileUtilRt.getNameWithoutExtension(e.file.presentableName)
+    val defaultFileName = FileUtilRt.getNameWithoutExtension(e.getData(PlatformDataKeys.VIRTUAL_FILE)!!.presentableName)
 
     val fileWrapper = FileChooserFactory.getInstance().createSaveFileDialog(
       FileSaverDescriptor(
@@ -31,7 +32,7 @@ private class D2ExportAction : AnAction() {
         *ConversionOutput.entries.map { it.name.lowercase() }.toTypedArray()
       ),
       e.project
-    ).save(e.file.parent, defaultFileName) ?: return
+    ).save((e.getData(PlatformDataKeys.VIRTUAL_FILE) as VirtualFile).parent, defaultFileName) ?: return
 
     val d2File = getGeneratedCommand(e.d2FileEditor)?.targetFile ?: error("no d2 file")
     val converted = service<D2Service>().convert(d2File, ConversionOutput.valueOf(fileWrapper.file.extension.uppercase()))

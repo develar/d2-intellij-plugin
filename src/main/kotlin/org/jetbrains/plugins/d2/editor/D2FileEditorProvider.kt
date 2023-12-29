@@ -1,12 +1,12 @@
 package org.jetbrains.plugins.d2.editor
 
-import com.dvd.intellij.d2.ide.utils.D2_EDITOR_NAME
-import com.dvd.intellij.d2.ide.utils.isD2
 import com.intellij.openapi.fileEditor.*
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import org.jetbrains.plugins.d2.D2_EDITOR_NAME
+import org.jetbrains.plugins.d2.isD2
 
 // https://github.com/JetBrains/intellij-community/blob/master/images/src/org/intellij/images/editor/impl/ImageFileEditorProvider.java
 private class D2FileEditorProvider : FileEditorProvider, DumbAware {

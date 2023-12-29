@@ -1,6 +1,5 @@
 package com.dvd.intellij.d2.ide.action
 
-import com.dvd.intellij.d2.ide.utils.D2Bundle
 import com.intellij.execution.impl.ConsoleViewImpl
 import com.intellij.execution.ui.ConsoleViewContentType
 import com.intellij.openapi.actionSystem.AnAction
@@ -12,6 +11,7 @@ import com.intellij.openapi.wm.ToolWindowId
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.ui.content.ContentFactory
 import com.intellij.ui.content.MessageView
+import org.jetbrains.plugins.d2.D2Bundle
 import org.jetbrains.plugins.d2.editor.D2Service
 import java.awt.BorderLayout
 import javax.swing.JPanel

@@ -1,12 +1,12 @@
 package com.dvd.intellij.d2.ide.settings
 
-import com.dvd.intellij.d2.ide.utils.D2Bundle
-import com.dvd.intellij.d2.ide.utils.D2Icons
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
+import org.jetbrains.plugins.d2.D2Bundle
+import org.jetbrains.plugins.d2.D2Icons
 import org.jetbrains.plugins.d2.lang.D2Language
 import org.jetbrains.plugins.d2.lang.D2SyntaxHighlighter
 import javax.swing.Icon

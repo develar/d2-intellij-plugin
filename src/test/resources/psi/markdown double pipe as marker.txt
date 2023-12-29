@@ -1,9 +1,9 @@
 D2 File
-  D2ShapeDefinitionImpl(SHAPE_DEFINITION)
+  ShapeId(SHAPE_ID)
     PsiElement(ID)('explanation')
   PsiElement(COLON)(':')
   PsiWhiteSpace(' ')
-  D2BlockStringImpl(BLOCK_STRING)
+  D2BlockString(BLOCK_STRING)
     PsiElement(BLOCK_STRING_OPEN)('||')
     PsiElement(BLOCK_STRING_LANG)('md')
     PsiElement(BLOCK_STRING_BODY)

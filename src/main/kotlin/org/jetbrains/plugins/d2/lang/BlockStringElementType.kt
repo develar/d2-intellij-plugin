@@ -21,9 +21,7 @@ private val gfmFlavourDescriptor = GFMFlavourDescriptor()
 
 internal class BlockStringElementType(name: String) : ILazyParseableElementType(name, D2Language) {
   override fun parseContents(chameleon: ASTNode): ASTNode {
-    val parentElement = chameleon.treeParent.psi ?: error("parent psi is null: $chameleon")
-    val project = parentElement.project
-
+    val project = (chameleon.treeParent.psi ?: error("parent psi is null: $chameleon")).project
 
     val langNode = chameleon.treePrev?.takeIf { it.elementType == D2ElementTypes.BLOCK_STRING_LANG }
     val langId = langNode?.chars
@@ -53,9 +51,7 @@ internal class BlockStringElementType(name: String) : ILazyParseableElementType(
 
   override fun getLanguageForParser(psi: PsiElement) = error("must not be called")
 
-  override fun createNode(text: CharSequence?): ASTNode {
-    return LazyParseablePsiElement(this, text)
-  }
+  override fun createNode(text: CharSequence?): ASTNode = LazyParseablePsiElement(this, text)
 }
 
 private class UnknownLanguageBlockString(text: CharSequence) : OwnBufferLeafPsiElement(PlainTextTokenTypes.PLAIN_TEXT, text), PsiPlainText {
@@ -63,7 +59,5 @@ private class UnknownLanguageBlockString(text: CharSequence) : OwnBufferLeafPsiE
     visitor.visitPlainText(this)
   }
 
-  override fun toString(): String {
-    return "PsiPlainText"
-  }
+  override fun toString(): String = "PsiPlainText"
 }
