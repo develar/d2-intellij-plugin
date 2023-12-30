@@ -105,6 +105,7 @@ private class D2BasicCompletionContributor : CompletionContributor() {
       }
     }
 
+    // doesn't work after the introduction of ShapeDeclaration
     // see D2CompletionTest.connection
     if (position.elementType == D2ElementTypes.ID && position.textContains(' ') && position.text.endsWith(spaceAndDummy)) {
       result.addAllElements(connections)

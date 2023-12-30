@@ -26,22 +26,23 @@ class D2ParserDefinition : ParserDefinition {
   override fun createFile(provider: FileViewProvider) = D2File(provider)
 
   override fun createElement(node: ASTNode): PsiElement {
-    return when (node.elementType.index) {
-      BLOCK_DEFINITION.index -> D2BlockDefinition(node)
-      BLOCK_STRING.index -> D2BlockString(node)
-      CONNECTOR.index -> D2Connector(node)
-      PROPERTY.index -> D2Property(node)
-      PROPERTY_KEY.index -> D2PropertyKey(node)
+    return when (node.elementType) {
+      BLOCK_DEFINITION -> D2BlockDefinition(node)
+      BLOCK_STRING -> D2BlockString(node)
+      CONNECTOR -> D2Connector(node)
+      PROPERTY -> D2Property(node)
+      PROPERTY_KEY -> D2PropertyKey(node)
 
-      SHAPE_LABEL.index -> ShapeLabel(node)
-      SHAPE_CONNECTION.index -> D2ShapeConnection(node)
+      SHAPE_DECLARATION -> ShapeDeclaration(node)
+      SHAPE_LABEL -> ShapeLabel(node)
+      SHAPE_CONNECTION -> D2ShapeConnection(node)
 
-      SHAPE_ID.index -> ShapeId(node)
+      SHAPE_ID -> ShapeId(node)
 
-      UNQUOTED_STRING_VALUE.index -> UnquotedStringValue(node)
-      STRING_VALUE.index -> StringValue(node)
-      COLOR_VALUE.index -> ColorValue(node)
-      OTHER_VALUE.index -> OtherValue(node)
+      UNQUOTED_STRING_VALUE -> UnquotedStringValue(node)
+      STRING_VALUE -> StringValue(node)
+      COLOR_VALUE -> ColorValue(node)
+      OTHER_VALUE -> OtherValue(node)
 
       else -> throw AssertionError("Unknown element type: ${node.elementType}")
     }

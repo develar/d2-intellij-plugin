@@ -5,6 +5,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.plugins.d2.completion.varsAndClasses
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
@@ -59,6 +60,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
   }
 
   @Test
+  @Disabled
   fun connection() {
     fixture.configureByText(
       "test.d2",

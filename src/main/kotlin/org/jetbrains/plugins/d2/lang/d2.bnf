@@ -19,23 +19,26 @@
 		psiImplPackage="org.jetbrains.plugins.d2.lang.psi.impl"
 }
 
-File ::= !<<eof>> (ShapeIdWithPropery | ShapeDefinitions | COMMENT | SEMICOLON)*
+File ::= !<<eof>> (ShapeDeclaration | ShapeIdWithPropery | ShapeDefinitions | COMMENT | SEMICOLON)*
 
 // logs.style.strokes: "#f4a261"
 private ShapeIdWithPropery ::= (ShapeId (DOT ShapeId)* DOT)? Property
+
+// declaration means `id + label` (not implicit shape via just ID)
+ShapeDeclaration ::= ShapeId (DOT ShapeId)* COLON (ShapeLabel | BlockString)? BlockDefinition?
 
 // bad tree structure: ci.deploys->clouds<-a.sub:test
 private ShapeDefinitions ::= ShapeId (ShapeConnection | SubShapeDefinition)* ShapeExtras? {
   pin=1
 }
 
-left private SubShapeDefinition ::= DOT ShapeId ShapeExtras?
+private SubShapeDefinition ::= DOT ShapeId ShapeExtras?
 
 private ShapeExtras ::= COLON ((ShapeLabel | BlockString) BlockDefinition? | BlockDefinition) {
   pin=1
 }
 
-ShapeId ::= ID+ | STRING
+ShapeId ::= ID | STRING
 
 ShapeLabel ::= UNQUOTED_STRING | STRING
 

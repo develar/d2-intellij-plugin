@@ -13,6 +13,7 @@ public interface D2ElementTypes {
   IElementType PROPERTY = D2ElementTypeFactory.element("PROPERTY");
   IElementType PROPERTY_KEY = D2ElementTypeFactory.element("PROPERTY_KEY");
   IElementType SHAPE_CONNECTION = D2ElementTypeFactory.element("SHAPE_CONNECTION");
+  IElementType SHAPE_DECLARATION = D2ElementTypeFactory.element("SHAPE_DECLARATION");
   IElementType SHAPE_ID = D2ElementTypeFactory.element("SHAPE_ID");
   IElementType SHAPE_LABEL = D2ElementTypeFactory.element("SHAPE_LABEL");
   IElementType STRING_VALUE = D2ElementTypeFactory.element("STRING_VALUE");
