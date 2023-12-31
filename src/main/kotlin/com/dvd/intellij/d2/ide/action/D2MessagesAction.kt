@@ -34,11 +34,11 @@ private class D2MessagesAction : AnAction(), DumbAware {
       Disposer.register(content, console)
     }
 
-    val console = content.component as ConsoleViewImpl
+    val console = content.component.getComponent(0) as ConsoleViewImpl
     console.clear()
     messageView.contentManager.setSelectedContent(content)
     for (command in service<D2Service>().map.values) {
-      console.print(command.log, ConsoleViewContentType.LOG_INFO_OUTPUT)
+      console.print(command.log.toString(), ConsoleViewContentType.LOG_INFO_OUTPUT)
     }
 
     val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(ToolWindowId.MESSAGES_WINDOW)

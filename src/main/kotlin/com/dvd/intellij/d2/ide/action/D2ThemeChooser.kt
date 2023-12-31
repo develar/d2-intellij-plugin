@@ -28,7 +28,7 @@ private class D2ThemeAction(private val theme: D2Theme) : ToggleAction(theme.tNa
 
   override fun setSelected(e: AnActionEvent, state: Boolean) {
     e.d2FileEditor.putUserData(D2_FILE_THEME, theme)
-    service<D2Service>().compile(e.d2FileEditor)
+    service<D2Service>().compileAndWatch(e.d2FileEditor)
   }
 }
 

@@ -7,18 +7,18 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileChooser.FileChooserFactory
 import com.intellij.openapi.fileChooser.FileSaverDescriptor
-import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.util.io.FileUtilRt
 import com.intellij.openapi.vfs.VirtualFile
 import org.jetbrains.plugins.d2.D2Bundle
 import org.jetbrains.plugins.d2.d2FileEditor
 import org.jetbrains.plugins.d2.editor.D2Service
-import org.jetbrains.plugins.d2.execution.D2Command
+import org.jetbrains.plugins.d2.editor.D2Viewer
+import org.jetbrains.plugins.d2.editor.GenerateCommand
 import java.nio.file.Files
 
 enum class ConversionOutput { SVG, PNG, JPG, TIFF }
 
-private fun getGeneratedCommand(fileEditor: FileEditor): D2Command.Generate? = service<D2Service>().map.get(fileEditor)?.command
+private fun getGeneratedCommand(fileEditor: D2Viewer): GenerateCommand? = service<D2Service>().map.get(fileEditor)
 
 @OptIn(ExperimentalStdlibApi::class)
 private class D2ExportAction : AnAction() {

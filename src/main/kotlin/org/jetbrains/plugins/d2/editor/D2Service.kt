@@ -1,29 +1,35 @@
 package org.jetbrains.plugins.d2.editor
 
 import com.dvd.intellij.d2.components.D2Layout
+import com.dvd.intellij.d2.components.D2Theme
 import com.dvd.intellij.d2.ide.action.ConversionOutput
+import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.*
+import com.intellij.ide.ui.LafManagerListener
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
-import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream
 import com.intellij.openapi.util.removeUserData
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.EditorNotifications
+import com.intellij.ui.JBColor
+import com.intellij.util.EnvironmentUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.plugins.d2.D2Bundle
 import org.jetbrains.plugins.d2.execution.D2Command
-import org.jetbrains.plugins.d2.execution.D2CommandOutput
 import java.io.File
 import java.net.ServerSocket
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.CancellationException
+import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Supplier
 import javax.imageio.ImageIO
 import kotlin.system.measureTimeMillis
@@ -34,9 +40,17 @@ internal val D2_FILE_NOTIFICATION: Key<Supplier<String>> = Key("d2EditorNotifica
 
 @Service
 class D2Service(private val coroutineScope: CoroutineScope) : Disposable {
-  private val editorToState: MutableMap<FileEditor, D2CommandOutput.Generate> = HashMap()
+  private val viewerToState = ConcurrentHashMap<D2Viewer, GenerateCommand>()
 
-  val map: Map<FileEditor, D2CommandOutput.Generate> = editorToState
+  val map: Map<D2Viewer, GenerateCommand> = viewerToState
+
+  init {
+    ApplicationManager.getApplication().messageBus.connect(coroutineScope).subscribe(LafManagerListener.TOPIC, LafManagerListener {
+      for (viewer in java.util.List.copyOf(viewerToState.keys)) {
+        compileAndWatch(viewer)
+      }
+    })
+  }
 
   fun getCompilerVersion(): String? {
     try {
@@ -52,7 +66,7 @@ class D2Service(private val coroutineScope: CoroutineScope) : Disposable {
 
   fun getLayoutEngines(): List<D2Layout>? = executeAndGetOutputOrNull(D2Command.LayoutEngines)?.layouts
 
-  fun scheduleCompile(fileEditor: D2SvgViewer, project: Project) {
+  fun scheduleCompile(fileEditor: D2Viewer, project: Project) {
     coroutineScope.launch {
       if (!fileEditor.isValid) {
         return@launch
@@ -64,7 +78,7 @@ class D2Service(private val coroutineScope: CoroutineScope) : Disposable {
 
       try {
         withContext(Dispatchers.IO) {
-          compile(fileEditor)
+          compileAndWatch(fileEditor)
         }
         if (fileEditor.removeUserData(D2_FILE_NOTIFICATION) != null) {
           EditorNotifications.getInstance(project).updateNotifications(fileEditor.file)
@@ -84,63 +98,74 @@ class D2Service(private val coroutineScope: CoroutineScope) : Disposable {
     }
   }
 
-  fun compile(fileEditor: D2SvgViewer) {
-    val oldExec = editorToState.get(fileEditor)
-    val oldCommand = oldExec?.command
+  fun compileAndWatch(fileEditor: D2Viewer) {
+    val command: GenerateCommand
+    synchronized(fileEditor) {
+      val oldCommand = viewerToState.get(fileEditor)
 
-    val theme = fileEditor.getUserData(D2_FILE_THEME)
-    val layout = fileEditor.getUserData(D2_FILE_LAYOUT)
-    val command = if (oldCommand == null) {
-      // find a free port
-      val port = ServerSocket(0).use {
-        it.localPort
-      }
-
+      val theme = fileEditor.getUserData(D2_FILE_THEME)
+      val layout = fileEditor.getUserData(D2_FILE_LAYOUT)
       val targetFile = Files.createTempFile("d2_temp_svg", ".svg")
-      D2Command.Generate(input = fileEditor.file, targetFile = targetFile, port = port, theme = theme, layout = layout)
-    } else {
-      oldCommand.copy(theme = theme, layout = layout)
-    }
-
-    oldCommand?.process?.let {
-      it.destroyProcess()
-      @Suppress("ControlFlowWithEmptyBody")
-      val terminationTime = measureTimeMillis {
-        // background process? ~5ms
-        while (!it.isProcessTerminated) {
+      if (oldCommand == null) {
+        // find a free port
+        val port = ServerSocket(0).use {
+          it.localPort
         }
-      }
-      "[plugin ] [info] D2 process termination ${terminationTime}ms".let { message ->
-        editorToState.put(fileEditor, editorToState.get(fileEditor)?.appendLog(message) ?: return)
-        LOG.info(message)
-      }
-    }
-    command.process = prepare(command, object : ProcessListener {
-      override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
-        onTextAvailable(fileEditor = fileEditor, event = event, outputType = outputType)
+
+        command = GenerateCommand(
+          input = fileEditor.file,
+          targetFile = targetFile,
+          port = port,
+          theme = theme,
+          layout = layout,
+          log = StringBuilder("[plugin ] info: starting process...\n"),
+        )
+      } else {
+        oldCommand.process?.let {
+          it.destroyProcess()
+          @Suppress("ControlFlowWithEmptyBody")
+          val terminationTime = measureTimeMillis {
+            // background process? ~5ms
+            while (!it.isProcessTerminated) {
+            }
+          }
+          oldCommand.log.append("[plugin ] [info] D2 process termination ${terminationTime}ms\n")
+        }
+
+        command = GenerateCommand(
+          input = fileEditor.file,
+          targetFile = targetFile,
+          port = oldCommand.port,
+          theme = theme,
+          layout = layout,
+          log = StringBuilder(oldCommand.log).append("[plugin ] info: restarting process...\n"),
+        )
       }
 
-      override fun processWillTerminate(event: ProcessEvent, willBeDestroyed: Boolean) {
-        deleteFile(command)
-      }
-    })
+      command.process = prepare(command, object : ProcessListener {
+        override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
+          onTextAvailable(event = event, outputType = outputType, log = command.log)
+        }
 
-    @Suppress("IfThenToElvis")
-    editorToState[fileEditor] = if (oldExec == null) {
-      command.parseOutput("[plugin ] info: starting process...\n")
-    } else {
-      oldExec.copy(command = command).appendLog("[plugin ] info: restarting process...\n")
+        override fun processWillTerminate(event: ProcessEvent, willBeDestroyed: Boolean) {
+          command.deleteTargetFile()
+        }
+      })
+
+      viewerToState.put(fileEditor, command)
     }
+
     command.process?.startNotify()
-
     fileEditor.refreshD2(command.port)
   }
 
-  fun closeFile(fileEditor: FileEditor) {
+  fun closeFile(fileEditor: D2Viewer) {
     fileEditor.putUserData(D2_FILE_LAYOUT, null)
     fileEditor.putUserData(D2_FILE_THEME, null)
 
-    editorToState.remove(fileEditor)?.command?.process?.destroyProcess()
+    synchronized(fileEditor) {
+      viewerToState.remove(fileEditor)
+    }?.process?.destroyProcess()
   }
 
   fun format(file: File): D2FormatterResult {
@@ -171,43 +196,36 @@ class D2Service(private val coroutineScope: CoroutineScope) : Disposable {
     return out.toByteArray()
   }
 
-  private fun onTextAvailable(fileEditor: FileEditor, event: ProcessEvent, outputType: Key<*>) {
-    buildString {
-      append("[process] ")
-      if (outputType == ProcessOutputType.SYSTEM) {
-        append("info: ")
-        append(event.text)
-      } else {
-        // remove timestamp
-        append(event.text.replace(Regex("\\[?\\d{2}:\\d{2}:\\d{2}]? "), ""))
-      }
-    }.let {
-      LOG.info(it)
-
-      // null if file editor closed
-      editorToState[fileEditor] = editorToState[fileEditor]?.appendLog(it) ?: return
-    }
-  }
-
   override fun dispose() {
-    for (item in editorToState.values) {
-      deleteFile(item.command)
+    for (command in viewerToState.values) {
+      command.deleteTargetFile()
     }
-    editorToState.clear()
+    viewerToState.clear()
   }
 
-  private fun deleteFile(command: D2Command.Generate) {
-    command.targetFile.let { Files.deleteIfExists(it) }
-  }
-
-  private fun prepare(command: D2Command<*>, listener: ProcessListener?) =
-    KillableColoredProcessHandler.Silent(command.createCommandLine().apply {
-      withEnvironment(command.envVars())
-    }).apply {
+  private fun prepare(command: GenerateCommand, listener: ProcessListener?): KillableColoredProcessHandler.Silent {
+    val commandLine = GeneralCommandLine(command.getArgs())
+      .withCharset(Charsets.UTF_8)
+      .withEnvironment(command.envVars())
+    return KillableColoredProcessHandler.Silent(commandLine).apply {
       if (listener != null) {
         addProcessListener(listener)
       }
     }
+  }
+}
+
+private val timestampRegexp = Regex("\\[?\\d{2}:\\d{2}:\\d{2}]? ")
+
+private fun onTextAvailable(event: ProcessEvent, outputType: Key<*>, log: StringBuilder) {
+  log.append("[process] ")
+  if (outputType == ProcessOutputType.SYSTEM) {
+    log.append("info: ")
+    log.append(event.text)
+  } else {
+    // remove timestamp
+    log.append(event.text.replace(timestampRegexp, ""))
+  }
 }
 
 // null if d2 executable not found
@@ -227,4 +245,47 @@ private fun <O> executeAndGetOutput(command: D2Command<O>): O? {
     500
   )
   return command.parseOutput(processOut)
+}
+
+class GenerateCommand(
+  val input: VirtualFile,
+  val targetFile: Path,
+  val port: Int,
+  val theme: D2Theme?,
+  val layout: D2Layout?,
+  val log: StringBuilder,
+) {
+  var process: ProcessHandler? = null
+
+  fun deleteTargetFile() {
+    targetFile.let { Files.deleteIfExists(it) }
+  }
+
+  fun getArgs(): List<String> = buildList {
+    add("d2")
+
+    add("--watch")
+
+    add("--port")
+    add(port.toString())
+
+    if (layout != null) {
+      add("--layout")
+      add(layout.name)
+    }
+
+    if (theme != null) {
+      add("--theme")
+      add(theme.id.toString())
+    } else if (!JBColor.isBright()) {
+      // https://github.com/develar/d2-intellij-plugin/issues/1
+      add("--theme")
+      add(EnvironmentUtil.getValue("D2_DARK_THEME")?.takeIf { it.isNotBlank() } ?: "200")
+    }
+
+    add(input.path)
+    add(targetFile.toString())
+  }
+
+  fun envVars(): Map<String, String> = java.util.Map.of("BROWSER", "0")
 }

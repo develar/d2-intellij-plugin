@@ -43,7 +43,7 @@ private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
 
   override fun setSelected(e: AnActionEvent, state: Boolean) {
     e.d2FileEditor.putUserData(D2_FILE_LAYOUT, layout)
-    service<D2Service>().compile(e.d2FileEditor)
+    service<D2Service>().compileAndWatch(e.d2FileEditor)
   }
 
   override fun getActionUpdateThread() = ActionUpdateThread.BGT

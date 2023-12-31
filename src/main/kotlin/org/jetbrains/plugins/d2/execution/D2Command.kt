@@ -1,12 +1,8 @@
 package org.jetbrains.plugins.d2.execution
 
 import com.dvd.intellij.d2.components.D2Layout
-import com.dvd.intellij.d2.components.D2Theme
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.execution.process.ProcessHandler
-import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
-import java.nio.file.Path
 
 sealed class D2Command<O> {
   abstract val args: List<String>
@@ -14,42 +10,6 @@ sealed class D2Command<O> {
   open fun envVars(): Map<String, String> = emptyMap()
 
   abstract fun parseOutput(output: String): O
-
-  data class Generate(
-    val input: VirtualFile,
-    val targetFile: Path,
-    val port: Int,
-    val theme: D2Theme?,
-    val layout: D2Layout?,
-  ) : D2Command<D2CommandOutput.Generate>() {
-    var process: ProcessHandler? = null
-
-    override val args = buildList {
-      add("--watch")
-
-      add("--port")
-      add(port.toString())
-
-      if (layout != null) {
-        add("--layout")
-        add(layout.name)
-      }
-
-      if (theme != null) {
-        add("--theme")
-        add(theme.id.toString())
-      }
-
-      add(input.path)
-      add(targetFile.toString())
-    }
-
-    override fun envVars(): Map<String, String> = mapOf(
-      "BROWSER" to "0",
-    )
-
-    override fun parseOutput(output: String): D2CommandOutput.Generate = D2CommandOutput.Generate(this, output)
-  }
 
   data object Version : D2Command<D2CommandOutput.Version>() {
     override val args = listOf("--version")

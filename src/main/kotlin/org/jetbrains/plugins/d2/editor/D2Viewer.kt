@@ -30,7 +30,7 @@ val D2_FILE_LAYOUT: Key<D2Layout> = Key<D2Layout>("d2_file_layout")
 val D2_FILE_THEME: Key<D2Theme> = Key<D2Theme>("d2_file_theme")
 
 // https://github.com/JetBrains/intellij-community/blob/master/images/src/org/intellij/images/editor/impl/ImageFileEditorImpl.java
-class D2SvgViewer(
+class D2Viewer(
   val project: Project,
   private val file: VirtualFile
 ) : UserDataHolderBase(), FileEditor {
