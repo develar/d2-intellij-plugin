@@ -13,9 +13,9 @@ import com.intellij.psi.util.siblings
 import org.jetbrains.annotations.VisibleForTesting
 import org.jetbrains.plugins.d2.*
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
-import org.jetbrains.plugins.d2.lang.psi.D2BlockDefinition
-import org.jetbrains.plugins.d2.lang.psi.D2Connector
-import org.jetbrains.plugins.d2.lang.psi.D2PropertyKey
+import org.jetbrains.plugins.d2.lang.psi.BlockDefinition
+import org.jetbrains.plugins.d2.lang.psi.Connector
+import org.jetbrains.plugins.d2.lang.psi.PropertyKey
 import org.jetbrains.plugins.d2.lang.psi.ShapeId
 
 private val keywords = (SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).map {
@@ -114,7 +114,7 @@ private class D2BasicCompletionContributor : CompletionContributor() {
       if (parent.siblings(withSelf = false).none(::notConnectorOrArrow) &&
         parent.siblings(withSelf = false, forward = false).none(::notConnectorOrArrow)
       ) {
-        val inMap = parent.context is D2BlockDefinition
+        val inMap = parent.context is BlockDefinition
         result.addAllElements(keywords)
         if (!inMap) {
           // classes and vars only in a file context
@@ -152,11 +152,11 @@ private fun styleCompletion(position: PsiElement, parent: PsiElement?, result: C
     //}
     result.addAllElements(variants)
   } else if (parent != null) {
-    val key = parent.siblings(forward = false).firstOrNull { it is D2PropertyKey }?.lastChild ?: return
+    val key = parent.siblings(forward = false).firstOrNull { it is PropertyKey }?.lastChild ?: return
     if (key.elementType == D2ElementTypes.STYLE_KEYWORDS) {
       result.addAllElements(ShapeStyles.fromKeyword(key.text)?.completionElements ?: return)
     }
   }
 }
 
-private fun notConnectorOrArrow(it: PsiElement) = it is D2Connector || it.elementType == D2ElementTypes.ARROW
+private fun notConnectorOrArrow(it: PsiElement) = it is Connector || it.elementType == D2ElementTypes.ARROW

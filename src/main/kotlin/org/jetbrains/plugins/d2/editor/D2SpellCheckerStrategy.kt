@@ -17,7 +17,8 @@ private class D2SpellCheckerStrategy : SpellcheckingStrategy() {
   override fun getTokenizer(element: PsiElement): Tokenizer<*> {
     return when {
       element is PsiComment -> D2CommentTokenizer
-      element.elementType == D2ElementTypes.STRING -> D2StringLiteralTokenizer
+      element.elementType == D2ElementTypes.STRING -> StringLiteralTokenizer
+      element.elementType == D2ElementTypes.UNQUOTED_STRING -> UnquotedStringLiteralTokenizer
       else -> EMPTY_TOKENIZER
     }
   }
@@ -43,7 +44,13 @@ private object D2CommentTokenizer : Tokenizer<PsiComment>() {
 private val STRING_FRAGMENTS = Key<List<Pair<TextRange, String>>>("D2 string fragments")
 private const val escapeTable = "\"\"\\\\//b\bf\u000cn\nr\rt\t"
 
-private object D2StringLiteralTokenizer : Tokenizer<PsiElement>() {
+private object UnquotedStringLiteralTokenizer : Tokenizer<PsiElement>() {
+  override fun tokenize(element: PsiElement, consumer: TokenConsumer) {
+    consumer.consumeToken(element, PlainTextSplitter.getInstance())
+  }
+}
+
+private object StringLiteralTokenizer : Tokenizer<PsiElement>() {
   override fun tokenize(element: PsiElement, consumer: TokenConsumer) {
     val textSplitter = PlainTextSplitter.getInstance()
     if (element.textContains('\\')) {

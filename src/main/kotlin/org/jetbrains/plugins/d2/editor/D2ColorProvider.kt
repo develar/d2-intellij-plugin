@@ -6,7 +6,7 @@ import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.util.descendantsOfType
 import com.intellij.ui.ColorUtil
 import org.jetbrains.plugins.d2.lang.psi.ColorValueProvider
-import org.jetbrains.plugins.d2.lang.psi.D2PropertyValue
+import org.jetbrains.plugins.d2.lang.psi.PropertyValue
 import java.awt.Color
 
 private class D2ColorProvider : ElementColorProvider {
@@ -23,6 +23,6 @@ private class D2ColorProvider : ElementColorProvider {
       element.containingFile
     ) ?: return
 
-    element.firstChild.replace(newPsi.descendantsOfType<D2PropertyValue>().first().firstChild)
+    element.firstChild.replace(newPsi.descendantsOfType<PropertyValue>().first().firstChild)
   }
 }

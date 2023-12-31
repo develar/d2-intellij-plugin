@@ -1,4 +1,3 @@
-//noinspection SpellCheckingInspectionForFile
 {
 		parserClass="org.jetbrains.plugins.d2.lang.D2Parser"
 
@@ -19,30 +18,33 @@
 		psiImplPackage="org.jetbrains.plugins.d2.lang.psi.impl"
 }
 
-File ::= !<<eof>> (ShapeDeclaration | ShapeIdWithPropery | ShapeDefinitions | COMMENT | SEMICOLON)*
+File ::= !<<eof>> (ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | COMMENT | SEMICOLON)*
 
-// logs.style.strokes: "#f4a261"
-private ShapeIdWithPropery ::= (ShapeId (DOT ShapeId)* DOT)? Property
+// same as for file level, but Property is allowed without ShapeIdChain
+BlockDefinition ::= LBRACE (ShapeDeclaration | ((ShapeIdChain DOT)? Property) | ShapeConnection | ShapeId | COMMENT | SEMICOLON)* RBRACE {
+		pin=1
+}
+
+private ShapeIdChain ::= ShapeId (DOT ShapeId)*
 
 // declaration means `id + label` (not implicit shape via just ID)
-ShapeDeclaration ::= ShapeId (DOT ShapeId)* COLON (ShapeLabel | BlockString)? BlockDefinition?
+ShapeDeclaration ::= ShapeIdChain COLON (ShapeLabel | BlockString)? BlockDefinition?
+
+ShapeConnection ::= ShapeIdChain (Connector ShapeId (DOT ShapeId)*)+ (COLON (ShapeLabel | BlockString))? BlockDefinition?
+
+// logs.style.strokes: "#f4a261"
+private ShapeIdWithProperty ::= ShapeIdChain DOT Property
 
 // bad tree structure: ci.deploys->clouds<-a.sub:test
-private ShapeDefinitions ::= ShapeId (ShapeConnection | SubShapeDefinition)* ShapeExtras? {
-  pin=1
-}
+//private ShapeDefinitions ::= ShapeId (ShapeConnection | SubShapeDefinition)* ShapeExtras? {
+//  pin=1
+//}
 
-private SubShapeDefinition ::= DOT ShapeId ShapeExtras?
-
-private ShapeExtras ::= COLON ((ShapeLabel | BlockString) BlockDefinition? | BlockDefinition) {
-  pin=1
-}
+//private SubShapeDefinition ::= DOT ShapeId ShapeExtras?
 
 ShapeId ::= ID | STRING
 
 ShapeLabel ::= UNQUOTED_STRING | STRING
-
-left ShapeConnection ::= (Connector ShapeId)+
 
 Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
@@ -58,9 +60,5 @@ PropertyKey ::= SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (
 private PropertyValue ::= UnquotedStringValue | StringValue | ColorValue | OtherValue
 
 Property ::= PropertyKey COLON PropertyValue
-
-BlockDefinition ::= LBRACE (ShapeIdWithPropery | ShapeDefinitions)* RBRACE {
-  pin=1
-}
 
 private AttributeValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT | COLOR

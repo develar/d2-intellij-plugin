@@ -27,15 +27,15 @@ class D2ParserDefinition : ParserDefinition {
 
   override fun createElement(node: ASTNode): PsiElement {
     return when (node.elementType) {
-      BLOCK_DEFINITION -> D2BlockDefinition(node)
-      BLOCK_STRING -> D2BlockString(node)
-      CONNECTOR -> D2Connector(node)
-      PROPERTY -> D2Property(node)
-      PROPERTY_KEY -> D2PropertyKey(node)
+      BLOCK_DEFINITION -> BlockDefinition(node)
+      BLOCK_STRING -> BlockString(node)
+      CONNECTOR -> Connector(node)
+      PROPERTY -> Property(node)
+      PROPERTY_KEY -> PropertyKey(node)
 
       SHAPE_DECLARATION -> ShapeDeclaration(node)
       SHAPE_LABEL -> ShapeLabel(node)
-      SHAPE_CONNECTION -> D2ShapeConnection(node)
+      SHAPE_CONNECTION -> ShapeConnection(node)
 
       SHAPE_ID -> ShapeId(node)
 

@@ -6,7 +6,7 @@ D2 File
       PsiElement(ID)('my_code')
     PsiElement(COLON)(':')
     PsiWhiteSpace(' ')
-    D2BlockString(BLOCK_STRING)
+    BlockString(BLOCK_STRING)
       PsiElement(BLOCK_STRING_OPEN)('|`')
       PsiElement(BLOCK_STRING_LANG)('ts')
       PsiElement(BLOCK_STRING_BODY)

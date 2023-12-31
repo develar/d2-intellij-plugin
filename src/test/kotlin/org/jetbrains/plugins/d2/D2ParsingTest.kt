@@ -9,6 +9,13 @@ class D2ParsingTest : D2ParsingTestCase() {
   }
 
   @Test
+  fun `just id`() {
+    test("""
+      s
+    """.trimIndent())
+  }
+
+  @Test
   fun `label with dot`() {
     test("""
       s: 1.2

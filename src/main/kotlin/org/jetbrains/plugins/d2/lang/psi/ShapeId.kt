@@ -136,4 +136,8 @@ private fun compare(a: ShapeId, b: ShapeId): Boolean {
 
 class ShapeLabel(node: ASTNode) : ASTWrapperPsiElement(node)
 
-class D2ShapeConnection(node: ASTNode) : ASTWrapperPsiElement(node)
+class ShapeConnection(node: ASTNode) : ASTWrapperPsiElement(node)
+
+class Connector(node: ASTNode) : ASTWrapperPsiElement(node)
+
+class BlockDefinition(node: ASTNode) : ASTWrapperPsiElement(node)
