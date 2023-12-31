@@ -1,5 +1,5 @@
 <idea-plugin>
-  <id>org.jetbrains.plugins.d2</id>
+  <id>com.dvd.intellij.d2</id>
   <name>D2</name>
   <vendor url="https://github.com/develar/d2-intellij-plugin">Vladimir Krivosheev</vendor>
   <description>--replaced by plugin--</description>

@@ -4,9 +4,11 @@
 
 ## [Unreleased]
 
-## [0.0.3-eap] - 2023-12-24
+## [1.0.0] - 2023-12-31
 - Highlighting works for most D2 syntax.
 - Fix element color provider (`logs.style.stroke: "#f4a261"`).
+- Reference&Resolve is implemented for shapes.
+- Basic completion (keywords).
 
 ## [0.0.2-eap] - 2022-12-13
 
