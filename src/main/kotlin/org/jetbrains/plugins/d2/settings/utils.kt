@@ -1,4 +1,4 @@
-package com.dvd.intellij.d2.ide.settings
+package org.jetbrains.plugins.d2.settings
 
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.options.colors.AttributesDescriptor

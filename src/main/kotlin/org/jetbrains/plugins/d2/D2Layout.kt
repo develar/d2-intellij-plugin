@@ -1,14 +1,16 @@
-package com.dvd.intellij.d2.components
+package org.jetbrains.plugins.d2
 
 import com.intellij.openapi.util.NlsSafe
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class D2Layout(
   @NlsSafe val name: String,
   val bundled: Boolean? = false,
   val description: String,
 ) {
   companion object {
-    val DEFAULT = D2Layout("dagre", true, "The directed graph layout library Dagre")
+    val DEFAULT = D2Layout(name = "dagre", bundled = true, description = "The directed graph layout library Dagre")
   }
 
   override fun equals(other: Any?): Boolean {

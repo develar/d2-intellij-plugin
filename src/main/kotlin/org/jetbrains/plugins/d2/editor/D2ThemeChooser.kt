@@ -1,34 +1,35 @@
-package com.dvd.intellij.d2.ide.action
+package org.jetbrains.plugins.d2.editor
 
-import com.dvd.intellij.d2.components.D2Theme
 import com.intellij.icons.AllIcons
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.actionSystem.*
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAware
 import org.jetbrains.plugins.d2.D2Bundle
-import org.jetbrains.plugins.d2.d2FileEditor
-import org.jetbrains.plugins.d2.editor.D2Service
-import org.jetbrains.plugins.d2.editor.D2_FILE_THEME
+import org.jetbrains.plugins.d2.D2Theme
+import org.jetbrains.plugins.d2.action.d2FileEditor
+import org.jetbrains.plugins.d2.themeList
 
-private class D2ThemesActionGroup : ActionGroup() {
-  override fun getChildren(e: AnActionEvent?): Array<AnAction> = arrayOf(
-    *D2Theme.values().map(::D2ThemeAction).toTypedArray(),
+private class D2ThemeActionGroup : ActionGroup(), DumbAware {
+  private val children: Array<AnAction> = arrayOf(
+    *themeList.map(::D2ThemeAction).toTypedArray(),
     Separator(),
     OpenThemeOverviewAction()
   )
+
+  override fun getChildren(e: AnActionEvent?): Array<AnAction> = children
+
+  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-private class D2ThemeAction(private val theme: D2Theme) : ToggleAction(theme.tName), DumbAware {
+private class D2ThemeAction(private val theme: D2Theme) : ToggleAction(theme.name), DumbAware {
   override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
   override fun isSelected(e: AnActionEvent): Boolean {
-    return (e.d2FileEditor.getUserData(D2_FILE_THEME) ?: D2Theme.DEFAULT) == theme
+    return (e.d2FileEditor.theme ?: D2Theme.DEFAULT) == theme
   }
 
   override fun setSelected(e: AnActionEvent, state: Boolean) {
-    e.d2FileEditor.putUserData(D2_FILE_THEME, theme)
-    service<D2Service>().compileAndWatch(e.d2FileEditor)
+    e.d2FileEditor.theme = theme
   }
 }
 
@@ -39,4 +40,6 @@ private class OpenThemeOverviewAction : AnAction(
   AllIcons.General.Web
 ), DumbAware {
   override fun actionPerformed(e: AnActionEvent) = BrowserUtil.browse(THEME_DOCS)
+
+  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

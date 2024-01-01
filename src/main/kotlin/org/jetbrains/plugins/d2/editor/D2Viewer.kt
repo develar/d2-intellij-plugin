@@ -1,9 +1,11 @@
 package org.jetbrains.plugins.d2.editor
 
-import com.dvd.intellij.d2.components.D2Layout
-import com.dvd.intellij.d2.components.D2Theme
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter
 import com.intellij.ide.structureView.StructureViewBuilder
+import com.intellij.ide.ui.LafManagerListener
+import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorLocation
@@ -11,56 +13,118 @@ import com.intellij.openapi.fileEditor.FileEditorState
 import com.intellij.openapi.fileEditor.FileEditorStateLevel
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
-import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.UserDataHolderBase
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.ui.jcef.JBCefApp
 import com.intellij.ui.jcef.JBCefBrowser
 import com.intellij.ui.jcef.JBCefBrowserBuilder
 import com.intellij.util.EventDispatcher
-import org.jetbrains.plugins.d2.D2Bundle
-import org.jetbrains.plugins.d2.D2_EDITOR_NAME
+import com.intellij.util.childScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.serialization.Serializable
+import org.jetbrains.plugins.d2.D2Layout
+import org.jetbrains.plugins.d2.D2Theme
+import java.awt.BorderLayout
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
 import java.beans.PropertyChangeListener
 import javax.swing.JComponent
-import javax.swing.JLabel
+import javax.swing.JPanel
 
-val D2_FILE_LAYOUT: Key<D2Layout> = Key<D2Layout>("d2_file_layout")
-val D2_FILE_THEME: Key<D2Theme> = Key<D2Theme>("d2_file_theme")
+internal data class D2Info(@JvmField val version: String, @JvmField val layouts: List<D2Layout>)
 
-// https://github.com/JetBrains/intellij-community/blob/master/images/src/org/intellij/images/editor/impl/ImageFileEditorImpl.java
-class D2Viewer(
+internal val D2_INFO_DATA_KEY: DataKey<D2Info> = DataKey.create("LAYOUT_ENGINES")
+
+@Service(Service.Level.PROJECT)
+private class ProjectLevelCoroutineScopeHolder(val coroutineScope: CoroutineScope)
+
+internal const val D2_EDITOR_NAME = "D2FileEditor"
+
+@Serializable
+internal data class D2FileEditorState(@JvmField var theme: D2Theme?, @JvmField val layout: D2Layout?) : FileEditorState {
+  override fun canBeMergedWith(otherState: FileEditorState, level: FileEditorStateLevel): Boolean = otherState is D2FileEditorState
+
+  //override fun getEditorId() = "D2Viewer"
+  //
+  //override fun getTransferableOptions(): Map<String, String?> {
+  //  return mapOf("theme" to theme)
+  //}
+  //
+  //override fun setTransferableOptions(options: Map<String, String?>) {
+  //  theme = options.get("theme")
+  //}
+  //
+  //override fun setCopiedFromMasterEditor() {
+  //}
+}
+
+internal class D2Viewer(
   val project: Project,
   private val file: VirtualFile
 ) : UserDataHolderBase(), FileEditor {
   private val dispatcher = EventDispatcher.create(PropertyChangeListener::class.java)
 
+  val renderManager: RenderManager
+  val coroutineScope: CoroutineScope
+
+  var theme: D2Theme? = null
+    set(value) {
+      field = value
+      requestRender()
+    }
+
+  var layout: D2Layout? = null
+    set(value) {
+      field = value
+      requestRender()
+    }
+
   private val component: JComponent
   private val browser: JBCefBrowser?
 
   init {
-    if (JBCefApp.isSupported()) {
-      browser = JBCefBrowserBuilder()
-        .build()
-      component = browser.component
+    browser = JBCefBrowserBuilder()
+      .build()
 
-      component.addComponentListener(object : ComponentAdapter() {
-        override fun componentShown(e: ComponentEvent?) {
-          // if preview was hidden initially (mode without preview)
-          browser.cefBrowser.reload()
-        }
-      })
-    } else {
-      component = JLabel(D2Bundle.message("preview.requires.an.intellij.platform.ide.with.jcef.support"))
-      browser = null
+    coroutineScope = project.service<ProjectLevelCoroutineScopeHolder>().coroutineScope.childScope()
+    renderManager = RenderManager(coroutineScope = coroutineScope, project = project, file = file) {
+      browser.loadURL("http://127.0.0.1:$it")
     }
 
-    service<D2Service>().scheduleCompile(this, project)
+    component = object : JPanel(BorderLayout()), DataProvider {
+      override fun getData(dataId: String): Any? {
+        return when {
+          CommonDataKeys.PROJECT.`is`(dataId) -> project
+          D2_INFO_DATA_KEY.`is`(dataId) -> renderManager.d2Info.value.takeIf { it.version.isNotEmpty() }
+          else -> null
+        }
+      }
+    }
+
+    val actionManager = ActionManager.getInstance()
+    val actionGroup = actionManager.getAction("D2.EditorToolbar") as ActionGroup
+    val actionToolbar = actionManager.createActionToolbar("D2.D2Viewer", actionGroup, true)
+    actionToolbar.targetComponent = component
+
+    component.add(actionToolbar.component, BorderLayout.PAGE_START)
+    component.add(browser.component, BorderLayout.CENTER)
+
+    component.addComponentListener(object : ComponentAdapter() {
+      override fun componentShown(e: ComponentEvent?) {
+        // if preview was hidden initially (mode without preview)
+        browser.cefBrowser.reload()
+      }
+    })
+
+    ApplicationManager.getApplication().messageBus.connect(coroutineScope).subscribe(LafManagerListener.TOPIC, LafManagerListener {
+      requestRender()
+    })
+
+    requestRender()
   }
 
-  fun refreshD2(port: Int) {
-    browser?.loadURL("http://127.0.0.1:${port}")
+  private fun requestRender() {
+    renderManager.request(RenderRequest(theme = theme, layout = layout))
   }
 
   override fun getComponent(): JComponent = component
@@ -70,27 +134,16 @@ class D2Viewer(
   override fun getName(): String = D2_EDITOR_NAME
 
   override fun getState(level: FileEditorStateLevel): FileEditorState {
-//    return D2FileEditorState(
-//      d2Editor.isTransparencyChessboardVisible,
-//      d2Editor.isGridVisible,
-//      d2Editor.zoomModel.zoomFactor,
-//      d2Editor.zoomModel.isZoomLevelChanged,
-//    )
-    return FileEditorState.INSTANCE
+    return D2FileEditorState(theme = theme, layout = layout)
   }
 
   override fun setState(state: FileEditorState) {
-//    if (state is D2FileEditorState) {
-//      val options = OptionsManager.getInstance().options
-//      val zoomOptions = options.editorOptions.zoomOptions
-//      val zoomModel = d2Editor.zoomModel
-//      d2Editor.isTransparencyChessboardVisible = state.isBackgroundVisible
-//      d2Editor.isGridVisible = state.isGridVisible
-//      if (state.isZoomFactorChanged || !zoomOptions.isSmartZooming) {
-//        zoomModel.zoomFactor = state.zoomFactor
-//      }
-//      zoomModel.isZoomLevelChanged = state.isZoomFactorChanged
-//    }
+    if (state !is D2FileEditorState) {
+      return
+    }
+
+    theme = state.theme
+    layout = state.layout
   }
 
   override fun addPropertyChangeListener(listener: PropertyChangeListener) {
@@ -100,11 +153,6 @@ class D2Viewer(
   override fun removePropertyChangeListener(listener: PropertyChangeListener) {
     dispatcher.removeListener(listener)
   }
-
-//  override fun propertyChange(event: PropertyChangeEvent) {
-//    val editorEvent = PropertyChangeEvent(this, event.propertyName, event.oldValue, event.newValue)
-//    dispatcher.multicaster.propertyChange(editorEvent)
-//  }
 
   override fun isModified(): Boolean = false
 
@@ -117,12 +165,9 @@ class D2Viewer(
   override fun getStructureViewBuilder(): StructureViewBuilder? = null
 
   override fun dispose() {
-    try {
-      browser?.let {
-        Disposer.dispose(it)
-      }
-    } finally {
-      service<D2Service>().closeFile(this)
+    coroutineScope.cancel()
+    browser?.let {
+      Disposer.dispose(it)
     }
   }
 

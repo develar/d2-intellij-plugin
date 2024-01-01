@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2024-01-03
+
+- Viewer toolbar: theme and layout choosers, export, compilation output and info.
+- if Dark IntelliJ theme is used, use dark D2 theme for preview by default ([34ce304](https://github.com/develar/d2-intellij-plugin/commit/34ce30413394b4754a8414bcdc7bd6c5a6d74409)), closes [#1](https://github.com/develar/d2-intellij-plugin/issues/1)
+- spellchecker for unquoted string.
+
 ## [1.0.0] - 2023-12-31
 - Highlighting works for most D2 syntax.
 - Fix element color provider (`logs.style.stroke: "#f4a261"`).

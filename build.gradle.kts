@@ -17,6 +17,8 @@ plugins {
   id("org.jetbrains.qodana") version "2023.2.1"
   id("org.jetbrains.kotlinx.kover") version "0.7.4"
   id("org.jetbrains.grammarkit") version "2022.3.2"
+
+  id("org.jetbrains.kotlin.plugin.serialization") version "1.9.21"
 }
 
 group = properties("pluginGroup")
@@ -31,6 +33,8 @@ dependencies {
   testImplementation("org.assertj:assertj-core:3.11.1")
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+  compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 }
 
 kotlin {
@@ -96,14 +100,14 @@ tasks {
     systemProperty("idea.tests.overwrite.data", overwriteData)
   }
 
-  val generateParser = withType<GenerateParserTask> {
+  withType<GenerateParserTask> {
     sourceFile.set(File("./src/main/kotlin/org/jetbrains/plugins/d2/lang/d2.bnf"))
     targetRoot.set("./src/main/gen")
     pathToParser.set("/org/jetbrains/plugins/d2/lang/D2Parser.java")
     pathToPsiRoot.set("/org/jetbrains/plugins/d2/lang/psi")
     purgeOldFiles.set(true)
   }
-  val generateLexer = withType<GenerateLexerTask> {
+  withType<GenerateLexerTask> {
     sourceFile.set(File("./src/main/kotlin/org/jetbrains/plugins/d2/lang/_D2Lexer.flex"))
     targetDir.set("./src/main/gen/org/jetbrains/plugins/d2/lang/")
     targetClass.set("_D2Lexer")

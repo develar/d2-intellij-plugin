@@ -1,28 +1,35 @@
-package com.dvd.intellij.d2.ide.action
+package org.jetbrains.plugins.d2.action
 
-import com.dvd.intellij.d2.components.D2Layout
 import com.intellij.icons.AllIcons
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.actionSystem.*
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAware
 import org.jetbrains.plugins.d2.D2Bundle
-import org.jetbrains.plugins.d2.d2FileEditor
-import org.jetbrains.plugins.d2.editor.D2Service
-import org.jetbrains.plugins.d2.editor.D2_FILE_LAYOUT
+import org.jetbrains.plugins.d2.D2Layout
+import org.jetbrains.plugins.d2.editor.D2Info
+import org.jetbrains.plugins.d2.editor.D2_INFO_DATA_KEY
 
 private class D2LayoutEngineActionGroup : ActionGroup(), DumbAware {
+  private var cachedChildren: Array<AnAction> = AnAction.EMPTY_ARRAY
+  private var lastInfo: D2Info? = null
+
   override fun getChildren(e: AnActionEvent?): Array<AnAction> {
     if (e == null) {
-      return emptyArray()
+      return AnAction.EMPTY_ARRAY
     }
 
-    val layouts = service<D2Service>().getLayoutEngines() ?: return emptyArray()
-    return arrayOf(
-      *layouts.map(::D2LayoutEngineAction).toTypedArray(),
+    val info = e.dataContext.getData(D2_INFO_DATA_KEY)
+    if (lastInfo === info) {
+      return cachedChildren
+    }
+
+    val layouts = info?.layouts ?: return emptyArray()
+    cachedChildren = arrayOf(
+      *layouts.map(::D2LayoutEngineAction).toTypedArray<D2LayoutEngineAction>(),
       Separator(),
       OpenLayoutEngineOverviewAction()
     )
+    return cachedChildren
   }
 
   override fun getActionUpdateThread() = ActionUpdateThread.BGT
@@ -39,11 +46,10 @@ private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
   },
   null
 ), DumbAware {
-  override fun isSelected(e: AnActionEvent): Boolean = (e.d2FileEditor.getUserData(D2_FILE_LAYOUT) ?: D2Layout.DEFAULT) == layout
+  override fun isSelected(e: AnActionEvent): Boolean = (e.d2FileEditor.layout ?: D2Layout.DEFAULT) == layout
 
   override fun setSelected(e: AnActionEvent, state: Boolean) {
-    e.d2FileEditor.putUserData(D2_FILE_LAYOUT, layout)
-    service<D2Service>().compileAndWatch(e.d2FileEditor)
+    e.d2FileEditor.layout = layout
   }
 
   override fun getActionUpdateThread() = ActionUpdateThread.BGT

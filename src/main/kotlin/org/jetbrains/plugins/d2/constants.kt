@@ -1,7 +1,6 @@
 package org.jetbrains.plugins.d2
 
-internal const val D2_EDITOR_NAME = "D2FileEditor"
-internal const val D2_NOTIFICATION_GROUP = "D2_INFO"
+internal const val D2_NOTIFICATION_GROUP = "D2"
 
 val SIMPLE_RESERVED_KEYWORDS: Array<String> = arrayOf(
   "label",

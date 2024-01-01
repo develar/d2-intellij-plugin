@@ -1,12 +1,15 @@
-<idea-plugin>
+<!--suppress PluginXmlValidity -->
+<idea-plugin package="org.jetbrains.plugins.d2">
   <id>com.dvd.intellij.d2</id>
   <name>D2</name>
   <vendor url="https://github.com/develar/d2-intellij-plugin">Vladimir Krivosheev</vendor>
   <description>--replaced by plugin--</description>
 
-  <depends>com.intellij.modules.platform</depends>
-  <depends>com.intellij.platform.images</depends>
-  <depends>org.intellij.plugins.markdown</depends>
+  <dependencies>
+    <plugin id="com.intellij.modules.platform"/>
+    <plugin id="com.intellij.platform.images"/>
+    <plugin id="org.intellij.plugins.markdown"/>
+  </dependencies>
 
   <resource-bundle>messages.D2Bundle</resource-bundle>
 
@@ -23,14 +26,11 @@
     <lang.syntaxHighlighterFactory language="d2"
                                    implementationClass="org.jetbrains.plugins.d2.lang.D2SyntaxHighlighterFactory"/>
 
-    <colorSettingsPage implementation="com.dvd.intellij.d2.ide.settings.D2ColorSettingsPage"/>
+    <colorSettingsPage implementation="org.jetbrains.plugins.d2.settings.D2ColorSettingsPage"/>
 
     <colorProvider implementation="org.jetbrains.plugins.d2.editor.D2ColorProvider"/>
 
     <fileEditorProvider implementation="org.jetbrains.plugins.d2.editor.D2FileEditorProvider"/>
-
-    <psi.referenceContributor language="d2"
-                              implementation="com.dvd.intellij.d2.ide.reference.D2UrlReferenceContributor"/>
 
     <formattingService implementation="org.jetbrains.plugins.d2.editor.D2FormatterService"/>
 
@@ -38,7 +38,7 @@
 
     <spellchecker.support language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2SpellCheckerStrategy"/>
 
-    <notificationGroup displayType="STICKY_BALLOON" id="D2_INFO" key="action.D2.Info.description"/>
+    <notificationGroup displayType="BALLOON" id="D2" key="D2.notification.group"/>
     <editorNotificationProvider implementation="org.jetbrains.plugins.d2.editor.D2MissingCompilerNotificationProvider"/>
 
     <lang.formatter language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2FormattingModelBuilder"/>
@@ -46,39 +46,39 @@
 
   <actions>
     <group id="D2.ThemeChooser"
-           class="com.dvd.intellij.d2.ide.action.D2ThemesActionGroup"
+           class="org.jetbrains.plugins.d2.editor.D2ThemeActionGroup"
            popup="true"
            icon="AllIcons.Toolwindows.ToolWindowPalette"/>
     <group id="D2.LayoutChooser"
-           class="com.dvd.intellij.d2.ide.action.D2LayoutEngineActionGroup"
+           class="org.jetbrains.plugins.d2.action.D2LayoutEngineActionGroup"
            popup="true"
            icon="AllIcons.General.Layout"/>
     <group id="D2.ExportMenu"
            popup="true"
            icon="AllIcons.ToolbarDecorator.Export">
-      <action class="com.dvd.intellij.d2.ide.action.D2ExportAction"
+      <action class="org.jetbrains.plugins.d2.action.D2ExportAction"
               id="D2.ExportDiagram"
               icon="AllIcons.Actions.MenuSaveall"/>
-      <action class="com.dvd.intellij.d2.ide.action.D2LiveBrowserAction"
+      <action class="org.jetbrains.plugins.d2.action.D2LiveBrowserAction"
               id="D2.LiveBrowser"
               icon="AllIcons.RunConfigurations.Web_app"/>
     </group>
-    <action class="com.dvd.intellij.d2.ide.action.D2MessagesAction"
+    <action class="org.jetbrains.plugins.d2.editor.D2MessagesAction"
             id="D2.Messages"
             icon="AllIcons.Debugger.Console"/>
-    <action class="com.dvd.intellij.d2.ide.action.D2InfoAction"
+    <action class="org.jetbrains.plugins.d2.action.D2InfoAction"
             id="D2.Info"
             icon="AllIcons.General.ShowInfos"/>
 
     <group id="D2.EditorToolbar">
-      <reference id="Images.ToggleTransparencyChessboard"/>
-      <reference id="Images.Editor.ToggleGrid"/>
-      <separator/>
-      <reference id="Images.Editor.ZoomIn"/>
-      <reference id="Images.Editor.ZoomOut"/>
-      <reference id="Images.Editor.ActualSize"/>
-      <reference id="Images.Editor.FitZoomToWindow"/>
-      <separator/>
+      <!--<reference id="Images.ToggleTransparencyChessboard"/>-->
+      <!--<reference id="Images.Editor.ToggleGrid"/>-->
+      <!--<separator/>-->
+      <!--<reference id="Images.Editor.ZoomIn"/>-->
+      <!--<reference id="Images.Editor.ZoomOut"/>-->
+      <!--<reference id="Images.Editor.ActualSize"/>-->
+      <!--<reference id="Images.Editor.FitZoomToWindow"/>-->
+      <!--<separator/>-->
       <reference id="D2.ThemeChooser"/>
       <reference id="D2.LayoutChooser"/>
       <reference id="D2.ExportMenu"/>
