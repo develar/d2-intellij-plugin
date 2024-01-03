@@ -143,16 +143,12 @@ internal class RenderManager(
     }
 
     // If `rendered` is called right after start for the second invocation, the page may not yet be ready
-    val isFirstLaunch = state == null
     state = newState
-    newState.process = createProcessHandler(newState, callRenderedOnFirstTextAvailable = !isFirstLaunch)
+    newState.process = createProcessHandler(newState)
     newState.process?.startNotify()
-    if (isFirstLaunch) {
-      rendered(newState.port)
-    }
   }
 
-  private fun createProcessHandler(state: D2CompilerState, callRenderedOnFirstTextAvailable: Boolean): KillableColoredProcessHandler.Silent {
+  private fun createProcessHandler(state: D2CompilerState): KillableColoredProcessHandler.Silent {
     val command = state.createCommandLine(watch = true, targetFile = state.targetFile)
     val processHandler = KillableColoredProcessHandler.Silent(command)
     var firstText = true
@@ -165,9 +161,7 @@ internal class RenderManager(
         } else {
           if (firstText) {
             firstText = false
-            if (callRenderedOnFirstTextAvailable) {
-              rendered(state.port)
-            }
+            rendered(state.port)
           }
 
           // remove timestamp

@@ -126,7 +126,8 @@ private suspend fun compileToPng(state: D2CompilerState): Path? {
   val log = StringBuilder()
 
   val exitCode = withRawProgressReporter {
-    val reporter = coroutineContext.rawProgressReporter
+    // location of rawProgressReporter is changed - no way to use it and be compatible with 2023.2 and 2024.1
+    //val reporter = coroutineContext.rawProgressReporter
     suspendCancellableCoroutine { continuation ->
       processHandler.addProcessListener(object : ProcessListener {
         override fun processTerminated(event: ProcessEvent) {
@@ -135,7 +136,7 @@ private suspend fun compileToPng(state: D2CompilerState): Path? {
 
         override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
           if (outputType != ProcessOutputType.SYSTEM) {
-            reporter?.text(event.text)
+            //reporter?.text(event.text)
             log.append(event.text)
           }
         }

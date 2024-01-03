@@ -18,9 +18,10 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.jcef.JBCefBrowser
 import com.intellij.ui.jcef.JBCefBrowserBuilder
 import com.intellij.util.EventDispatcher
-import com.intellij.util.childScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.job
 import kotlinx.serialization.Serializable
 import org.jetbrains.plugins.d2.D2Layout
 import org.jetbrains.plugins.d2.D2Theme
@@ -30,6 +31,8 @@ import java.awt.event.ComponentEvent
 import java.beans.PropertyChangeListener
 import javax.swing.JComponent
 import javax.swing.JPanel
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 internal data class D2Info(@JvmField val version: String, @JvmField val layouts: List<D2Layout>)
 
@@ -172,4 +175,9 @@ internal class D2Viewer(
   }
 
   override fun getFile(): VirtualFile = file
+}
+
+private fun CoroutineScope.childScope(context: CoroutineContext = EmptyCoroutineContext): CoroutineScope {
+  val parentContext = coroutineContext
+  return CoroutineScope(parentContext + SupervisorJob(parent = parentContext.job) + context)
 }
