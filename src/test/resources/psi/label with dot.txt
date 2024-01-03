@@ -4,5 +4,4 @@ D2 File
       PsiElement(ID)('s')
     PsiElement(COLON)(':')
     PsiWhiteSpace(' ')
-    ShapeLabel(SHAPE_LABEL)
-      PsiElement(UNQUOTED_STRING)('1.2')
+    PsiElement(UNQUOTED_STRING)('1.2')

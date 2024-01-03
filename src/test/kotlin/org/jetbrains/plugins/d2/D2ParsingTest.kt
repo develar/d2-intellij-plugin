@@ -16,6 +16,13 @@ class D2ParsingTest : D2ParsingTestCase() {
   }
 
   @Test
+  fun `top-level direction`() {
+    test("""
+      direction: down
+    """.trimIndent())
+  }
+
+  @Test
   fun `label with dot`() {
     test("""
       s: 1.2

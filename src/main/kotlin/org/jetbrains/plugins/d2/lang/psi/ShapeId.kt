@@ -134,7 +134,7 @@ private fun compare(a: ShapeId, b: ShapeId): Boolean {
   return a.getValueTextRange().length == b.getValueTextRange().length && a.name == b.name
 }
 
-class ShapeLabel(node: ASTNode) : ASTWrapperPsiElement(node)
+//class ShapeLabel(node: ASTNode) : ASTWrapperPsiElement(node)
 
 class ShapeConnection(node: ASTNode) : ASTWrapperPsiElement(node)
 

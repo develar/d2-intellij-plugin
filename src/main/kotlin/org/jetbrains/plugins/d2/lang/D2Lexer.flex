@@ -27,12 +27,15 @@ import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
 
 // non style/holder keywords, see SimpleReservedKeywords in d2 source code,
 // `classes` is not SimpleReservedKeyword, from CompositeReservedKeywords
-SimpleReservedKeywords = label | desc | shape | icon | constraint | tooltip | link | near | width | height | direction | top | left |
+SimpleReservedKeywords = label | desc | shape | icon | constraint | tooltip | link | near | width | height | top | left |
 grid-rows | grid-columns | grid-gap |
 vertical-gap | horizontal-gap |
 class | vars | classes
 
 StyleKeyword = style
+
+// keywors that can be used without container (top-level)
+ContainerLessKeywords=direction
 
 // StyleKeywords are reserved keywords which cannot exist outside of the "style" keyword
 StyleKeywords = opacity | stroke | fill | fill-pattern | stroke-width | stroke-dash | border-radius | font | font-size | font-color |
@@ -86,6 +89,7 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 		{ReservedKeywordHolders} { return RESERVED_KEYWORD_HOLDERS; }
 		{StyleKeyword} { return STYLE_KEYWORD; }
 		{StyleKeywords} { yybegin(PROPERTY_VALUE_STATE); return STYLE_KEYWORDS; }
+		{ContainerLessKeywords} { yybegin(PROPERTY_VALUE_STATE); return CONTAINER_LESS_KEYWORDS; }
 
   {Id} { return ID; }
 

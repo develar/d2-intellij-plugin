@@ -46,6 +46,7 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
       put(D2ElementTypes.STYLE_KEYWORD, FIELDS)
       put(D2ElementTypes.STYLE_KEYWORDS, FIELDS)
       put(D2ElementTypes.RESERVED_KEYWORD_HOLDERS, FIELDS)
+      put(D2ElementTypes.CONTAINER_LESS_KEYWORDS, FIELDS)
 
       put(D2ElementTypes.STRING, STRING)
       put(D2ElementTypes.UNQUOTED_STRING, STRING)

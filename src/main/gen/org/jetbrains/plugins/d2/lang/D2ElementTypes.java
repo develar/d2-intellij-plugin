@@ -15,7 +15,6 @@ public interface D2ElementTypes {
   IElementType SHAPE_CONNECTION = D2ElementTypeFactory.element("SHAPE_CONNECTION");
   IElementType SHAPE_DECLARATION = D2ElementTypeFactory.element("SHAPE_DECLARATION");
   IElementType SHAPE_ID = D2ElementTypeFactory.element("SHAPE_ID");
-  IElementType SHAPE_LABEL = D2ElementTypeFactory.element("SHAPE_LABEL");
   IElementType STRING_VALUE = D2ElementTypeFactory.element("STRING_VALUE");
   IElementType UNQUOTED_STRING_VALUE = D2ElementTypeFactory.element("UNQUOTED_STRING_VALUE");
 
@@ -27,6 +26,7 @@ public interface D2ElementTypes {
   IElementType COLON = D2ElementTypeFactory.token("COLON");
   IElementType COLOR = D2ElementTypeFactory.token("COLOR");
   IElementType COMMENT = D2ElementTypeFactory.token("COMMENT");
+  IElementType CONTAINER_LESS_KEYWORDS = D2ElementTypeFactory.token("CONTAINER_LESS_KEYWORDS");
   IElementType DOT = D2ElementTypeFactory.token("DOT");
   IElementType DOUBLE_ARROW = D2ElementTypeFactory.token("DOUBLE_ARROW");
   IElementType DOUBLE_HYPHEN_ARROW = D2ElementTypeFactory.token("DOUBLE_HYPHEN_ARROW");

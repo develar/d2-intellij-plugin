@@ -20,7 +20,7 @@ import org.jetbrains.plugins.d2.lang.psi.ShapeId
 
 private val keywords = (SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).map {
   val builder = LookupElementBuilder.create(it)
-    .withIcon(D2Icons.ATTRIBUTE)
+    .withIcon(D2Icons.PROPERTY)
   if (it != "style") {
     builder.withInsertHandler(ColonLookupElementInsertHandler)
   }
@@ -40,7 +40,7 @@ private object ColonLookupElementInsertHandler : InsertHandler<LookupElement> {
 internal val varsAndClasses: List<LookupElementBuilder> = sequenceOf("vars", "classes")
   .map {
     LookupElementBuilder.create(it)
-      .withIcon(D2Icons.ATTRIBUTE)
+      .withIcon(D2Icons.PROPERTY)
       .withInsertHandler(ColonLookupElementInsertHandler)
   }
   .toList()
@@ -49,6 +49,14 @@ private val connections = sequenceOf("--", "->", "<-", "<->")
   .map {
     LookupElementBuilder.create(it)
       .withIcon(D2Icons.CONNECTION)
+  }
+  .toList()
+
+@VisibleForTesting
+val directions = sequenceOf("up", "down", "right", "left")
+  .map {
+    LookupElementBuilder.create(it)
+      .withIcon(D2Icons.PROPERTY)
   }
   .toList()
 
@@ -92,7 +100,7 @@ private class D2BasicCompletionContributor : CompletionContributor() {
     val position = parameters.position
     var parent = position.context
     if (parent !is ShapeId) {
-      styleCompletion(position, parent, result)
+      styleOrPropertyValueCompletion(position, parent, result)
       return
     }
 
@@ -125,7 +133,7 @@ private class D2BasicCompletionContributor : CompletionContributor() {
   }
 }
 
-private fun styleCompletion(position: PsiElement, parent: PsiElement?, result: CompletionResultSet) {
+private fun styleOrPropertyValueCompletion(position: PsiElement, parent: PsiElement?, result: CompletionResultSet) {
   var startElement = position
   if (parent is PsiErrorElement) {
     // logs.style.<caret>: case (we expect STYLE_KEYWORDS, that's why PsiErrorElement)
@@ -155,6 +163,8 @@ private fun styleCompletion(position: PsiElement, parent: PsiElement?, result: C
     val key = parent.siblings(forward = false).firstOrNull { it is PropertyKey }?.lastChild ?: return
     if (key.elementType == D2ElementTypes.STYLE_KEYWORDS) {
       result.addAllElements(ShapeStyles.fromKeyword(key.text)?.completionElements ?: return)
+    } else if (key.textMatches("direction")) {
+      result.addAllElements(directions)
     }
   }
 }

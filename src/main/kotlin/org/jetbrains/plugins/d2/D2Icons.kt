@@ -7,10 +7,7 @@ import javax.swing.Icon
 object D2Icons {
   val FILE by lazy { IconLoader.getIcon("icons/d2.svg", D2Icons::class.java.classLoader) }
 
-  val SHAPE: Icon
-    get() = AllIcons.Nodes.Gvariable
-
-  val ATTRIBUTE: Icon
+  val PROPERTY: Icon
     get() = AllIcons.Nodes.Property
 
   val CONNECTION: Icon

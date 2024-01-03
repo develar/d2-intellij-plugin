@@ -1,0 +1,8 @@
+D2 File
+  Property(PROPERTY)
+    PropertyKey(PROPERTY_KEY)
+      PsiElement(CONTAINER_LESS_KEYWORDS)('direction')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    UnquotedStringValue(UNQUOTED_STRING_VALUE)
+      PsiElement(UNQUOTED_STRING)('down')

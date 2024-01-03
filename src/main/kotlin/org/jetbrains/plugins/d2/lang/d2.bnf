@@ -18,10 +18,12 @@
 		psiImplPackage="org.jetbrains.plugins.d2.lang.psi.impl"
 }
 
-File ::= !<<eof>> (ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | COMMENT | SEMICOLON)*
+File ::= !<<eof>> ContainerContent*
+
+private ContainerContent ::= ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | COMMENT | SEMICOLON
 
 // same as for file level, but Property is allowed without ShapeIdChain
-BlockDefinition ::= LBRACE (ShapeDeclaration | ((ShapeIdChain DOT)? Property) | ShapeConnection | ShapeId | COMMENT | SEMICOLON)* RBRACE {
+BlockDefinition ::= LBRACE ContainerContent* RBRACE {
 		pin=1
 }
 
@@ -33,18 +35,11 @@ ShapeDeclaration ::= ShapeIdChain COLON (ShapeLabel | BlockString)? BlockDefinit
 ShapeConnection ::= ShapeIdChain (Connector ShapeId (DOT ShapeId)*)+ (COLON (ShapeLabel | BlockString))? BlockDefinition?
 
 // logs.style.strokes: "#f4a261"
-private ShapeIdWithProperty ::= ShapeIdChain DOT Property
-
-// bad tree structure: ci.deploys->clouds<-a.sub:test
-//private ShapeDefinitions ::= ShapeId (ShapeConnection | SubShapeDefinition)* ShapeExtras? {
-//  pin=1
-//}
-
-//private SubShapeDefinition ::= DOT ShapeId ShapeExtras?
+private ShapeIdWithProperty ::= (ShapeIdChain DOT)? Property
 
 ShapeId ::= ID | STRING
 
-ShapeLabel ::= UNQUOTED_STRING | STRING
+private ShapeLabel ::= UNQUOTED_STRING | STRING
 
 Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
@@ -56,7 +51,7 @@ ColorValue ::= COLOR
 OtherValue ::= AttributeValue | BlockString
 
 // todo: handle RESERVED_KEYWORD_HOLDERS in the same way as style (do not allow arbitrary ID)
-PropertyKey ::= SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS)
+PropertyKey ::= SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS) | CONTAINER_LESS_KEYWORDS
 private PropertyValue ::= UnquotedStringValue | StringValue | ColorValue | OtherValue
 
 Property ::= PropertyKey COLON PropertyValue

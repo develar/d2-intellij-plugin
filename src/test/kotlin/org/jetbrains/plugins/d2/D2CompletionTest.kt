@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.plugins.d2.completion.directions
 import org.jetbrains.plugins.d2.completion.varsAndClasses
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -25,6 +26,16 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
     )
     fixture.complete(CompletionType.BASIC)
     assertThat(fixture.lookupElementStrings).containsOnlyElementsOf((SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).toList())
+  }
+
+  @Test
+  fun direction() {
+    fixture.configureByText(
+      "test.d2",
+      "direction: <caret>"
+    )
+    fixture.complete(CompletionType.BASIC)
+    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(directions.map { it.lookupString })
   }
 
   @Test

@@ -52,7 +52,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LBRACE (ShapeDeclaration | ((ShapeIdChain DOT)? Property) | ShapeConnection | ShapeId | COMMENT | SEMICOLON)* RBRACE
+  // LBRACE ContainerContent* RBRACE
   public static boolean BlockDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BlockDefinition")) return false;
     if (!nextTokenIs(b, LBRACE)) return false;
@@ -66,59 +66,15 @@ public class D2Parser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (ShapeDeclaration | ((ShapeIdChain DOT)? Property) | ShapeConnection | ShapeId | COMMENT | SEMICOLON)*
+  // ContainerContent*
   private static boolean BlockDefinition_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BlockDefinition_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!BlockDefinition_1_0(b, l + 1)) break;
+      if (!ContainerContent(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "BlockDefinition_1", c)) break;
     }
     return true;
-  }
-
-  // ShapeDeclaration | ((ShapeIdChain DOT)? Property) | ShapeConnection | ShapeId | COMMENT | SEMICOLON
-  private static boolean BlockDefinition_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BlockDefinition_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ShapeDeclaration(b, l + 1);
-    if (!r) r = BlockDefinition_1_0_1(b, l + 1);
-    if (!r) r = ShapeConnection(b, l + 1);
-    if (!r) r = ShapeId(b, l + 1);
-    if (!r) r = consumeToken(b, COMMENT);
-    if (!r) r = consumeToken(b, SEMICOLON);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (ShapeIdChain DOT)? Property
-  private static boolean BlockDefinition_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BlockDefinition_1_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = BlockDefinition_1_0_1_0(b, l + 1);
-    r = r && Property(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (ShapeIdChain DOT)?
-  private static boolean BlockDefinition_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BlockDefinition_1_0_1_0")) return false;
-    BlockDefinition_1_0_1_0_0(b, l + 1);
-    return true;
-  }
-
-  // ShapeIdChain DOT
-  private static boolean BlockDefinition_1_0_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BlockDefinition_1_0_1_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ShapeIdChain(b, l + 1);
-    r = r && consumeToken(b, DOT);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -169,7 +125,21 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !<<eof>> (ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | COMMENT | SEMICOLON)*
+  // ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | COMMENT | SEMICOLON
+  static boolean ContainerContent(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ContainerContent")) return false;
+    boolean r;
+    r = ShapeDeclaration(b, l + 1);
+    if (!r) r = ShapeIdWithProperty(b, l + 1);
+    if (!r) r = ShapeConnection(b, l + 1);
+    if (!r) r = ShapeId(b, l + 1);
+    if (!r) r = consumeToken(b, COMMENT);
+    if (!r) r = consumeToken(b, SEMICOLON);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !<<eof>> ContainerContent*
   static boolean File(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "File")) return false;
     boolean r;
@@ -190,28 +160,15 @@ public class D2Parser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | COMMENT | SEMICOLON)*
+  // ContainerContent*
   private static boolean File_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "File_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!File_1_0(b, l + 1)) break;
+      if (!ContainerContent(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "File_1", c)) break;
     }
     return true;
-  }
-
-  // ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | COMMENT | SEMICOLON
-  private static boolean File_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "File_1_0")) return false;
-    boolean r;
-    r = ShapeDeclaration(b, l + 1);
-    if (!r) r = ShapeIdWithProperty(b, l + 1);
-    if (!r) r = ShapeConnection(b, l + 1);
-    if (!r) r = ShapeId(b, l + 1);
-    if (!r) r = consumeToken(b, COMMENT);
-    if (!r) r = consumeToken(b, SEMICOLON);
-    return r;
   }
 
   /* ********************************************************** */
@@ -240,7 +197,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS)
+  // SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS) | CONTAINER_LESS_KEYWORDS
   public static boolean PropertyKey(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PropertyKey")) return false;
     boolean r;
@@ -248,6 +205,7 @@ public class D2Parser implements PsiParser, LightPsiParser {
     r = consumeToken(b, SIMPLE_RESERVED_KEYWORDS);
     if (!r) r = PropertyKey_1(b, l + 1);
     if (!r) r = PropertyKey_2(b, l + 1);
+    if (!r) r = consumeToken(b, CONTAINER_LESS_KEYWORDS);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -469,29 +427,43 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ShapeIdChain DOT Property
+  // (ShapeIdChain DOT)? Property
   static boolean ShapeIdWithProperty(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeIdWithProperty")) return false;
-    if (!nextTokenIs(b, "", ID, STRING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ShapeIdWithProperty_0(b, l + 1);
+    r = r && Property(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (ShapeIdChain DOT)?
+  private static boolean ShapeIdWithProperty_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeIdWithProperty_0")) return false;
+    ShapeIdWithProperty_0_0(b, l + 1);
+    return true;
+  }
+
+  // ShapeIdChain DOT
+  private static boolean ShapeIdWithProperty_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeIdWithProperty_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = ShapeIdChain(b, l + 1);
     r = r && consumeToken(b, DOT);
-    r = r && Property(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
   // UNQUOTED_STRING | STRING
-  public static boolean ShapeLabel(PsiBuilder b, int l) {
+  static boolean ShapeLabel(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeLabel")) return false;
-    if (!nextTokenIs(b, "<shape label>", STRING, UNQUOTED_STRING)) return false;
+    if (!nextTokenIs(b, "", STRING, UNQUOTED_STRING)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SHAPE_LABEL, "<shape label>");
     r = consumeToken(b, UNQUOTED_STRING);
     if (!r) r = consumeToken(b, STRING);
-    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
