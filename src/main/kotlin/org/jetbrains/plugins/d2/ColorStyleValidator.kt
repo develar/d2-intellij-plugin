@@ -163,7 +163,7 @@ internal val NAMED_COLORS: Map<String, Color?> = sequenceOf(
   }
   .toMap(HashMap())
 
-internal data object ColorStyleValidator : StyleValidator {
+internal object ColorStyleValidator : StyleValidator {
   private val COLOR_REGEX: Regex = Regex("^#(([0-9a-fA-F]{2}){3}|([0-9a-fA-F]){3})\$")
 
   override val completionElements = NAMED_COLORS.map { (name, color) ->

@@ -93,7 +93,7 @@ class IntRangeStyleValidator(
   override fun isAcceptableValueType(elementType: IElementType) = elementType == D2ElementTypes.INT
 }
 
-private data object BooleanStyleValidator : StyleValidator {
+private object BooleanStyleValidator : StyleValidator {
   override val completionElements = sequenceOf(true, false).map { LookupElementBuilder.create(it).bold() }.toList()
 
   override val messageError: String = "Expected %s to be true or false"
@@ -103,7 +103,7 @@ private data object BooleanStyleValidator : StyleValidator {
   override fun isAcceptableValueType(elementType: IElementType) = elementType == D2ElementTypes.TRUE || elementType == D2ElementTypes.FALSE
 }
 
-private data object FontStyleValidator : StyleValidator {
+private object FontStyleValidator : StyleValidator {
   private val SYSTEM_FONTS = arrayOf(
     "mono",
   )

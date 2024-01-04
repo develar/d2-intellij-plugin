@@ -15,7 +15,6 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.fileChooser.FileChooserFactory
 import com.intellij.openapi.fileChooser.FileSaverDescriptor
-import com.intellij.openapi.progress.*
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
@@ -36,18 +35,7 @@ import javax.imageio.ImageIO
 import kotlin.coroutines.resume
 import kotlin.io.path.extension
 
-private data class ConversionOutput(val type: String) {
-  companion object {
-    val SVG = ConversionOutput("SVG")
-    val PNG = ConversionOutput("PNG")
-    val JPG = ConversionOutput("JPG")
-    val TIFF = ConversionOutput("TIFF")
-  }
-
-  override fun toString() = type
-}
-
-private val conversionFormats = listOf(ConversionOutput.SVG, ConversionOutput.PNG, ConversionOutput.JPG, ConversionOutput.TIFF)
+private enum class ConversionOutput { SVG, PNG, JPG, TIFF }
 
 private class D2ExportAction : AnAction(), DumbAware {
   override fun actionPerformed(e: AnActionEvent) {
@@ -57,8 +45,8 @@ private class D2ExportAction : AnAction(), DumbAware {
     val fileWrapper = FileChooserFactory.getInstance().createSaveFileDialog(
       FileSaverDescriptor(
         D2Bundle.message("d2.export.image.title"),
-        """${D2Bundle.message("d2.export.image.description")} ${conversionFormats.joinToString(", ")}""",
-        *conversionFormats.map { it.type.lowercase() }.toTypedArray()
+        """${D2Bundle.message("d2.export.image.description")} ${ConversionOutput.values().joinToString(", ")}""",
+        *ConversionOutput.values().map { it.name.lowercase() }.toTypedArray()
       ),
       project
     ).save((e.getData(PlatformDataKeys.VIRTUAL_FILE) as VirtualFile).parent, defaultFileName) ?: return
@@ -74,8 +62,8 @@ private fun convert(targetFile: Path, viewer: D2Viewer) {
 
   val formatName = targetFile.extension.uppercase()
   val format = try {
-    conversionFormats.first { it.type == formatName }
-  } catch (e: NoSuchElementException) {
+    ConversionOutput.valueOf(formatName)
+  } catch (e: IllegalArgumentException) {
     NotificationGroupManager.getInstance()
       .getNotificationGroup(D2_NOTIFICATION_GROUP)
       .createNotification(

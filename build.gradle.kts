@@ -118,6 +118,7 @@ tasks {
 
     kotlinOptions {
       jvmTarget = properties("jvm.target")
+      languageVersion = "1.8"
     }
   }
 
