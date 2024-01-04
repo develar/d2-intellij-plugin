@@ -5,8 +5,6 @@ import com.intellij.ide.structureView.StructureViewBuilder
 import com.intellij.ide.ui.LafManagerListener
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorLocation
 import com.intellij.openapi.fileEditor.FileEditorState
@@ -19,10 +17,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.jcef.JBCefBrowser
 import com.intellij.ui.jcef.JBCefBrowserBuilder
 import com.intellij.util.EventDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.job
+import kotlinx.coroutines.*
 import kotlinx.serialization.Serializable
 import org.jetbrains.plugins.d2.D2Layout
 import org.jetbrains.plugins.d2.D2Theme
@@ -38,9 +33,6 @@ import kotlin.coroutines.EmptyCoroutineContext
 internal data class D2Info(@JvmField val version: String, @JvmField val layouts: List<D2Layout>)
 
 internal val D2_INFO_DATA_KEY: DataKey<D2Info> = DataKey.create("LAYOUT_ENGINES")
-
-@Service(Service.Level.PROJECT)
-private class ProjectLevelCoroutineScopeHolder(val coroutineScope: CoroutineScope)
 
 internal const val D2_EDITOR_NAME = "D2FileEditor"
 
@@ -90,7 +82,7 @@ internal class D2Viewer(
     browser = JBCefBrowserBuilder()
       .build()
 
-    coroutineScope = project.service<ProjectLevelCoroutineScopeHolder>().coroutineScope.childScope()
+    coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     renderManager = RenderManager(coroutineScope = coroutineScope, project = project, file = file) {
       browser.loadURL("http://127.0.0.1:$it")
     }
@@ -120,7 +112,7 @@ internal class D2Viewer(
       }
     })
 
-    ApplicationManager.getApplication().messageBus.connect(coroutineScope).subscribe(LafManagerListener.TOPIC, LafManagerListener {
+    ApplicationManager.getApplication().messageBus.connect(this).subscribe(LafManagerListener.TOPIC, LafManagerListener {
       requestRender()
     })
 

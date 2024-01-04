@@ -17,13 +17,9 @@ private class D2ThemeActionGroup : ActionGroup(), DumbAware {
   )
 
   override fun getChildren(e: AnActionEvent?): Array<AnAction> = children
-
-  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
 private class D2ThemeAction(private val theme: D2Theme) : ToggleAction(theme.name), DumbAware {
-  override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
-
   override fun isSelected(e: AnActionEvent): Boolean {
     return (e.d2FileEditor.theme ?: D2Theme.DEFAULT) == theme
   }
@@ -40,6 +36,4 @@ private class OpenThemeOverviewAction : AnAction(
   AllIcons.General.Web
 ), DumbAware {
   override fun actionPerformed(e: AnActionEvent) = BrowserUtil.browse(THEME_DOCS)
-
-  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

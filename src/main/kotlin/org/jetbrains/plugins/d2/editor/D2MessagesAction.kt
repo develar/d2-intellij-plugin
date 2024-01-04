@@ -19,7 +19,7 @@ private class D2MessagesAction : AnAction(), DumbAware {
   override fun actionPerformed(e: AnActionEvent) {
     val project = e.project ?: return
 
-    val messageView = MessageView.getInstance(project)
+    val messageView = MessageView.SERVICE.getInstance(project)
     val displayName = D2Bundle.message("d2")
 
     var content = messageView.contentManager.findContent(displayName)
@@ -28,7 +28,7 @@ private class D2MessagesAction : AnAction(), DumbAware {
       val console = ConsoleViewImpl(project, true)
       panel.add(console.component, BorderLayout.CENTER)
 
-      content = ContentFactory.getInstance().createContent(panel, displayName, true)
+      content = ContentFactory.SERVICE.getInstance().createContent(panel, displayName, true)
       messageView.contentManager.addContent(content)
       Disposer.register(content, console)
     }

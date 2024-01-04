@@ -4,7 +4,6 @@ import com.intellij.notification.BrowseNotificationAction
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAware
@@ -28,6 +27,4 @@ private class D2InfoAction : AnAction(), DumbAware {
     prevNotification = WeakReference(notification)
     notification.notify(e.project)
   }
-
-  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

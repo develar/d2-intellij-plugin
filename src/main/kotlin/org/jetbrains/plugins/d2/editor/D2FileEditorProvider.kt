@@ -4,6 +4,7 @@ import com.intellij.openapi.fileEditor.*
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.JDOMUtil
 import com.intellij.openapi.vfs.VirtualFile
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
@@ -46,7 +47,7 @@ private class D2FileEditorProvider : FileEditorProvider, DumbAware {
     val firstState = sourceElement.getChild("text")?.let {
       TextEditorProvider.getInstance().readState(it, project, file)
     }
-    val secondState: D2FileEditorState?  = sourceElement.getChild("d2")?.text?.let { dataString ->
+    val secondState: D2FileEditorState? = sourceElement.getChild("d2")?.text?.let { dataString ->
       val result = json.decodeFromString<D2FileEditorState>(dataString) as? D2FileEditorState
       val theme = result?.theme
       if (theme == null) {
@@ -66,7 +67,7 @@ private class D2FileEditorProvider : FileEditorProvider, DumbAware {
       state.firstState?.let {
         val text = Element("text")
         TextEditorProvider.getInstance().writeState(it, project, text)
-        if (!text.isEmpty) {
+        if (!JDOMUtil.isEmpty(text)) {
           targetElement.addContent(text)
         }
       }

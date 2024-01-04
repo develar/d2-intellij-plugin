@@ -26,13 +26,14 @@ import java.util.function.Supplier
 import kotlin.coroutines.resume
 import kotlin.system.measureTimeMillis
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.ExperimentalTime
 
 internal data class RenderRequest(@JvmField val theme: D2Theme?, @JvmField val layout: D2Layout?)
 
 private val LOG: Logger
   get() = logger<RenderManager>()
 
-@OptIn(FlowPreview::class)
+@OptIn(FlowPreview::class, ExperimentalTime::class)
 internal class RenderManager(
   coroutineScope: CoroutineScope,
   private val project: Project,
@@ -152,7 +153,7 @@ internal class RenderManager(
     val command = state.createCommandLine(watch = true, targetFile = state.targetFile)
     val processHandler = KillableColoredProcessHandler.Silent(command)
     var firstText = true
-    processHandler.addProcessListener(object : ProcessListener {
+    processHandler.addProcessListener(object : ProcessAdapter() {
       override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
         val log = state.log
         log.append("[process] ")
@@ -195,7 +196,7 @@ private suspend fun executeAndReadOutput(command: GeneralCommandLine, logErrorIf
   val output = StringBuilder()
   val exitCode = suspendCancellableCoroutine { continuation ->
     val processHandler = OSProcessHandler(command)
-    processHandler.addProcessListener(object : ProcessListener {
+    processHandler.addProcessListener(object : ProcessAdapter() {
       override fun processTerminated(event: ProcessEvent) {
         continuation.resume(event.exitCode)
       }

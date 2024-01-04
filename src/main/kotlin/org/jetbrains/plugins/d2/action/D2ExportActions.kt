@@ -3,13 +3,12 @@
 package org.jetbrains.plugins.d2.action
 
 import com.intellij.execution.process.OSProcessHandler
+import com.intellij.execution.process.ProcessAdapter
 import com.intellij.execution.process.ProcessEvent
-import com.intellij.execution.process.ProcessListener
 import com.intellij.execution.process.ProcessOutputType
 import com.intellij.ide.BrowserUtil
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
@@ -58,8 +57,6 @@ private class D2ExportAction : AnAction(), DumbAware {
     val targetFile = fileWrapper.file.toPath()
     convert(targetFile = targetFile, viewer = viewer)
   }
-
-  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
 private fun convert(targetFile: Path, viewer: D2Viewer) {
@@ -88,9 +85,7 @@ private fun convert(targetFile: Path, viewer: D2Viewer) {
   }
 
   viewer.coroutineScope.launch(Dispatchers.IO) {
-    withBackgroundProgress(viewer.project, D2Bundle.message("progress.title.compiling.to", state.targetFile.fileName, targetFile.fileName)) {
-      convertSvg(state = state, viewer = viewer, formatName = formatName, format = format, targetFile = targetFile)
-    }
+    convertSvg(state = state, viewer = viewer, formatName = formatName, format = format, targetFile = targetFile)
   }
 }
 
@@ -125,11 +120,11 @@ private suspend fun compileToPng(state: D2CompilerState): Path? {
   val processHandler = OSProcessHandler(command)
   val log = StringBuilder()
 
-  val exitCode = withRawProgressReporter {
+  val exitCode = run {
     // location of rawProgressReporter is changed - no way to use it and be compatible with 2023.2 and 2024.1
     //val reporter = coroutineContext.rawProgressReporter
     suspendCancellableCoroutine { continuation ->
-      processHandler.addProcessListener(object : ProcessListener {
+      processHandler.addProcessListener(object : ProcessAdapter() {
         override fun processTerminated(event: ProcessEvent) {
           continuation.resume(event.exitCode)
         }
@@ -170,6 +165,4 @@ private class D2LiveBrowserAction : AnAction(), DumbAware {
   override fun update(e: AnActionEvent) {
     e.presentation.isEnabled = e.d2FileEditor.renderManager.state?.process != null
   }
-
-  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

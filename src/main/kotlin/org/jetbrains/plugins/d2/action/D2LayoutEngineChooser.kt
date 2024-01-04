@@ -31,8 +31,6 @@ private class D2LayoutEngineActionGroup : ActionGroup(), DumbAware {
     )
     return cachedChildren
   }
-
-  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
 private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
@@ -51,8 +49,6 @@ private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
   override fun setSelected(e: AnActionEvent, state: Boolean) {
     e.d2FileEditor.layout = layout
   }
-
-  override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
 private const val LAYOUT_DOCS = "https://d2lang.com/tour/layouts"
