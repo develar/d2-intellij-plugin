@@ -11,6 +11,7 @@ import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorLocation
 import com.intellij.openapi.fileEditor.FileEditorState
 import com.intellij.openapi.fileEditor.FileEditorStateLevel
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.UserDataHolderBase
@@ -64,7 +65,7 @@ internal data class D2FileEditorState(@JvmField var theme: D2Theme?, @JvmField v
 internal class D2Viewer(
   val project: Project,
   private val file: VirtualFile
-) : UserDataHolderBase(), FileEditor {
+) : UserDataHolderBase(), FileEditor, DumbAware {
   private val dispatcher = EventDispatcher.create(PropertyChangeListener::class.java)
 
   val renderManager: RenderManager
