@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [1.1.1] - 2024-01-04
+
+- D2Viewer must implement DumbAware ([7fe9d91](https://github.com/develar/d2-intellij-plugin/commit/7fe9d916d9a43d1b0c237eb9964d93c12638de8d)).
+
 ## [1.1.0] - 2024-01-03
 
 - Viewer toolbar: theme and layout choosers, export, compilation output and info.
