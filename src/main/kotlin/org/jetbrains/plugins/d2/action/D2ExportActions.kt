@@ -36,9 +36,19 @@ import javax.imageio.ImageIO
 import kotlin.coroutines.resume
 import kotlin.io.path.extension
 
-private enum class ConversionOutput { SVG, PNG, JPG, TIFF }
+private data class ConversionOutput(val type: String) {
+  companion object {
+    val SVG = ConversionOutput("SVG")
+    val PNG = ConversionOutput("PNG")
+    val JPG = ConversionOutput("JPG")
+    val TIFF = ConversionOutput("TIFF")
+  }
 
-@OptIn(ExperimentalStdlibApi::class)
+  override fun toString() = type
+}
+
+private val conversionFormats = listOf(ConversionOutput.SVG, ConversionOutput.PNG, ConversionOutput.JPG, ConversionOutput.TIFF)
+
 private class D2ExportAction : AnAction(), DumbAware {
   override fun actionPerformed(e: AnActionEvent) {
     val defaultFileName = FileUtilRt.getNameWithoutExtension(e.getData(PlatformDataKeys.VIRTUAL_FILE)!!.presentableName) + ".svg"
@@ -47,8 +57,8 @@ private class D2ExportAction : AnAction(), DumbAware {
     val fileWrapper = FileChooserFactory.getInstance().createSaveFileDialog(
       FileSaverDescriptor(
         D2Bundle.message("d2.export.image.title"),
-        """${D2Bundle.message("d2.export.image.description")} ${ConversionOutput.entries.joinToString(", ")}""",
-        *ConversionOutput.entries.map { it.name.lowercase() }.toTypedArray()
+        """${D2Bundle.message("d2.export.image.description")} ${conversionFormats.joinToString(", ")}""",
+        *conversionFormats.map { it.type.lowercase() }.toTypedArray()
       ),
       project
     ).save((e.getData(PlatformDataKeys.VIRTUAL_FILE) as VirtualFile).parent, defaultFileName) ?: return
@@ -64,8 +74,8 @@ private fun convert(targetFile: Path, viewer: D2Viewer) {
 
   val formatName = targetFile.extension.uppercase()
   val format = try {
-    ConversionOutput.valueOf(formatName)
-  } catch (e: IllegalArgumentException) {
+    conversionFormats.first { it.type == formatName }
+  } catch (e: NoSuchElementException) {
     NotificationGroupManager.getInstance()
       .getNotificationGroup(D2_NOTIFICATION_GROUP)
       .createNotification(
