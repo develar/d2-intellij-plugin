@@ -43,6 +43,8 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
 
       // shape and other simple keywords highlight as instance field, like JSON_PROPERTY_KEY in a JSON highlighter does
       put(D2ElementTypes.SIMPLE_RESERVED_KEYWORDS, FIELDS)
+      put(D2ElementTypes.COMPOSITE_RESERVED_KEYWORDS, FIELDS)
+
       put(D2ElementTypes.STYLE_KEYWORD, FIELDS)
       put(D2ElementTypes.STYLE_KEYWORDS, FIELDS)
       put(D2ElementTypes.RESERVED_KEYWORD_HOLDERS, FIELDS)

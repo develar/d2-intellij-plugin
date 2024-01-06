@@ -15,8 +15,8 @@ import org.jetbrains.plugins.d2.*
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
 import org.jetbrains.plugins.d2.lang.psi.BlockDefinition
 import org.jetbrains.plugins.d2.lang.psi.Connector
-import org.jetbrains.plugins.d2.lang.psi.PropertyKey
 import org.jetbrains.plugins.d2.lang.psi.ShapeId
+import org.jetbrains.plugins.d2.lang.psi.ShapePropertyKey
 
 private val keywords = (SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).map {
   val builder = LookupElementBuilder.create(it)
@@ -160,7 +160,7 @@ private fun styleOrPropertyValueCompletion(position: PsiElement, parent: PsiElem
     //}
     result.addAllElements(variants)
   } else if (parent != null) {
-    val key = parent.siblings(forward = false).firstOrNull { it is PropertyKey }?.lastChild ?: return
+    val key = parent.siblings(forward = false).firstOrNull { it is ShapePropertyKey }?.lastChild ?: return
     if (key.elementType == D2ElementTypes.STYLE_KEYWORDS) {
       result.addAllElements(ShapeStyles.fromKeyword(key.text)?.completionElements ?: return)
     } else if (key.textMatches("direction")) {

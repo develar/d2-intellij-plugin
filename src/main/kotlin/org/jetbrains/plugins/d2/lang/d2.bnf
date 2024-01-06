@@ -20,7 +20,7 @@
 
 File ::= !<<eof>> ContainerContent*
 
-private ContainerContent ::= ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | PropertyMap| COMMENT | SEMICOLON
+private ContainerContent ::= ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | IdPropertyMap | COMMENT | SEMICOLON
 
 // same as for file level, but Property is allowed without ShapeIdChain
 BlockDefinition ::= LBRACE ContainerContent* RBRACE {
@@ -32,33 +32,36 @@ private ShapeIdChain ::= ShapeId (DOT ShapeId)*
 // declaration means `id + label` (not implicit shape via just ID)
 ShapeDeclaration ::= ShapeIdChain COLON (ShapeLabel | BlockString)? BlockDefinition?
 
-PropertyMap ::= (COMPOSITE_RESERVED_KEYWORDS | STYLE_KEYWORD) COLON BlockDefinition
-
 ShapeConnection ::= ShapeIdChain (Connector ShapeId (DOT ShapeId)*)+ (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
+Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
 // logs.style.strokes: "#f4a261"
-private ShapeIdWithProperty ::= (ShapeIdChain DOT)? Property
+private ShapeIdWithProperty ::= (ShapeIdChain DOT)? ShapeProperty
 
 ShapeId ::= ID | STRING
 
 private ShapeLabel ::= UNQUOTED_STRING | STRING
-
-Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
 BlockString ::= BLOCK_STRING_OPEN BLOCK_STRING_LANG? BLOCK_STRING_BODY BLOCK_STRING_CLOSE
 
 UnquotedStringValue ::= UNQUOTED_STRING
 StringValue ::= STRING
 ColorValue ::= COLOR
-OtherValue ::= AttributeValue | BlockString
+OtherValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT | COLOR | BlockString
 
+ShapeProperty ::= ShapePropertyKey COLON ShapePropertyValue
 // STYLE_KEYWORDS are not allowed, but we parse it (report error as inspection - it is allowed if our parent is "style")
 // todo: handle RESERVED_KEYWORD_HOLDERS in the same way as style (do not allow arbitrary ID)
-PropertyKey ::= SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS) | CONTAINER_LESS_KEYWORDS | STYLE_KEYWORDS
-private PropertyValue ::= UnquotedStringValue | StringValue | ColorValue | OtherValue | Array
+ShapePropertyKey ::= SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS) | CONTAINER_LESS_KEYWORDS | STYLE_KEYWORDS
+private ShapePropertyValue ::= UnquotedStringValue | StringValue | ColorValue | OtherValue | Array
 
-Array ::= LBRACKET (PropertyValue SEMICOLON?)* RBRACKET
+IdPropertyMap ::= (COMPOSITE_RESERVED_KEYWORDS | STYLE_KEYWORD) COLON LBRACE PropertyMapContent* RBRACE
+private PropertyMapContent ::= SubIdPropertyMap | IdProperty | COMMENT | SEMICOLON
 
-Property ::= PropertyKey COLON PropertyValue
+SubIdPropertyMap ::= IdPropertyKey COLON LBRACE PropertyMapContent* RBRACE
 
-private AttributeValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT | COLOR
+IdProperty ::= IdPropertyKey COLON IdPropertyValue
+IdPropertyKey ::= SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS | STYLE_KEYWORD | CONTAINER_LESS_KEYWORDS | STYLE_KEYWORDS | ID | STRING
+private IdPropertyValue ::= SubIdPropertyMap | UnquotedStringValue | StringValue | ColorValue | OtherValue | Array
+
+Array ::= LBRACKET (ShapePropertyValue SEMICOLON?)* RBRACKET

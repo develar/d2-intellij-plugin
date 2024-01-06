@@ -8,11 +8,12 @@ import com.intellij.ui.ColorHexUtil
 import org.jetbrains.plugins.d2.NAMED_COLORS
 import java.awt.Color
 
-class Property(node: ASTNode) : ASTWrapperPsiElement(node)
+class ShapeProperty(node: ASTNode) : ASTWrapperPsiElement(node)
 
-class PropertyKey(node: ASTNode) : ASTWrapperPsiElement(node)
+class ShapePropertyKey(node: ASTNode) : ASTWrapperPsiElement(node)
 
-class PropertyMap(node: ASTNode) : ASTWrapperPsiElement(node)
+class IdPropertyMap(node: ASTNode) : ASTWrapperPsiElement(node)
+class IdProperty(node: ASTNode) : ASTWrapperPsiElement(node)
 
 class D2Array(node: ASTNode) : ASTWrapperPsiElement(node)
 

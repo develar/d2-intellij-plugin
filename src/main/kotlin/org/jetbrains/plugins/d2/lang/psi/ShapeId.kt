@@ -79,7 +79,7 @@ private class ShapePsiReference(private val reference: ShapeId) : PsiReference {
   // todo FQN
   override fun resolve(): PsiElement? {
     var lastCandidate: ShapeId? = null
-    for (element in reference.containingFile.descendants(canGoInside = { it !is PropertyMap && it !is D2Array })) {
+    for (element in reference.containingFile.descendants(canGoInside = { it !is IdPropertyMap && it !is D2Array && it !is ShapeProperty })) {
       if (element is ShapeDeclaration) {
         val shapeId = element.findId()
         if (shapeId != null && compare(shapeId, reference)) {

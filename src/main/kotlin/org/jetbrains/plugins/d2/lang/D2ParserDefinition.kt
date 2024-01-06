@@ -1,5 +1,6 @@
 package org.jetbrains.plugins.d2.lang
 
+import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.openapi.project.Project
@@ -30,9 +31,13 @@ class D2ParserDefinition : ParserDefinition {
       BLOCK_DEFINITION -> BlockDefinition(node)
       BLOCK_STRING -> BlockString(node)
       CONNECTOR -> Connector(node)
-      PROPERTY -> Property(node)
-      PROPERTY_KEY -> PropertyKey(node)
-      PROPERTY_MAP -> PropertyMap(node)
+      SHAPE_PROPERTY -> ShapeProperty(node)
+      SHAPE_PROPERTY_KEY -> ShapePropertyKey(node)
+
+      ID_PROPERTY_MAP -> IdProperty(node)
+      ID_PROPERTY -> IdProperty(node)
+      ID_PROPERTY_KEY -> ASTWrapperPsiElement(node)
+
       ARRAY -> D2Array(node)
 
       SHAPE_DECLARATION -> ShapeDeclaration(node)

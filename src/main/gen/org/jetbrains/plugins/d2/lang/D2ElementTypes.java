@@ -10,14 +10,17 @@ public interface D2ElementTypes {
   IElementType BLOCK_STRING = D2ElementTypeFactory.element("BLOCK_STRING");
   IElementType COLOR_VALUE = D2ElementTypeFactory.element("COLOR_VALUE");
   IElementType CONNECTOR = D2ElementTypeFactory.element("CONNECTOR");
+  IElementType ID_PROPERTY = D2ElementTypeFactory.element("ID_PROPERTY");
+  IElementType ID_PROPERTY_KEY = D2ElementTypeFactory.element("ID_PROPERTY_KEY");
+  IElementType ID_PROPERTY_MAP = D2ElementTypeFactory.element("ID_PROPERTY_MAP");
   IElementType OTHER_VALUE = D2ElementTypeFactory.element("OTHER_VALUE");
-  IElementType PROPERTY = D2ElementTypeFactory.element("PROPERTY");
-  IElementType PROPERTY_KEY = D2ElementTypeFactory.element("PROPERTY_KEY");
-  IElementType PROPERTY_MAP = D2ElementTypeFactory.element("PROPERTY_MAP");
   IElementType SHAPE_CONNECTION = D2ElementTypeFactory.element("SHAPE_CONNECTION");
   IElementType SHAPE_DECLARATION = D2ElementTypeFactory.element("SHAPE_DECLARATION");
   IElementType SHAPE_ID = D2ElementTypeFactory.element("SHAPE_ID");
+  IElementType SHAPE_PROPERTY = D2ElementTypeFactory.element("SHAPE_PROPERTY");
+  IElementType SHAPE_PROPERTY_KEY = D2ElementTypeFactory.element("SHAPE_PROPERTY_KEY");
   IElementType STRING_VALUE = D2ElementTypeFactory.element("STRING_VALUE");
+  IElementType SUB_ID_PROPERTY_MAP = D2ElementTypeFactory.element("SUB_ID_PROPERTY_MAP");
   IElementType UNQUOTED_STRING_VALUE = D2ElementTypeFactory.element("UNQUOTED_STRING_VALUE");
 
   IElementType ARROW = D2ElementTypeFactory.token("ARROW");
