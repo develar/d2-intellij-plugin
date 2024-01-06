@@ -36,7 +36,6 @@ dependencies {
 kotlin {
   jvmToolchain {
     languageVersion.set(JavaLanguageVersion.of(properties("jvm.target")))
-    vendor = JvmVendorSpec.JETBRAINS
   }
 
   sourceSets {
