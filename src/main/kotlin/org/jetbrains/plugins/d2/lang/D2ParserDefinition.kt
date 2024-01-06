@@ -32,6 +32,8 @@ class D2ParserDefinition : ParserDefinition {
       CONNECTOR -> Connector(node)
       PROPERTY -> Property(node)
       PROPERTY_KEY -> PropertyKey(node)
+      PROPERTY_MAP -> PropertyMap(node)
+      ARRAY -> D2Array(node)
 
       SHAPE_DECLARATION -> ShapeDeclaration(node)
       SHAPE_CONNECTION -> ShapeConnection(node)

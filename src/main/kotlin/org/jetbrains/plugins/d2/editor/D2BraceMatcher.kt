@@ -10,6 +10,7 @@ import org.jetbrains.plugins.d2.lang.psi.ShapeId
 
 private val BRACE_PAIRS = arrayOf(
   BracePair(D2ElementTypes.LBRACE, D2ElementTypes.RBRACE, true),
+  BracePair(D2ElementTypes.LBRACKET, D2ElementTypes.RBRACKET, true),
   BracePair(D2ElementTypes.BLOCK_STRING_OPEN, D2ElementTypes.BLOCK_STRING_CLOSE, true),
 )
 

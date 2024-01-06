@@ -26,11 +26,12 @@ import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
 %unicode
 
 // non style/holder keywords, see SimpleReservedKeywords in d2 source code,
-// `classes` is not SimpleReservedKeyword, from CompositeReservedKeywords
 SimpleReservedKeywords = label | desc | shape | icon | constraint | tooltip | link | near | width | height | top | left |
 grid-rows | grid-columns | grid-gap |
 vertical-gap | horizontal-gap |
-class | vars | classes
+class
+
+CompositeReservedKeywords = classes | vars
 
 StyleKeyword = style
 
@@ -64,10 +65,17 @@ WhiteSpace=\s+
 LBrace="{"
 RBrace="}"
 
-UnquotedStringFragment=[^\s{}|;]+
+LBracket="["
+RBracket="]"
+
+UnquotedLabelStringFragment=[^\s{}|;]+
+UnquotedLabelString={UnquotedLabelStringFragment}([ \t]+{UnquotedLabelStringFragment})*
+
+// [] is not supported - it is array
+UnquotedStringFragment=[^\s{}[]|;]+
 UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 
-%states LABEL_STATE PROPERTY_VALUE_STATE BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE
+%states LABEL_STATE PROPERTY_VALUE_BEGIN_STATE PROPERTY_VALUE_STATE BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE ARRAY_STATE
 
 %%
 <YYINITIAL> {
@@ -77,7 +85,7 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
   {RBrace} { return RBRACE; }
   "." { return DOT; }
   {Semicolon} { return SEMICOLON; }
-  ":"                         { yybegin(LABEL_STATE); return COLON; }
+  ":" { yybegin(LABEL_STATE); return COLON; }
 
   {ARROW}                     { return ARROW; }
   {REVERSE_ARROW}             { return REVERSE_ARROW; }
@@ -85,17 +93,23 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
   {DOUBLE_ARROW}              { return DOUBLE_ARROW; }
   {Comment}                   { return COMMENT; }
 
-		{SimpleReservedKeywords} { yybegin(PROPERTY_VALUE_STATE); return SIMPLE_RESERVED_KEYWORDS; }
+		{CompositeReservedKeywords} { return COMPOSITE_RESERVED_KEYWORDS; }
+		{SimpleReservedKeywords} { yybegin(PROPERTY_VALUE_BEGIN_STATE); return SIMPLE_RESERVED_KEYWORDS; }
 		{ReservedKeywordHolders} { return RESERVED_KEYWORD_HOLDERS; }
 		{StyleKeyword} { return STYLE_KEYWORD; }
-		{StyleKeywords} { yybegin(PROPERTY_VALUE_STATE); return STYLE_KEYWORDS; }
-		{ContainerLessKeywords} { yybegin(PROPERTY_VALUE_STATE); return CONTAINER_LESS_KEYWORDS; }
+		{StyleKeywords} { yybegin(PROPERTY_VALUE_BEGIN_STATE); return STYLE_KEYWORDS; }
+		{ContainerLessKeywords} { yybegin(PROPERTY_VALUE_BEGIN_STATE); return CONTAINER_LESS_KEYWORDS; }
 
   {Id} { return ID; }
 
   {String} { return STRING; }
 		// allows to avoid using regex for completion/color provider and other functionality that utilizes color
   {Color} { return COLOR; }
+}
+
+<PROPERTY_VALUE_BEGIN_STATE> {
+		":" { yybegin(PROPERTY_VALUE_STATE); return COLON; }
+		{WhiteSpace} { return WHITE_SPACE; }
 }
 
 // block string is not allowed for property value
@@ -108,8 +122,9 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 		"false" { return FALSE; }
 		{Color} { return COLOR; }
 		{String} { return STRING; }
-		// unquoted string - opposite to LABEL_STATE, `:` is not allowed (otherwise, we match `:` as UNQUOTED_STRING instead of COLON)
-		[^\s{}|:;]+([ \t]+[^\s{}|:;]+)* { return UNQUOTED_STRING; }
+		{LBracket} { yybegin(ARRAY_STATE); return LBRACKET; }
+		{RBracket} { return RBRACKET; }
+		{UnquotedString} { return UNQUOTED_STRING; }
 
 		[ \t]+ { return WHITE_SPACE; }
 		[\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }
@@ -117,6 +132,16 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 
 		// inline shape definition: {shape: person}
 		{RBrace} { yybegin(YYINITIAL); return RBRACE; }
+}
+
+<ARRAY_STATE> {
+		{Semicolon} { return SEMICOLON; }
+		// D2 supports nested arrays, but we don't for now (nested states are nnot supported, can be implemented, but not clear yet for what)
+		{LBracket} { return LBRACKET; }
+		{RBracket} { yybegin(YYINITIAL); return RBRACKET; }
+		{UnquotedString} { return UNQUOTED_STRING; }
+
+		{WhiteSpace} { return WHITE_SPACE; }
 }
 
 <LABEL_STATE> {
@@ -128,7 +153,7 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
       }
 
 	 {String} { return STRING; }
-	 {UnquotedString} { return UNQUOTED_STRING; }
+	 {UnquotedLabelString} { return UNQUOTED_STRING; }
 	 [ \t]+ { return WHITE_SPACE; }
 	 [\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }
 	 {LBrace} { yybegin(YYINITIAL); return LBRACE; }
@@ -148,19 +173,19 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 // so, we can be sure that lexing will be never performed in the middle of block string (always from BLOCK_STRING_OPEN)
 <BLOCK_STRING_BODY_STATE> {
 	[^|]*\|+ {
-									if (blockStringToken == null) {
-											yybegin(YYINITIAL);
-											blockStringToken = null;
-											return BLOCK_STRING_CLOSE;
-									}
-									else if (StringUtilRt.endsWith(yytext(), blockStringToken)) {
-											// push back to register on next step as a BLOCK_STRING_CLOSE token,
-											// (we neeed it to easily implement embededed language, brace matcher and so on)
-											yypushback(blockStringToken.length());
-											blockStringToken = null;
-											return BLOCK_STRING_BODY;
-									}
-							}
+		if (blockStringToken == null) {
+				yybegin(YYINITIAL);
+				blockStringToken = null;
+				return BLOCK_STRING_CLOSE;
+		}
+		else if (StringUtilRt.endsWith(yytext(), blockStringToken)) {
+				// push back to register on next step as a BLOCK_STRING_CLOSE token,
+				// (we neeed it to easily implement embededed language, brace matcher and so on)
+				yypushback(blockStringToken.length());
+				blockStringToken = null;
+				return BLOCK_STRING_BODY;
+		}
+}
 
   <<EOF>> { yybegin(YYINITIAL); return BAD_CHARACTER; }
 }

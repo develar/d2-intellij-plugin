@@ -1,6 +1,5 @@
 package org.jetbrains.plugins.d2.editor
 
-import com.intellij.codeInsight.codeVision.CodeVisionState
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.OSProcessHandler
 import com.intellij.execution.process.ProcessNotCreatedException
@@ -54,7 +53,7 @@ private fun format(file: Path, request: AsyncFormattingRequest) {
     val params = command.parametersList
     params.add("fmt")
     Files.copy(file, result, StandardCopyOption.REPLACE_EXISTING)
-    params.add(CodeVisionState.NotReady.result.toString())
+    params.add(result.toString())
     val output = ScriptRunnerUtil.getProcessOutput(
       command,
       ScriptRunnerUtil.STDOUT_OR_STDERR_OUTPUT_KEY_FILTER,

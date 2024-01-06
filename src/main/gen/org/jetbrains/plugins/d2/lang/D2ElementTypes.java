@@ -5,6 +5,7 @@ import com.intellij.psi.tree.IElementType;
 
 public interface D2ElementTypes {
 
+  IElementType ARRAY = D2ElementTypeFactory.element("ARRAY");
   IElementType BLOCK_DEFINITION = D2ElementTypeFactory.element("BLOCK_DEFINITION");
   IElementType BLOCK_STRING = D2ElementTypeFactory.element("BLOCK_STRING");
   IElementType COLOR_VALUE = D2ElementTypeFactory.element("COLOR_VALUE");
@@ -12,6 +13,7 @@ public interface D2ElementTypes {
   IElementType OTHER_VALUE = D2ElementTypeFactory.element("OTHER_VALUE");
   IElementType PROPERTY = D2ElementTypeFactory.element("PROPERTY");
   IElementType PROPERTY_KEY = D2ElementTypeFactory.element("PROPERTY_KEY");
+  IElementType PROPERTY_MAP = D2ElementTypeFactory.element("PROPERTY_MAP");
   IElementType SHAPE_CONNECTION = D2ElementTypeFactory.element("SHAPE_CONNECTION");
   IElementType SHAPE_DECLARATION = D2ElementTypeFactory.element("SHAPE_DECLARATION");
   IElementType SHAPE_ID = D2ElementTypeFactory.element("SHAPE_ID");
@@ -26,6 +28,7 @@ public interface D2ElementTypes {
   IElementType COLON = D2ElementTypeFactory.token("COLON");
   IElementType COLOR = D2ElementTypeFactory.token("COLOR");
   IElementType COMMENT = D2ElementTypeFactory.token("COMMENT");
+  IElementType COMPOSITE_RESERVED_KEYWORDS = D2ElementTypeFactory.token("COMPOSITE_RESERVED_KEYWORDS");
   IElementType CONTAINER_LESS_KEYWORDS = D2ElementTypeFactory.token("CONTAINER_LESS_KEYWORDS");
   IElementType DOT = D2ElementTypeFactory.token("DOT");
   IElementType DOUBLE_ARROW = D2ElementTypeFactory.token("DOUBLE_ARROW");
@@ -35,7 +38,9 @@ public interface D2ElementTypes {
   IElementType ID = D2ElementTypeFactory.token("ID");
   IElementType INT = D2ElementTypeFactory.token("INT");
   IElementType LBRACE = D2ElementTypeFactory.token("LBRACE");
+  IElementType LBRACKET = D2ElementTypeFactory.token("LBRACKET");
   IElementType RBRACE = D2ElementTypeFactory.token("RBRACE");
+  IElementType RBRACKET = D2ElementTypeFactory.token("RBRACKET");
   IElementType RESERVED_KEYWORD_HOLDERS = D2ElementTypeFactory.token("RESERVED_KEYWORD_HOLDERS");
   IElementType REVERSE_ARROW = D2ElementTypeFactory.token("REVERSE_ARROW");
   IElementType SEMICOLON = D2ElementTypeFactory.token("SEMICOLON");

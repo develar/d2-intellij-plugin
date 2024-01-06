@@ -3,6 +3,7 @@ package org.jetbrains.plugins.d2
 import com.intellij.testFramework.ParsingTestCase
 import com.intellij.testFramework.rules.TestNameExtension
 import com.intellij.testFramework.runInEdtAndWait
+import org.intellij.lang.annotations.Language
 import org.intellij.plugins.markdown.lang.parser.MarkdownParserDefinition
 import org.jetbrains.plugins.d2.lang.D2ParserDefinition
 import org.junit.jupiter.api.extension.AfterEachCallback
@@ -11,10 +12,6 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.RegisterExtension
 
 abstract class D2ParsingTestCase() {
-  init {
-//    System.setProperty("idea.tests.overwrite.data", "true")
-  }
-
   @RegisterExtension
   protected val testNameRule: TestNameExtension = TestNameExtension()
 
@@ -61,7 +58,7 @@ abstract class D2ParsingTestCase() {
     }
   }
 
-  fun test(text: String? = null) {
-    testCase.test(text)
+  fun test(@Language("D2") text: String? = null) {
+    testCase.test(text?.trimIndent())
   }
 }
