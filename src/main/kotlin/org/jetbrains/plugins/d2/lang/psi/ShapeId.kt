@@ -14,10 +14,6 @@ import com.intellij.psi.util.elementType
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
 
 internal class ShapeDeclaration(node: ASTNode) : ASTWrapperPsiElement(node) {
-  //override fun getName(): String? {
-  //  return findId()?.name
-  //}
-
   fun findId(): ShapeId? {
     var child: PsiElement? = firstChild
     var id: ShapeId? = null
@@ -33,10 +29,6 @@ internal class ShapeDeclaration(node: ASTNode) : ASTWrapperPsiElement(node) {
     }
     return id
   }
-
-  //override fun getNameIdentifier(): PsiElement? = findId()?.getNameIdentifier()
-
-  //override fun setName(name: String): PsiElement? = findId()?.setName(name)
 }
 
 internal class ShapeId(node: ASTNode) : ASTWrapperPsiElement(node), PsiNamedElement {
@@ -64,8 +56,6 @@ internal class ShapeId(node: ASTNode) : ASTWrapperPsiElement(node), PsiNamedElem
     }
   }
 
-  //fun getNameIdentifier(): PsiElement? = firstChild
-
   override fun setName(name: String): PsiElement? {
     val child = firstChild ?: return null
     val project = child.project
@@ -89,7 +79,7 @@ private class ShapePsiReference(private val reference: ShapeId) : PsiReference {
   // todo FQN
   override fun resolve(): PsiElement? {
     var lastCandidate: ShapeId? = null
-    for (element in reference.containingFile.descendants()) {
+    for (element in reference.containingFile.descendants(canGoInside = { it !is PropertyMap && it !is D2Array })) {
       if (element is ShapeDeclaration) {
         val shapeId = element.findId()
         if (shapeId != null && compare(shapeId, reference)) {

@@ -60,6 +60,9 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
       put(D2ElementTypes.LBRACE, BRACES)
       put(D2ElementTypes.RBRACE, BRACES)
 
+      put(D2ElementTypes.LBRACKET, BRACES)
+      put(D2ElementTypes.RBRACKET, BRACES)
+
       put(D2ElementTypes.BLOCK_STRING_OPEN, BLOCK_STRING_MARKER)
       put(D2ElementTypes.BLOCK_STRING_CLOSE, BLOCK_STRING_MARKER)
       put(D2ElementTypes.BLOCK_STRING_LANG, IDENTIFIERS)

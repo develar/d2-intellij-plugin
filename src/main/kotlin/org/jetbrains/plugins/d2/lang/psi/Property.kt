@@ -12,6 +12,10 @@ class Property(node: ASTNode) : ASTWrapperPsiElement(node)
 
 class PropertyKey(node: ASTNode) : ASTWrapperPsiElement(node)
 
+class PropertyMap(node: ASTNode) : ASTWrapperPsiElement(node)
+
+class D2Array(node: ASTNode) : ASTWrapperPsiElement(node)
+
 sealed interface PropertyValue : PsiElement
 
 class OtherValue(node: ASTNode) : ASTWrapperPsiElement(node), PropertyValue
