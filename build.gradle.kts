@@ -1,5 +1,8 @@
+import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.gradle.ext.packagePrefix
+import org.jetbrains.gradle.ext.settings
 import java.nio.file.Files
 
 fun properties(key: String): String = providers.gradleProperty(key).get()
@@ -12,12 +15,25 @@ plugins {
   id("org.jetbrains.intellij") version "1.16.1"
   id("org.jetbrains.changelog") version "2.2.0"
   id("org.jetbrains.qodana") version "2023.2.1"
-  id("org.jetbrains.kotlinx.kover") version "0.7.4"
+  id("org.jetbrains.kotlinx.kover") version "0.7.5"
 
   id("org.jetbrains.kotlin.plugin.serialization") version "1.9.21"
+
+  id("idea")
+  id("org.jetbrains.gradle.plugin.idea-ext") version "0.5"
 }
 
-group = properties("pluginGroup")
+idea {
+  module {
+    generatedSourceDirs.add(file("src/gen"))
+    settings {
+      packagePrefix["src/src"] = "org.jetbrains.plugins.d2"
+      packagePrefix["src/testSrc"] = "org.jetbrains.plugins.d2"
+    }
+  }
+}
+
+group = "org.jetbrains.plugins.d2"
 version = properties("pluginVersion")
 
 repositories {
@@ -35,18 +51,27 @@ dependencies {
 
 kotlin {
   jvmToolchain {
-    languageVersion.set(JavaLanguageVersion.of(properties("jvm.target")))
+    languageVersion.set(JavaLanguageVersion.of(17))
     vendor = JvmVendorSpec.JETBRAINS
   }
 
   sourceSets {
     main {
-      kotlin.srcDirs("src/main/gen")
+      kotlin {
+        setSrcDirs(listOf("src/src", "src/gen"))
+      }
+      resources.setSrcDirs(listOf("src/resources"))
+    }
+    test {
+      kotlin {
+        setSrcDirs(listOf("src/testSrc"))
+      }
+      resources.setSrcDirs(listOf("src/testResources"))
     }
   }
 }
 
-sourceSets["main"].java.srcDirs("src/main/gen")
+sourceSets["main"].java.setSrcDirs(listOf("src/gen"))
 
 intellij {
   pluginName.set(properties("pluginName"))

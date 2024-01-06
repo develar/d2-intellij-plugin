@@ -18,7 +18,7 @@ abstract class D2ParsingTestCase() {
   @Suppress("JUnitMalformedDeclaration")
   @RegisterExtension
   private val testCase = object : ParsingTestCase("psi", "d2", D2ParserDefinition(), MarkdownParserDefinition()), BeforeEachCallback, AfterEachCallback {
-    override fun getTestDataPath() = "src/test/resources"
+    override fun getTestDataPath() = "src/testResources"
 
     override fun beforeEach(context: ExtensionContext?) {
       runInEdtAndWait {
