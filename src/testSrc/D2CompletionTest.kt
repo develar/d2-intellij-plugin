@@ -25,7 +25,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       """
     )
     fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf((SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).toList())
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs((SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).toList())
   }
 
   @Test
@@ -35,7 +35,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       "direction: <caret>"
     )
     fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(directions.map { it.lookupString })
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs(directions.map { it.lookupString })
   }
 
   @Test
@@ -67,7 +67,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       """
     )
     fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf((SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).toList() + varsAndClasses.map { it.lookupString })
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs((SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).toList() + varsAndClasses.map { it.lookupString })
   }
 
   @Test
@@ -80,7 +80,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       """
     )
     fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(listOf("--", "->", "<-", "<->"))
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs(listOf("--", "->", "<-", "<->"))
   }
 
   @Test
@@ -93,7 +93,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
     )
     fixture.complete(CompletionType.BASIC)
     // listOf("fill", "font-color", "stroke")
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(allShapeStyleKeywords())
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs(allShapeStyleKeywords())
   }
 
   @Test
@@ -106,7 +106,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
     )
     fixture.complete(CompletionType.BASIC)
     // listOf("opacity")
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(allShapeStyleKeywords())
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs(allShapeStyleKeywords())
   }
 
   @Test
@@ -119,7 +119,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
     )
     fixture.complete(CompletionType.BASIC)
     // listOf("border-radius", "font-size", "opacity", "stroke-dash", "stroke-width")
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(allShapeStyleKeywords())
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs(allShapeStyleKeywords())
   }
 
   @Test
@@ -131,7 +131,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       """
     )
     fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs(
       //listOf(
       //  "3d",
       //  "animated",
@@ -156,7 +156,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       """
     )
     fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(allShapeStyleKeywords())
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs(allShapeStyleKeywords())
   }
 
   @Test
@@ -168,7 +168,7 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
       """
     )
     fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).containsOnlyElementsOf(listOf("mono"))
+    assertThat(fixture.lookupElementStrings).hasSameElementsAs(listOf("mono"))
   }
 
   @Test

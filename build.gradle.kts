@@ -1,4 +1,5 @@
-import kotlinx.serialization.json.JsonNull.content
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.gradle.ext.packagePrefix
@@ -42,7 +43,9 @@ repositories {
 }
 
 dependencies {
-  testImplementation("org.assertj:assertj-core:3.11.1")
+  @Suppress("SpellCheckingInspection")
+  testImplementation("org.opentest4j:opentest4j:1.3.0")
+  testImplementation("org.assertj:assertj-core:3.25.1")
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
@@ -107,6 +110,36 @@ tasks {
   }
 
   test {
+    testLogging {
+      // set options for log level LIFECYCLE
+      events = setOf(
+        TestLogEvent.FAILED,
+        TestLogEvent.SKIPPED,
+        TestLogEvent.STANDARD_OUT
+      )
+      exceptionFormat = TestExceptionFormat.FULL
+      showExceptions = true
+      showCauses = true
+      showStackTraces = true
+
+      // set options for log level DEBUG and INFO
+      debug {
+        events = setOf(
+          TestLogEvent.STARTED,
+          TestLogEvent.FAILED,
+          TestLogEvent.PASSED,
+          TestLogEvent.SKIPPED,
+          TestLogEvent.STANDARD_ERROR,
+          TestLogEvent.STANDARD_OUT
+        )
+        exceptionFormat = TestExceptionFormat.FULL
+      }
+      info.events = debug.events
+      info.exceptionFormat = debug.exceptionFormat
+    }
+
+    // *** gradle *** html is not required - failures must be correctly printed to console
+    reports.html.required = false
     useJUnitPlatform()
 
     val overwriteData = providers.gradleProperty("idea.tests.overwrite.data").getOrNull() == "true"
