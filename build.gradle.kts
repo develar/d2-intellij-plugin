@@ -1,6 +1,6 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.nio.file.Files
 
 fun properties(key: String): String = providers.gradleProperty(key).get()
 
@@ -88,36 +88,21 @@ tasks {
     systemProperty("idea.tests.overwrite.data", overwriteData)
   }
 
-  withType<KotlinCompile> {
-    kotlinOptions {
-      jvmTarget = properties("jvm.target")
-    }
-  }
-
   patchPluginXml {
     version.set(properties("pluginVersion"))
     sinceBuild.set(properties("pluginSinceBuild"))
     untilBuild.set(properties("pluginUntilBuild"))
 
-    pluginDescription.set(
-      file("README.md").readText().lines().run {
-        val start = "<!-- Plugin description -->"
-        val end = "<!-- Plugin description end -->"
-
-        if (!containsAll(listOf(start, end))) {
-          throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
-        }
-        subList(indexOf(start) + 1, indexOf(end))
-      }.joinToString("\n").let { markdownToHTML(it) }
-    )
+    val lines = Files.readString(file("README.md").toPath()).lines()
+    val start = lines.indexOf("<!-- Plugin description -->")
+    val end = lines.indexOf("<!-- Plugin description end -->")
+    if (start < 0 || end < 0) {
+      throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+    }
+    pluginDescription.set(lines.subList(start + 1, end).joinToString("\n").let { markdownToHTML(it) })
 
     changeNotes.set(provider {
-      with(changelog) {
-        renderItem(
-          getOrNull(properties("pluginVersion")) ?: getLatest(),
-          Changelog.OutputType.HTML,
-        )
-      }
+      changelog.renderItem(item = changelog.getOrNull(properties("pluginVersion")) ?: changelog.getLatest(), outputType = Changelog.OutputType.HTML)
     })
   }
 
