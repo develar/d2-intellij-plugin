@@ -52,7 +52,8 @@ OtherValue ::= STRING | ID | INT | FLOAT | TRUE | FALSE | DOT | COLOR | BlockStr
 ShapeProperty ::= ShapePropertyKey COLON ShapePropertyValue
 // STYLE_KEYWORDS are not allowed, but we parse it (report error as inspection - it is allowed if our parent is "style")
 // todo: handle RESERVED_KEYWORD_HOLDERS in the same way as style (do not allow arbitrary ID)
-ShapePropertyKey ::= SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS) | CONTAINER_LESS_KEYWORDS | STYLE_KEYWORDS
+private PropertyKey ::= SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS) | CONTAINER_LESS_KEYWORDS | STYLE_KEYWORDS
+ShapePropertyKey ::= PropertyKey
 private ShapePropertyValue ::= UnquotedStringValue | StringValue | ColorValue | OtherValue | Array
 
 IdPropertyMap ::= (COMPOSITE_RESERVED_KEYWORDS | STYLE_KEYWORD) COLON LBRACE PropertyMapContent* RBRACE
@@ -61,7 +62,7 @@ private PropertyMapContent ::= SubIdPropertyMap | IdProperty | COMMENT | SEMICOL
 SubIdPropertyMap ::= IdPropertyKey COLON LBRACE PropertyMapContent* RBRACE
 
 IdProperty ::= IdPropertyKey COLON IdPropertyValue
-IdPropertyKey ::= SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS | STYLE_KEYWORD | CONTAINER_LESS_KEYWORDS | STYLE_KEYWORDS | ID | STRING
+IdPropertyKey ::= PropertyKey | ID | STRING
 private IdPropertyValue ::= SubIdPropertyMap | UnquotedStringValue | StringValue | ColorValue | OtherValue | Array
 
 Array ::= LBRACKET (ShapePropertyValue SEMICOLON?)* RBRACKET

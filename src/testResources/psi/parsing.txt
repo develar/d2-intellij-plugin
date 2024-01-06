@@ -13,25 +13,25 @@ D2 File
       PsiWhiteSpace('\n  ')
       PsiComment(COMMENT)('# and unquoted string literal for values as string,')
       PsiWhiteSpace('\n  ')
-      Property(PROPERTY)
-        PropertyKey(PROPERTY_KEY)
+      ShapeProperty
+        ShapePropertyKey
           PsiElement(SIMPLE_RESERVED_KEYWORDS)('shape')
         PsiElement(COLON)(':')
         PsiWhiteSpace(' ')
-        UnquotedStringValue(UNQUOTED_STRING_VALUE)
+        UnquotedStringValue
           PsiElement(UNQUOTED_STRING)('page')
       PsiWhiteSpace('\n\n')
       PsiWhiteSpace('  ')
       PsiComment(COMMENT)('# still boolean or int literals is properly highlighted')
       PsiWhiteSpace('\n  ')
-      Property(PROPERTY)
-        PropertyKey(PROPERTY_KEY)
+      ShapeProperty
+        ShapePropertyKey
           PsiElement(STYLE_KEYWORD)('style')
           PsiElement(DOT)('.')
           PsiElement(STYLE_KEYWORDS)('multiple')
         PsiElement(COLON)(':')
         PsiWhiteSpace(' ')
-        OtherValue(OTHER_VALUE)
+        OtherValue
           PsiElement(TRUE)('true')
       PsiWhiteSpace('\n')
       PsiElement(RBRACE)('}')
@@ -55,14 +55,14 @@ D2 File
   ShapeId(SHAPE_ID)
     PsiElement(ID)('logs')
   PsiElement(DOT)('.')
-  Property(PROPERTY)
-    PropertyKey(PROPERTY_KEY)
+  ShapeProperty
+    ShapePropertyKey
       PsiElement(STYLE_KEYWORD)('style')
       PsiElement(DOT)('.')
       PsiElement(STYLE_KEYWORDS)('stroke')
     PsiElement(COLON)(':')
     PsiWhiteSpace(' ')
-    ColorValue(COLOR_VALUE)
+    ColorValue
       PsiElement(COLOR)('"#694024"')
   PsiWhiteSpace('\n\n')
   ShapeDeclaration(SHAPE_DECLARATION)
@@ -74,12 +74,12 @@ D2 File
     PsiWhiteSpace(' ')
     BlockDefinition(BLOCK_DEFINITION)
       PsiElement(LBRACE)('{')
-      Property(PROPERTY)
-        PropertyKey(PROPERTY_KEY)
+      ShapeProperty
+        ShapePropertyKey
           PsiElement(SIMPLE_RESERVED_KEYWORDS)('shape')
         PsiElement(COLON)(':')
         PsiWhiteSpace(' ')
-        UnquotedStringValue(UNQUOTED_STRING_VALUE)
+        UnquotedStringValue
           PsiElement(UNQUOTED_STRING)('person')
       PsiElement(RBRACE)('}')
   PsiWhiteSpace('\n')
@@ -111,23 +111,23 @@ D2 File
             BlockDefinition(BLOCK_DEFINITION)
               PsiElement(LBRACE)('{')
               PsiWhiteSpace('\n      ')
-              Property(PROPERTY)
-                PropertyKey(PROPERTY_KEY)
+              ShapeProperty
+                ShapePropertyKey
                   PsiElement(SIMPLE_RESERVED_KEYWORDS)('shape')
                 PsiElement(COLON)(':')
                 PsiWhiteSpace(' ')
-                UnquotedStringValue(UNQUOTED_STRING_VALUE)
+                UnquotedStringValue
                   PsiElement(UNQUOTED_STRING)('stored_data')
               PsiWhiteSpace('\n')
               PsiWhiteSpace('      ')
-              Property(PROPERTY)
-                PropertyKey(PROPERTY_KEY)
+              ShapeProperty
+                ShapePropertyKey
                   PsiElement(STYLE_KEYWORD)('style')
                   PsiElement(DOT)('.')
                   PsiElement(STYLE_KEYWORDS)('multiple')
                 PsiElement(COLON)(':')
                 PsiWhiteSpace(' ')
-                OtherValue(OTHER_VALUE)
+                OtherValue
                   PsiElement(TRUE)('true')
               PsiWhiteSpace('\n')
               PsiWhiteSpace('    ')
@@ -188,23 +188,23 @@ D2 File
             BlockDefinition(BLOCK_DEFINITION)
               PsiElement(LBRACE)('{')
               PsiWhiteSpace('\n      ')
-              Property(PROPERTY)
-                PropertyKey(PROPERTY_KEY)
+              ShapeProperty
+                ShapePropertyKey
                   PsiElement(SIMPLE_RESERVED_KEYWORDS)('shape')
                 PsiElement(COLON)(':')
                 PsiWhiteSpace(' ')
-                UnquotedStringValue(UNQUOTED_STRING_VALUE)
+                UnquotedStringValue
                   PsiElement(UNQUOTED_STRING)('cylinder')
               PsiWhiteSpace('\n')
               PsiWhiteSpace('      ')
-              Property(PROPERTY)
-                PropertyKey(PROPERTY_KEY)
+              ShapeProperty
+                ShapePropertyKey
                   PsiElement(STYLE_KEYWORD)('style')
                   PsiElement(DOT)('.')
                   PsiElement(STYLE_KEYWORDS)('multiple')
                 PsiElement(COLON)(':')
                 PsiWhiteSpace(' ')
-                OtherValue(OTHER_VALUE)
+                OtherValue
                   PsiElement(TRUE)('true')
               PsiWhiteSpace('\n')
               PsiWhiteSpace('    ')
@@ -381,14 +381,14 @@ D2 File
     BlockDefinition(BLOCK_DEFINITION)
       PsiElement(LBRACE)('{')
       PsiWhiteSpace('\n  ')
-      Property(PROPERTY)
-        PropertyKey(PROPERTY_KEY)
+      ShapeProperty
+        ShapePropertyKey
           PsiElement(STYLE_KEYWORD)('style')
           PsiElement(DOT)('.')
           PsiElement(STYLE_KEYWORDS)('stroke-dash')
         PsiElement(COLON)(':')
         PsiWhiteSpace(' ')
-        OtherValue(OTHER_VALUE)
+        OtherValue
           PsiElement(INT)('3')
       PsiWhiteSpace('\n')
       PsiElement(RBRACE)('}')

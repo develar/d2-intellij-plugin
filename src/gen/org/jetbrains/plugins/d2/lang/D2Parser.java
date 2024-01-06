@@ -213,16 +213,12 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SIMPLE_RESERVED_KEYWORDS | RESERVED_KEYWORD_HOLDERS | STYLE_KEYWORD | CONTAINER_LESS_KEYWORDS | STYLE_KEYWORDS | ID | STRING
+  // PropertyKey | ID | STRING
   public static boolean IdPropertyKey(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IdPropertyKey")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ID_PROPERTY_KEY, "<id property key>");
-    r = consumeToken(b, SIMPLE_RESERVED_KEYWORDS);
-    if (!r) r = consumeToken(b, RESERVED_KEYWORD_HOLDERS);
-    if (!r) r = consumeToken(b, STYLE_KEYWORD);
-    if (!r) r = consumeToken(b, CONTAINER_LESS_KEYWORDS);
-    if (!r) r = consumeToken(b, STYLE_KEYWORDS);
+    r = PropertyKey(b, l + 1);
     if (!r) r = consumeToken(b, ID);
     if (!r) r = consumeToken(b, STRING);
     exit_section_(b, l, m, r, false, null);
@@ -294,6 +290,41 @@ public class D2Parser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, COLOR);
     if (!r) r = BlockString(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS) | CONTAINER_LESS_KEYWORDS | STYLE_KEYWORDS
+  static boolean PropertyKey(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKey")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, SIMPLE_RESERVED_KEYWORDS);
+    if (!r) r = PropertyKey_1(b, l + 1);
+    if (!r) r = PropertyKey_2(b, l + 1);
+    if (!r) r = consumeToken(b, CONTAINER_LESS_KEYWORDS);
+    if (!r) r = consumeToken(b, STYLE_KEYWORDS);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // RESERVED_KEYWORD_HOLDERS DOT ID
+  private static boolean PropertyKey_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKey_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, RESERVED_KEYWORD_HOLDERS, DOT, ID);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // STYLE_KEYWORD DOT STYLE_KEYWORDS
+  private static boolean PropertyKey_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKey_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, STYLE_KEYWORD, DOT, STYLE_KEYWORDS);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -555,37 +586,13 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SIMPLE_RESERVED_KEYWORDS | (RESERVED_KEYWORD_HOLDERS DOT ID) | (STYLE_KEYWORD DOT STYLE_KEYWORDS) | CONTAINER_LESS_KEYWORDS | STYLE_KEYWORDS
+  // PropertyKey
   public static boolean ShapePropertyKey(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapePropertyKey")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SHAPE_PROPERTY_KEY, "<shape property key>");
-    r = consumeToken(b, SIMPLE_RESERVED_KEYWORDS);
-    if (!r) r = ShapePropertyKey_1(b, l + 1);
-    if (!r) r = ShapePropertyKey_2(b, l + 1);
-    if (!r) r = consumeToken(b, CONTAINER_LESS_KEYWORDS);
-    if (!r) r = consumeToken(b, STYLE_KEYWORDS);
+    r = PropertyKey(b, l + 1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // RESERVED_KEYWORD_HOLDERS DOT ID
-  private static boolean ShapePropertyKey_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapePropertyKey_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, RESERVED_KEYWORD_HOLDERS, DOT, ID);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // STYLE_KEYWORD DOT STYLE_KEYWORDS
-  private static boolean ShapePropertyKey_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapePropertyKey_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, STYLE_KEYWORD, DOT, STYLE_KEYWORDS);
-    exit_section_(b, m, null, r);
     return r;
   }
 

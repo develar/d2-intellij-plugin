@@ -16,6 +16,8 @@ internal object D2ElementTypeFactory {
   }
 
   @JvmStatic
-  fun element(name: String): IElementType = IElementType(name, D2Language)
+  fun element(name: String): IElementType {
+    return IElementType(name, D2Language)
+  }
 }
 

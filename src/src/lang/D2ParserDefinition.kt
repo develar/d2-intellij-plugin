@@ -34,10 +34,6 @@ class D2ParserDefinition : ParserDefinition {
       SHAPE_PROPERTY -> ShapeProperty(node)
       SHAPE_PROPERTY_KEY -> ShapePropertyKey(node)
 
-      ID_PROPERTY_MAP -> IdProperty(node)
-      ID_PROPERTY -> IdProperty(node)
-      ID_PROPERTY_KEY -> ASTWrapperPsiElement(node)
-
       ARRAY -> D2Array(node)
 
       SHAPE_DECLARATION -> ShapeDeclaration(node)
@@ -50,7 +46,9 @@ class D2ParserDefinition : ParserDefinition {
       COLOR_VALUE -> ColorValue(node)
       OTHER_VALUE -> OtherValue(node)
 
-      else -> throw AssertionError("Unknown element type: ${node.elementType}")
+      ID_PROPERTY_MAP -> IdPropertyMap(node)
+
+      else -> ASTWrapperPsiElement(node)
     }
   }
 }

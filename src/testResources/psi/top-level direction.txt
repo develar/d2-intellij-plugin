@@ -1,8 +1,8 @@
 D2 File
-  Property(PROPERTY)
-    PropertyKey(PROPERTY_KEY)
+  ShapeProperty
+    ShapePropertyKey
       PsiElement(CONTAINER_LESS_KEYWORDS)('direction')
     PsiElement(COLON)(':')
     PsiWhiteSpace(' ')
-    UnquotedStringValue(UNQUOTED_STRING_VALUE)
+    UnquotedStringValue
       PsiElement(UNQUOTED_STRING)('down')
