@@ -52,13 +52,19 @@ private val connections = sequenceOf("--", "->", "<-", "<->")
   }
   .toList()
 
+private fun constantLookupElement(value: String): LookupElementBuilder {
+  return LookupElementBuilder.create(value)
+}
+
 @VisibleForTesting
 val directions = sequenceOf("up", "down", "right", "left")
-  .map {
-    LookupElementBuilder.create(it)
-      .withIcon(D2Icons.PROPERTY)
-  }
+  .map { constantLookupElement(it) }
   .toList()
+
+@VisibleForTesting
+val shapes = Shapes.values().map {
+  constantLookupElement(it.value)
+}
 
 private val STYLE_VALIDATOR_KEY: Key<StyleValidator> = Key("styleValidator")
 
@@ -161,10 +167,21 @@ private fun styleOrPropertyValueCompletion(position: PsiElement, parent: PsiElem
     result.addAllElements(variants)
   } else if (parent != null) {
     val key = parent.siblings(forward = false).firstOrNull { it is ShapePropertyKey }?.lastChild ?: return
-    if (key.elementType == D2ElementTypes.STYLE_KEYWORDS) {
-      result.addAllElements(ShapeStyles.fromKeyword(key.text)?.completionElements ?: return)
-    } else if (key.textMatches("direction")) {
-      result.addAllElements(directions)
+    val keyElementType = key.elementType
+    when (keyElementType) {
+      D2ElementTypes.STYLE_KEYWORDS -> {
+        result.addAllElements(ShapeStyles.fromKeyword(key.text)?.completionElements ?: return)
+      }
+      D2ElementTypes.SIMPLE_RESERVED_KEYWORDS -> {
+        if (key.textMatches("shape")) {
+          result.addAllElements(shapes)
+        }
+      }
+      D2ElementTypes.CONTAINER_LESS_KEYWORDS -> {
+        if (key.textMatches("direction")) {
+          result.addAllElements(directions)
+        }
+      }
     }
   }
 }

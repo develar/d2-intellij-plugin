@@ -9,7 +9,7 @@ import org.jetbrains.plugins.d2.lang.D2ElementTypes
 private val textShapeOnly = arrayOf(Shapes.TEXT)
 
 // https://github.com/terrastruct/d2/blob/eb55a49559fe933b3846094d8af01496ed55d037/d2graph/d2graph.go#L1061-L1087
-enum class ShapeStyles(
+internal enum class ShapeStyles(
   val keyword: String,
   val forShapes: Array<Shapes>,
   val validator: StyleValidator,

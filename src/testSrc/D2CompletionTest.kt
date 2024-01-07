@@ -5,6 +5,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.plugins.d2.completion.directions
+import org.jetbrains.plugins.d2.completion.shapes
 import org.jetbrains.plugins.d2.completion.varsAndClasses
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -149,38 +150,28 @@ class D2CompletionTest : D2LightCodeInsightFixtureTestCase() {
 
   @Test
   fun `style sub properties without value`() {
-    fixture.configureByText(
-      "test.d2",
-      """
-        logs.style.<caret>
-      """
-    )
-    fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).hasSameElementsAs(allShapeStyleKeywords())
+    assertThat(complete("logs.style.<caret>")).hasSameElementsAs(allShapeStyleKeywords())
   }
 
   @Test
   fun `style font`() {
-    fixture.configureByText(
-      "test.d2",
-      """
-        logs.style.font: <caret>
-      """
-    )
-    fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).hasSameElementsAs(listOf("mono"))
+    assertThat(complete("logs.style.font: <caret>")).hasSameElementsAs(listOf("mono"))
   }
 
   @Test
   fun `style font with valid prefix`() {
-    fixture.configureByText(
-      "test.d2",
-      """
-        logs.style.font: mo<caret>
-      """
-    )
+    assertThat(complete("logs.style.font: mo<caret>")).isNull()
+  }
+
+  @Test
+  fun shape() {
+    assertThat(complete("user: User {shape: <caret>}")).hasSameElementsAs(shapes.map { it.lookupString })
+  }
+
+  private fun complete(content: String): List<String>? {
+    fixture.configureByText("test.d2", content)
     fixture.complete(CompletionType.BASIC)
-    assertThat(fixture.lookupElementStrings).isNull()
+    return fixture.lookupElementStrings
   }
 }
 

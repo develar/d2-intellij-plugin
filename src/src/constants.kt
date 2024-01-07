@@ -31,7 +31,8 @@ internal val KEYWORD_HOLDERS = arrayOf(
   "target-arrowhead",
 )
 
-enum class Shapes(val value: String) {
+// https://d2lang.com/tour/shapes/
+internal enum class Shapes(@JvmField val value: String) {
   RECTANGLE("rectangle"),
   SQUARE("square"),
   PAGE("page"),
@@ -55,8 +56,6 @@ enum class Shapes(val value: String) {
   SQL_TABLE("sql_table"),
   IMAGE("image"),
   ;
-
-  val prettyName = value.replace("_", " ")
 }
 
 internal val ARROWHEADS = arrayOf(
