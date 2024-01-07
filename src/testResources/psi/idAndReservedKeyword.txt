@@ -1,6 +1,7 @@
 D2 File
-  ShapeId(SHAPE_ID)
-    PsiElement(ID)('logs')
+  ShapeRef
+    ShapeId
+      PsiElement(ID)('logs')
   PsiElement(DOT)('.')
   ShapeProperty
     ShapePropertyKey

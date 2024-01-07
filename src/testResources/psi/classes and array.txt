@@ -72,8 +72,9 @@ D2 File
     PsiWhiteSpace('\n')
     PsiElement(RBRACE)('}')
   PsiWhiteSpace('\n\n')
-  ShapeId(SHAPE_ID)
-    PsiElement(ID)('logo')
+  ShapeRef
+    ShapeId
+      PsiElement(ID)('logo')
   PsiElement(DOT)('.')
   ShapeProperty
     ShapePropertyKey

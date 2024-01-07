@@ -9,14 +9,13 @@ import com.intellij.openapi.util.Key
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.util.elementType
+import com.intellij.psi.util.parentOfType
 import com.intellij.psi.util.siblings
 import org.jetbrains.annotations.VisibleForTesting
 import org.jetbrains.plugins.d2.*
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
-import org.jetbrains.plugins.d2.lang.psi.BlockDefinition
-import org.jetbrains.plugins.d2.lang.psi.Connector
+import org.jetbrains.plugins.d2.lang.psi.*
 import org.jetbrains.plugins.d2.lang.psi.ShapeId
-import org.jetbrains.plugins.d2.lang.psi.ShapePropertyKey
 
 private val keywords = (SIMPLE_RESERVED_KEYWORDS + KEYWORD_HOLDERS).map {
   val builder = LookupElementBuilder.create(it)
@@ -125,10 +124,13 @@ private class D2BasicCompletionContributor : CompletionContributor() {
       result.addAllElements(connections)
     } else {
       // reserved keywords are prohibited in edges
-      if (parent.siblings(withSelf = false).none(::notConnectorOrArrow) &&
-        parent.siblings(withSelf = false, forward = false).none(::notConnectorOrArrow)
-      ) {
-        val inMap = parent.context is BlockDefinition
+      val shapeRef = position.parentOfType<ShapeRef>()
+      if (shapeRef != null && isInEdge(shapeRef)) {
+        return
+      }
+
+      if (!isInEdge(parent)) {
+        val inMap = (shapeRef ?: parent).context is BlockDefinition
         result.addAllElements(keywords)
         if (!inMap) {
           // classes and vars only in a file context
@@ -137,6 +139,11 @@ private class D2BasicCompletionContributor : CompletionContributor() {
       }
     }
   }
+}
+
+private fun isInEdge(parent: PsiElement): Boolean {
+  return parent.siblings(withSelf = false).any(::isConnectorOrArrow) ||
+    parent.siblings(withSelf = false, forward = false).any(::isConnectorOrArrow)
 }
 
 private fun styleOrPropertyValueCompletion(position: PsiElement, parent: PsiElement?, result: CompletionResultSet) {
@@ -186,4 +193,4 @@ private fun styleOrPropertyValueCompletion(position: PsiElement, parent: PsiElem
   }
 }
 
-private fun notConnectorOrArrow(it: PsiElement) = it is Connector || it.elementType == D2ElementTypes.ARROW
+private fun isConnectorOrArrow(it: PsiElement) = it is Connector || it.elementType == D2ElementTypes.ARROW

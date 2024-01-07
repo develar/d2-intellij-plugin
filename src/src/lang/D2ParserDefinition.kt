@@ -38,6 +38,8 @@ class D2ParserDefinition : ParserDefinition {
 
       SHAPE_DECLARATION -> ShapeDeclaration(node)
       SHAPE_CONNECTION -> ShapeConnection(node)
+      SHAPE_REF -> ShapeRef(node)
+      PARENT_SHAPE_REF_PSI -> ParentShapeRef(node)
 
       SHAPE_ID -> ShapeId(node)
 

@@ -14,11 +14,13 @@ public interface D2ElementTypes {
   IElementType ID_PROPERTY_KEY = D2ElementTypeFactory.element("ID_PROPERTY_KEY");
   IElementType ID_PROPERTY_MAP = D2ElementTypeFactory.element("ID_PROPERTY_MAP");
   IElementType OTHER_VALUE = D2ElementTypeFactory.element("OTHER_VALUE");
+  IElementType PARENT_SHAPE_REF_PSI = D2ElementTypeFactory.element("PARENT_SHAPE_REF_PSI");
   IElementType SHAPE_CONNECTION = D2ElementTypeFactory.element("SHAPE_CONNECTION");
   IElementType SHAPE_DECLARATION = D2ElementTypeFactory.element("SHAPE_DECLARATION");
   IElementType SHAPE_ID = D2ElementTypeFactory.element("SHAPE_ID");
   IElementType SHAPE_PROPERTY = D2ElementTypeFactory.element("SHAPE_PROPERTY");
   IElementType SHAPE_PROPERTY_KEY = D2ElementTypeFactory.element("SHAPE_PROPERTY_KEY");
+  IElementType SHAPE_REF = D2ElementTypeFactory.element("SHAPE_REF");
   IElementType STRING_VALUE = D2ElementTypeFactory.element("STRING_VALUE");
   IElementType SUB_ID_PROPERTY_MAP = D2ElementTypeFactory.element("SUB_ID_PROPERTY_MAP");
   IElementType UNQUOTED_STRING_VALUE = D2ElementTypeFactory.element("UNQUOTED_STRING_VALUE");
@@ -42,6 +44,7 @@ public interface D2ElementTypes {
   IElementType INT = D2ElementTypeFactory.token("INT");
   IElementType LBRACE = D2ElementTypeFactory.token("LBRACE");
   IElementType LBRACKET = D2ElementTypeFactory.token("LBRACKET");
+  IElementType PARENT_SHAPE_REF = D2ElementTypeFactory.token("PARENT_SHAPE_REF");
   IElementType RBRACE = D2ElementTypeFactory.token("RBRACE");
   IElementType RBRACKET = D2ElementTypeFactory.token("RBRACKET");
   IElementType RESERVED_KEYWORD_HOLDERS = D2ElementTypeFactory.token("RESERVED_KEYWORD_HOLDERS");

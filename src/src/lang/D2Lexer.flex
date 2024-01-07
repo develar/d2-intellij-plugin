@@ -100,6 +100,7 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 		{StyleKeywords} { yybegin(PROPERTY_VALUE_BEGIN_STATE); return STYLE_KEYWORDS; }
 		{ContainerLessKeywords} { yybegin(PROPERTY_VALUE_BEGIN_STATE); return CONTAINER_LESS_KEYWORDS; }
 
+  "_" { return PARENT_SHAPE_REF; }
   {Id} { return ID; }
 
   {String} { return STRING; }

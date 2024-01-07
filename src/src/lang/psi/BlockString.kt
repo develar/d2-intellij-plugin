@@ -4,4 +4,4 @@ package org.jetbrains.plugins.d2.lang.psi
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 
-class BlockString(node: ASTNode) : ASTWrapperPsiElement(node)
+class BlockString(node: ASTNode) : AstWrapperPsiElement(node)

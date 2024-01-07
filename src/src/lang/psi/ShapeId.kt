@@ -1,18 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package org.jetbrains.plugins.d2.lang.psi
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFileFactory
-import com.intellij.psi.PsiNamedElement
-import com.intellij.psi.PsiReference
+import com.intellij.psi.*
 import com.intellij.psi.util.descendantsOfType
 import com.intellij.psi.util.elementType
+import com.intellij.psi.util.parentOfType
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
 
-internal class ShapeDeclaration(node: ASTNode) : ASTWrapperPsiElement(node) {
+internal class ShapeDeclaration(node: ASTNode) : AstWrapperPsiElement(node) {
   fun findId(): ShapeId? {
     var child: PsiElement? = firstChild
     var id: ShapeId? = null
@@ -30,7 +27,7 @@ internal class ShapeDeclaration(node: ASTNode) : ASTWrapperPsiElement(node) {
   }
 }
 
-internal class ShapeId(node: ASTNode) : ASTWrapperPsiElement(node), PsiNamedElement {
+internal class ShapeId(node: ASTNode) : AstWrapperPsiElement(node), PsiNamedElement {
   fun getValueTextRange(): TextRange {
     val child = firstChild
     val textLength = child.textLength
@@ -63,15 +60,14 @@ internal class ShapeId(node: ASTNode) : ASTWrapperPsiElement(node), PsiNamedElem
   }
 
   override fun getReference(): PsiReference? {
-    if (parent is ShapeDeclaration) {
-      return null
-    }
-    return ShapePsiReference(this)
+    return if (parent is ShapeRef) ShapePsiReference(this) else null
   }
 }
 
-class ShapeConnection(node: ASTNode) : ASTWrapperPsiElement(node)
+class ShapeConnection(node: ASTNode) : AstWrapperPsiElement(node)
 
-class Connector(node: ASTNode) : ASTWrapperPsiElement(node)
+class ShapeRef(node: ASTNode) : AstWrapperPsiElement(node)
 
-class BlockDefinition(node: ASTNode) : ASTWrapperPsiElement(node)
+class Connector(node: ASTNode) : AstWrapperPsiElement(node)
+
+class BlockDefinition(node: ASTNode) : AstWrapperPsiElement(node)

@@ -1,6 +1,6 @@
 D2 File
-  ShapeDeclaration(SHAPE_DECLARATION)
-    ShapeId(SHAPE_ID)
+  ShapeDeclaration
+    ShapeId
       PsiElement(ID)('s')
     PsiElement(COLON)(':')
     PsiWhiteSpace(' ')

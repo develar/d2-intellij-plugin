@@ -28,15 +28,17 @@ BlockDefinition ::= LBRACE ContainerContent* RBRACE {
 }
 
 private ShapeIdChain ::= ShapeId (DOT ShapeId)*
+ParentShapeRefPsi ::= PARENT_SHAPE_REF
+ShapeRef ::= (ParentShapeRefPsi DOT)? ShapeIdChain
 
 // declaration means `id + label` (not implicit shape via just ID)
 ShapeDeclaration ::= ShapeIdChain COLON (ShapeLabel | BlockString)? BlockDefinition?
 
-ShapeConnection ::= ShapeIdChain (Connector ShapeId (DOT ShapeId)*)+ (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
+ShapeConnection ::= ShapeRef (Connector ShapeRef)+ (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
 Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
 // logs.style.strokes: "#f4a261"
-private ShapeIdWithProperty ::= (ShapeIdChain DOT)? ShapeProperty
+private ShapeIdWithProperty ::= (ShapeRef DOT)? ShapeProperty
 
 ShapeId ::= ID | STRING
 

@@ -35,7 +35,7 @@ class ColorValue(node: ASTNode) : AstWrapperPsiElement(node), PropertyValue, Col
 
 // toString doesn't print node element type
 sealed class AstWrapperPsiElement(private val node: ASTNode) : ASTDelegatePsiElement() {
-  override fun getParent(): PsiElement = SharedImplUtil.getParent(node)
+  override fun getParent(): PsiElement? = SharedImplUtil.getParent(node)
 
   override fun getNode(): ASTNode = node
 

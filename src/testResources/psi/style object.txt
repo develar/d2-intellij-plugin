@@ -1,16 +1,18 @@
 D2 File
-  ShapeConnection(SHAPE_CONNECTION)
-    ShapeId(SHAPE_ID)
-      PsiElement(ID)('x')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
     PsiWhiteSpace(' ')
-    Connector(CONNECTOR)
+    Connector
       PsiElement(ARROW)('->')
     PsiWhiteSpace(' ')
-    ShapeId(SHAPE_ID)
-      PsiElement(ID)('y')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
     PsiElement(COLON)(':')
     PsiWhiteSpace(' ')
-    BlockDefinition(BLOCK_DEFINITION)
+    BlockDefinition
       PsiElement(LBRACE)('{')
       PsiWhiteSpace('\n  ')
       IdPropertyMap
@@ -32,8 +34,9 @@ D2 File
       PsiWhiteSpace('\n')
       PsiElement(RBRACE)('}')
   PsiWhiteSpace('\n')
-  ShapeId(SHAPE_ID)
-    PsiElement(ID)('x')
+  ShapeRef
+    ShapeId
+      PsiElement(ID)('x')
   PsiElement(DOT)('.')
   ShapeProperty
     ShapePropertyKey
