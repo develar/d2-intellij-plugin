@@ -11,7 +11,7 @@
 ## [0.0.2-eap] - 2022-12-13
 
 ### Added
-- Completion contributor
+- Completion contributor (#2)
 - Formatter
 
 ## [0.0.1-eap]
