@@ -38,6 +38,7 @@ class D2SyntaxHighlighter : SyntaxHighlighterBase() {
       fillMap(this, D2TokenSets.NUMBERS, NUMBERS)
 
       put(D2ElementTypes.ID, SHAPE_IDS)
+      put(D2ElementTypes.PARENT_SHAPE_REF, SHAPE_IDS)
 
       put(D2ElementTypes.COMMENT, COMMENT)
 
