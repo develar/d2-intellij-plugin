@@ -1,0 +1,49 @@
+D2 File
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      PsiWhiteSpace('\n  ')
+      IdPropertyMap
+        PsiElement(STYLE_KEYWORD)('style')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        PsiElement(LBRACE)('{')
+        PsiWhiteSpace('\n    ')
+        ASTWrapperPsiElement(ID_PROPERTY)
+          ASTWrapperPsiElement(ID_PROPERTY_KEY)
+            PsiElement(STYLE_KEYWORDS)('stroke-dash')
+          PsiElement(COLON)(':')
+          PsiWhiteSpace(' ')
+          OtherValue
+            PsiElement(INT)('10')
+        PsiWhiteSpace('\n')
+        PsiWhiteSpace('  ')
+        PsiElement(RBRACE)('}')
+      PsiWhiteSpace('\n')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n')
+  ShapeRef
+    ShapeId
+      PsiElement(ID)('x')
+  PsiElement(DOT)('.')
+  ShapeProperty
+    ShapePropertyKey
+      PsiElement(STYLE_KEYWORD)('style')
+      PsiElement(DOT)('.')
+      PsiElement(STYLE_KEYWORDS)('stroke-dash')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    OtherValue
+      PsiElement(INT)('3')

@@ -1,0 +1,3 @@
+D2 File
+  ShapeId
+    PsiElement(ID)('s')

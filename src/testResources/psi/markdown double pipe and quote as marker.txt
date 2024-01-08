@@ -1,0 +1,14 @@
+D2 File
+  PsiComment(COMMENT)('# Much cleaner!')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('my_code')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    BlockString
+      PsiElement(BLOCK_STRING_OPEN)('|`')
+      PsiElement(BLOCK_STRING_LANG)('ts')
+      PsiElement(BLOCK_STRING_BODY)
+        PsiPlainText('\n  declare function getSmallPet(): Fish | Bird;\n  const works = (a > 1) || (b < 2)\n')
+      PsiElement(BLOCK_STRING_CLOSE)('`|')

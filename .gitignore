@@ -2,3 +2,5 @@
 .idea
 .qodana
 build
+/src/gen/org/jetbrains/plugins/d2/lang/idea-flex.skeleton
+/src/gen/org/jetbrains/plugins/d2/lang/jflex-1.9.*.jar

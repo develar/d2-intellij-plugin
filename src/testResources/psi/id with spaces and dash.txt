@@ -1,0 +1,12 @@
+D2 File
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('logs-foo bar - dash')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('logs')

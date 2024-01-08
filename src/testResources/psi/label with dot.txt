@@ -1,0 +1,7 @@
+D2 File
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('s')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('1.2')

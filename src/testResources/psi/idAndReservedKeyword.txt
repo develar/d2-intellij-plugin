@@ -1,0 +1,14 @@
+D2 File
+  ShapeRef
+    ShapeId
+      PsiElement(ID)('logs')
+  PsiElement(DOT)('.')
+  ShapeProperty
+    ShapePropertyKey
+      PsiElement(STYLE_KEYWORD)('style')
+      PsiElement(DOT)('.')
+      PsiElement(STYLE_KEYWORDS)('stroke')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    ColorValue
+      PsiElement(COLOR)('"#694024"')

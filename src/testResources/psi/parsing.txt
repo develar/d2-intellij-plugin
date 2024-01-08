@@ -1,0 +1,423 @@
+D2 File
+  PsiComment(COMMENT)('# comments are supported')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('logs')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      PsiWhiteSpace('\n  ')
+      PsiComment(COMMENT)('# proper highlighting of special keywords as "fields" (like a JSON),')
+      PsiWhiteSpace('\n  ')
+      PsiComment(COMMENT)('# and unquoted string literal for values as string,')
+      PsiWhiteSpace('\n  ')
+      ShapeProperty
+        ShapePropertyKey
+          PsiElement(SIMPLE_RESERVED_KEYWORDS)('shape')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        UnquotedStringValue
+          PsiElement(UNQUOTED_STRING)('page')
+      PsiWhiteSpace('\n\n')
+      PsiWhiteSpace('  ')
+      PsiComment(COMMENT)('# still boolean or int literals is properly highlighted')
+      PsiWhiteSpace('\n  ')
+      ShapeProperty
+        ShapePropertyKey
+          PsiElement(STYLE_KEYWORD)('style')
+          PsiElement(DOT)('.')
+          PsiElement(STYLE_KEYWORDS)('multiple')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        OtherValue
+          PsiElement(TRUE)('true')
+      PsiWhiteSpace('\n')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n\n')
+  PsiComment(COMMENT)('# shape id with space is supported')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('logs foo bar')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('logs')
+  PsiWhiteSpace('\n\n')
+  PsiComment(COMMENT)('# color on a gutter is supported, including changing;')
+  PsiWhiteSpace('\n')
+  PsiComment(COMMENT)('# proper highlighting of special keywords works also for inline form')
+  PsiWhiteSpace('\n')
+  ShapeRef
+    ShapeId
+      PsiElement(ID)('logs')
+  PsiElement(DOT)('.')
+  ShapeProperty
+    ShapePropertyKey
+      PsiElement(STYLE_KEYWORD)('style')
+      PsiElement(DOT)('.')
+      PsiElement(STYLE_KEYWORDS)('stroke')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    ColorValue
+      PsiElement(COLOR)('"#694024"')
+  PsiWhiteSpace('\n\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('user')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('User')
+    PsiWhiteSpace(' ')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      ShapeProperty
+        ShapePropertyKey
+          PsiElement(SIMPLE_RESERVED_KEYWORDS)('shape')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        UnquotedStringValue
+          PsiElement(UNQUOTED_STRING)('person')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('network')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('Network')
+    PsiWhiteSpace(' ')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      PsiWhiteSpace('\n  ')
+      ShapeDeclaration
+        ShapeId
+          PsiElement(ID)('tower')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        PsiElement(UNQUOTED_STRING)('Cell Tower')
+        PsiWhiteSpace(' ')
+        BlockDefinition
+          PsiElement(LBRACE)('{')
+          PsiWhiteSpace('\n    ')
+          ShapeDeclaration
+            ShapeId
+              PsiElement(ID)('satellites')
+            PsiElement(COLON)(':')
+            PsiWhiteSpace(' ')
+            BlockDefinition
+              PsiElement(LBRACE)('{')
+              PsiWhiteSpace('\n      ')
+              ShapeProperty
+                ShapePropertyKey
+                  PsiElement(SIMPLE_RESERVED_KEYWORDS)('shape')
+                PsiElement(COLON)(':')
+                PsiWhiteSpace(' ')
+                UnquotedStringValue
+                  PsiElement(UNQUOTED_STRING)('stored_data')
+              PsiWhiteSpace('\n')
+              PsiWhiteSpace('      ')
+              ShapeProperty
+                ShapePropertyKey
+                  PsiElement(STYLE_KEYWORD)('style')
+                  PsiElement(DOT)('.')
+                  PsiElement(STYLE_KEYWORDS)('multiple')
+                PsiElement(COLON)(':')
+                PsiWhiteSpace(' ')
+                OtherValue
+                  PsiElement(TRUE)('true')
+              PsiWhiteSpace('\n')
+              PsiWhiteSpace('    ')
+              PsiElement(RBRACE)('}')
+          PsiWhiteSpace('\n\n    ')
+          ShapeConnection
+            ShapeRef
+              ShapeId
+                PsiElement(ID)('satellites')
+            PsiWhiteSpace(' ')
+            Connector
+              PsiElement(ARROW)('->')
+            PsiWhiteSpace(' ')
+            ShapeRef
+              ShapeId
+                PsiElement(ID)('transmitter')
+          PsiWhiteSpace('\n    ')
+          ShapeConnection
+            ShapeRef
+              ShapeId
+                PsiElement(ID)('satellites')
+            PsiWhiteSpace(' ')
+            Connector
+              PsiElement(ARROW)('->')
+            PsiWhiteSpace(' ')
+            ShapeRef
+              ShapeId
+                PsiElement(ID)('transmitter')
+          PsiWhiteSpace('\n    ')
+          ShapeConnection
+            ShapeRef
+              ShapeId
+                PsiElement(ID)('satellites')
+            PsiWhiteSpace(' ')
+            Connector
+              PsiElement(ARROW)('->')
+            PsiWhiteSpace(' ')
+            ShapeRef
+              ShapeId
+                PsiElement(ID)('transmitter')
+          PsiWhiteSpace('\n    ')
+          ShapeId
+            PsiElement(ID)('transmitter')
+          PsiWhiteSpace('\n  ')
+          PsiElement(RBRACE)('}')
+      PsiWhiteSpace('\n  ')
+      ShapeDeclaration
+        ShapeId
+          PsiElement(ID)('processor')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        PsiElement(UNQUOTED_STRING)('Data Processor')
+        PsiWhiteSpace(' ')
+        BlockDefinition
+          PsiElement(LBRACE)('{')
+          PsiWhiteSpace('\n    ')
+          ShapeDeclaration
+            ShapeId
+              PsiElement(ID)('storage')
+            PsiElement(COLON)(':')
+            PsiWhiteSpace(' ')
+            PsiElement(UNQUOTED_STRING)('Storage')
+            PsiWhiteSpace(' ')
+            BlockDefinition
+              PsiElement(LBRACE)('{')
+              PsiWhiteSpace('\n      ')
+              ShapeProperty
+                ShapePropertyKey
+                  PsiElement(SIMPLE_RESERVED_KEYWORDS)('shape')
+                PsiElement(COLON)(':')
+                PsiWhiteSpace(' ')
+                UnquotedStringValue
+                  PsiElement(UNQUOTED_STRING)('cylinder')
+              PsiWhiteSpace('\n')
+              PsiWhiteSpace('      ')
+              ShapeProperty
+                ShapePropertyKey
+                  PsiElement(STYLE_KEYWORD)('style')
+                  PsiElement(DOT)('.')
+                  PsiElement(STYLE_KEYWORDS)('multiple')
+                PsiElement(COLON)(':')
+                PsiWhiteSpace(' ')
+                OtherValue
+                  PsiElement(TRUE)('true')
+              PsiWhiteSpace('\n')
+              PsiWhiteSpace('    ')
+              PsiElement(RBRACE)('}')
+          PsiWhiteSpace('\n  ')
+          PsiElement(RBRACE)('}')
+      PsiWhiteSpace('\n  ')
+      ShapeDeclaration
+        ShapeId
+          PsiElement(ID)('portal')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        PsiElement(UNQUOTED_STRING)('Online Portal')
+        PsiWhiteSpace(' ')
+        BlockDefinition
+          PsiElement(LBRACE)('{')
+          PsiWhiteSpace('\n    ')
+          ShapeId
+            PsiElement(ID)('UI')
+          PsiWhiteSpace('\n  ')
+          PsiElement(RBRACE)('}')
+      PsiWhiteSpace('\n\n  ')
+      ShapeConnection
+        ShapeRef
+          ShapeId
+            PsiElement(ID)('tower')
+          PsiElement(DOT)('.')
+          ShapeId
+            PsiElement(ID)('transmitter')
+        PsiWhiteSpace(' ')
+        Connector
+          PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        ShapeRef
+          ShapeId
+            PsiElement(ID)('processor')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        PsiElement(UNQUOTED_STRING)('phone logs')
+      PsiWhiteSpace('\n')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('server')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('API Server')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('user')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('network')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('tower')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('Make call')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('network')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('processor')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('server')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('network')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('processor')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('server')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('network')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('processor')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('server')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('server')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('logs')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('server')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('logs')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('server')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('logs')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('persist')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('server')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('network')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('portal')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('UI')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('display')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('user')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('network')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('portal')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('UI')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('access')
+    PsiWhiteSpace(' ')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      PsiWhiteSpace('\n  ')
+      ShapeProperty
+        ShapePropertyKey
+          PsiElement(STYLE_KEYWORD)('style')
+          PsiElement(DOT)('.')
+          PsiElement(STYLE_KEYWORDS)('stroke-dash')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        OtherValue
+          PsiElement(INT)('3')
+      PsiWhiteSpace('\n')
+      PsiElement(RBRACE)('}')
