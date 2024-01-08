@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2024-01-08
+
 ### Added
 - Resolving of ambiguous shape references (shapes with the same names but declared in different containers).
 - Support [parent reference](https://d2lang.com/tour/containers#reference-parent).
