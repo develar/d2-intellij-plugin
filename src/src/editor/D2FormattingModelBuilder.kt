@@ -116,19 +116,23 @@ private class D2Block(
   override fun isIncomplete(): Boolean {
     val lastChildNode = node.lastChildNode
     val elementType = node.elementType
-    if (elementType == D2ElementTypes.BLOCK_DEFINITION) {
-      return lastChildNode != null && lastChildNode.elementType !== D2ElementTypes.RBRACE
-    } else if (elementType == D2ElementTypes.SHAPE_PROPERTY) {
-      var child: ASTNode? = node.firstChildNode
-      while (child != null) {
-        if (D2TokenSets.PROPERTY_VALUE.contains(child.elementType)) {
-          return false
-        }
-        child = child.treeNext
+    when (elementType) {
+      D2ElementTypes.BLOCK_DEFINITION -> {
+        return lastChildNode != null && lastChildNode.elementType !== D2ElementTypes.RBRACE
       }
-      return true
-    } else {
-      return false
+      D2ElementTypes.SHAPE_PROPERTY -> {
+        var child: ASTNode? = node.firstChildNode
+        while (child != null) {
+          if (D2TokenSets.PROPERTY_VALUE.contains(child.elementType)) {
+            return false
+          }
+          child = child.treeNext
+        }
+        return true
+      }
+      else -> {
+        return false
+      }
     }
   }
 

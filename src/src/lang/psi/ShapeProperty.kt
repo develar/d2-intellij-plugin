@@ -1,7 +1,6 @@
 package org.jetbrains.plugins.d2.lang.psi
 
 import com.intellij.extapi.psi.ASTDelegatePsiElement
-import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.SharedImplUtil

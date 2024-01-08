@@ -6,7 +6,6 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.util.descendantsOfType
 import com.intellij.psi.util.elementType
-import com.intellij.psi.util.parentOfType
 import org.jetbrains.plugins.d2.lang.D2ElementTypes
 
 internal class ShapeDeclaration(node: ASTNode) : AstWrapperPsiElement(node) {
