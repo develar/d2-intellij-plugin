@@ -17,7 +17,7 @@ import org.intellij.plugins.markdown.lang.MarkdownLanguage
 import org.intellij.plugins.markdown.lang.parser.MarkdownParserAdapter
 import org.intellij.plugins.markdown.lang.parser.MarkdownParserManager
 
-private val gfmFlavourDescriptor = GFMFlavourDescriptor()
+private val gfmFlavourDescriptor = I_hate_our_tools()
 
 internal class BlockStringElementType(name: String) : ILazyParseableElementType(name, D2Language) {
   override fun parseContents(chameleon: ASTNode): ASTNode {
