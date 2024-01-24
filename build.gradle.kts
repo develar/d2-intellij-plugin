@@ -45,7 +45,7 @@ repositories {
 dependencies {
   @Suppress("SpellCheckingInspection")
   testImplementation("org.opentest4j:opentest4j:1.3.0")
-  testImplementation("org.assertj:assertj-core:3.25.1")
+  testImplementation("org.assertj:assertj-core:3.25.2")
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
