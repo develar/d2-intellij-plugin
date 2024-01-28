@@ -51,10 +51,16 @@ bold | italic | underline | text-transform | shadow | multiple | double-border |
 // reservedKeywordHolders are reserved keywords that are meaningless on its own and must hold composites
 ReservedKeywordHolders = source-arrowhead | target-arrowhead
 
-ARROW=-+>
-REVERSE_ARROW=<-+
-DOUBLE_HYPHEN_ARROW=--+
-DOUBLE_ARROW=<-+>
+Continuation=\\\n
+Space=[ \t\f]
+SpaceContinuationNewLine=(\s|{Continuation})
+SpaceContinuation=({Space}|{Continuation})
+ContinuationClosure={Continuation}{SpaceContinuation}*
+ARROW=-(-|{ContinuationClosure})*>
+REVERSE_ARROW=<(-|{ContinuationClosure})*-
+DOUBLE_HYPHEN_ARROW=-(-|{ContinuationClosure})*-
+DOUBLE_ARROW=<{ContinuationClosure}*-(-|{ContinuationClosure})*>
+
 Comment=#.*
 BlockComment = "\"\"\""~"\"\"\""
 Int=[0-9]+
@@ -66,10 +72,18 @@ BlockStringStart=\|+[^a-zA-Z0-9\s_|]*
 String='([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\'|\\)*\"
 Color=\"#(([a-fA-F0-9]{2}){3}|([a-fA-F0-9]){3})\"
 
-// exclude `-`, `<` and `>` also - to not match connector (`-` is allowed only if surrounded by other symbols)
-IdFragment=[^\s{}|:;.<>-]+
-Id={IdFragment}([ \t-]+{IdFragment})*
-WhiteSpace=\s+
+EscapeSequence=\\.
+ValueSymbol=[^\s;{}\[\]#]
+
+IdSymbol=[[^:.<>&\\-]&&{ValueSymbol}]
+IdDashSubstring=-{SpaceContinuation}*([{IdSymbol}&&[^->*]]|{EscapeSequence})
+AllowedInId=({IdSymbol}|{EscapeSequence}|{IdDashSubstring})
+IdBody={AllowedInId}*({SpaceContinuation}+{AllowedInId}+)*
+ExclamationId=(\!({SpaceContinuation}*([[^&]&&{IdSymbol}]|{EscapeSequence}|{IdDashSubstring}){IdBody})?)
+AllowedFirstInId=([{IdSymbol}&&[^|!('\"$@]]|{EscapeSequence}|{IdDashSubstring})
+RegularId={AllowedFirstInId}{IdBody}
+Id=({RegularId}|{ExclamationId})
+WhiteSpace={SpaceContinuationNewLine}+
 
 LBrace="{"
 RBrace="}"

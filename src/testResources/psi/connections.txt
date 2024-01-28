@@ -1,0 +1,204 @@
+D2 File
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('--')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('---')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('-->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(REVERSE_ARROW)('<-')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(REVERSE_ARROW)('<--')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_ARROW)('<->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('x')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_ARROW)('<-->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('y')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id here')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('--\\n    >')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id even longer here')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id here')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('--\\n    ->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id even longer here')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id here')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('--\\n    -')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id even longer here')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id here')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(REVERSE_ARROW)('<-\\n    -')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id even longer here')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id here')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_ARROW)('<-\\n    ->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('super long shape id even longer here')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('broken multiple times')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('--\\n    -\\n    \\n    \\n    >')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('broken multiple times target')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('broken multiple times')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('--\\n    -\\n    \\n    \\n    -')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('broken multiple times target')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('broken multiple times')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(REVERSE_ARROW)('<-\\n    -\\n    \\n    \\n    -')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('broken multiple times target')
+  PsiWhiteSpace('\n\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('broken multiple times')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_ARROW)('<-\\n    -\\n    \\n    \\n    >')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('broken multiple times target')

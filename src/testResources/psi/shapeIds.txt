@@ -1,0 +1,70 @@
+D2 File
+  ShapeId
+    PsiElement(ID)('imAShape')
+  PsiWhiteSpace('\n')
+  ShapeId
+    PsiElement(ID)('im_a_shape')
+  PsiWhiteSpace('\n')
+  ShapeId
+    PsiElement(ID)('im a shape')
+  PsiWhiteSpace('\n')
+  ShapeId
+    PsiElement(ID)('i'm a shape')
+  PsiWhiteSpace('\n\n')
+  ShapeId
+    PsiElement(ID)('i'm \\nanother \\nshape')
+  PsiWhiteSpace('\n\n')
+  PsiComment(COMMENT)('# notice that one-hyphen is not a connection')
+  PsiWhiteSpace('\n')
+  PsiComment(COMMENT)('# whereas, `a--shape` would be a connection')
+  PsiWhiteSpace('\n')
+  ShapeId
+    PsiElement(ID)('a-shape')
+  PsiWhiteSpace('\n')
+  ShapeId
+    PsiElement(ID)('SQLite')
+  PsiElement(SEMICOLON)(';')
+  PsiWhiteSpace(' ')
+  ShapeId
+    PsiElement(ID)('Cassandra')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('pg')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('PostgreSQL')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('Cloud')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('my cloud')
+  PsiWhiteSpace('\n')
+  ShapeRef
+    ShapeId
+      PsiElement(ID)('Cloud')
+  PsiElement(DOT)('.')
+  ShapeProperty
+    ShapePropertyKey
+      PsiElement(SIMPLE_RESERVED_KEYWORDS)('shape')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    UnquotedStringValue
+      PsiElement(UNQUOTED_STRING)('cloud')
+  PsiWhiteSpace('\n')
+  ShapeId
+    PsiElement(ID)('a - a')
+  PsiWhiteSpace('\n')
+  ShapeId
+    PsiElement(ID)('b -\\nb')
+  PsiWhiteSpace('\n')
+  ShapeId
+    PsiElement(ID)('c - \\nc')
+  PsiWhiteSpace('\n')
+  ShapeId
+    PsiElement(ID)('- dash')
+  PsiWhiteSpace('\n\\n')
+  ShapeId
+    PsiElement(ID)('doesn't start with escape')
