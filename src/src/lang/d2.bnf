@@ -40,7 +40,7 @@ Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 // logs.style.strokes: "#f4a261"
 private ShapeIdWithProperty ::= (ShapeRef DOT)? ShapeProperty
 
-ShapeId ::= ID | STRING
+ShapeId ::= BlockString | ID | STRING
 
 private ShapeLabel ::= UNQUOTED_STRING | STRING
 

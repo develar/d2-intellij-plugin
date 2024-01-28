@@ -1,0 +1,69 @@
+D2 File
+  ShapeId
+    BlockString
+      PsiElement(BLOCK_STRING_OPEN)('|')
+      PsiElement(BLOCK_STRING_BODY)
+        PsiElement(BLOCK_STRING_BODY)
+          PsiWhiteSpace(' ')
+      PsiElement(BLOCK_STRING_CLOSE)('|')
+  PsiWhiteSpace('\n')
+  ShapeId
+    BlockString
+      PsiElement(BLOCK_STRING_OPEN)('|')
+      PsiElement(BLOCK_STRING_BODY)
+        PsiElement(BLOCK_STRING_BODY)
+          PsiWhiteSpace('\n')
+      PsiElement(BLOCK_STRING_CLOSE)('|')
+  PsiWhiteSpace('\n')
+  ShapeId
+    BlockString
+      PsiElement(BLOCK_STRING_OPEN)('|')
+      PsiElement(BLOCK_STRING_LANG)('go')
+      PsiElement(BLOCK_STRING_BODY)
+        PsiPlainText('\n    func main() {\n    }\n')
+      PsiElement(BLOCK_STRING_CLOSE)('|')
+  PsiWhiteSpace('\n')
+  ShapeId
+    BlockString
+      PsiElement(BLOCK_STRING_OPEN)('|`')
+      PsiElement(BLOCK_STRING_LANG)('go')
+      PsiElement(BLOCK_STRING_BODY)
+        PsiPlainText('\n    func main() {\n        a | b || c ||| d\n    }\n')
+      PsiElement(BLOCK_STRING_CLOSE)('`|')
+  PsiWhiteSpace('\n')
+  ShapeId
+    BlockString
+      PsiElement(BLOCK_STRING_OPEN)('||')
+      PsiElement(BLOCK_STRING_LANG)('go')
+      PsiElement(BLOCK_STRING_BODY)
+        PsiPlainText('\n    func main() {\n        a | b | c\n    }\n')
+      PsiElement(BLOCK_STRING_CLOSE)('||')
+  PsiWhiteSpace('\n')
+  ShapeId
+    BlockString
+      PsiElement(BLOCK_STRING_OPEN)('|||')
+      PsiElement(BLOCK_STRING_LANG)('go')
+      PsiElement(BLOCK_STRING_BODY)
+        PsiPlainText('\n    func main() {\n        a | b || c\n    }\n')
+      PsiElement(BLOCK_STRING_CLOSE)('|||')
+  PsiWhiteSpace('\n')
+  ShapeId
+    BlockString
+      PsiElement(BLOCK_STRING_OPEN)('|')
+      PsiElement(BLOCK_STRING_BODY)
+        PsiElement(BLOCK_STRING_BODY)
+          MarkdownParagraph(Markdown:PARAGRAPH)
+            PsiWhiteSpace(' ')
+            PsiElement(Markdown:Markdown:TEXT)('go')
+            PsiWhiteSpace('\n')
+            PsiWhiteSpace('    ')
+            PsiElement(Markdown:Markdown:TEXT)('func main')
+            PsiElement(Markdown:Markdown:()('(')
+            PsiElement(Markdown:Markdown:))(')')
+            PsiWhiteSpace(' ')
+            PsiElement(Markdown:Markdown:TEXT)('{')
+            PsiWhiteSpace('\n')
+            PsiWhiteSpace('    ')
+            PsiElement(Markdown:Markdown:TEXT)('}')
+          PsiWhiteSpace('\n')
+      PsiElement(BLOCK_STRING_CLOSE)('|')

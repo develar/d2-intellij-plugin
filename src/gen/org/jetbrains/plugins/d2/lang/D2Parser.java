@@ -437,7 +437,6 @@ public class D2Parser implements PsiParser, LightPsiParser {
   // ShapeIdChain COLON (ShapeLabel | BlockString)? BlockDefinition?
   public static boolean ShapeDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeDeclaration")) return false;
-    if (!nextTokenIs(b, "<shape declaration>", ID, STRING)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SHAPE_DECLARATION, "<shape declaration>");
     r = ShapeIdChain(b, l + 1);
@@ -472,13 +471,13 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ID | STRING
+  // BlockString | ID | STRING
   public static boolean ShapeId(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeId")) return false;
-    if (!nextTokenIs(b, "<shape id>", ID, STRING)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SHAPE_ID, "<shape id>");
-    r = consumeToken(b, ID);
+    r = BlockString(b, l + 1);
+    if (!r) r = consumeToken(b, ID);
     if (!r) r = consumeToken(b, STRING);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -488,7 +487,6 @@ public class D2Parser implements PsiParser, LightPsiParser {
   // ShapeId (DOT ShapeId)*
   static boolean ShapeIdChain(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ShapeIdChain")) return false;
-    if (!nextTokenIs(b, "", ID, STRING)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = ShapeId(b, l + 1);
