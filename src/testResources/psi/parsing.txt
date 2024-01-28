@@ -9,9 +9,7 @@ D2 File
     BlockDefinition
       PsiElement(LBRACE)('{')
       PsiWhiteSpace('\n  ')
-      PsiComment(COMMENT)('# proper highlighting of special keywords as "fields" (like a JSON),')
-      PsiWhiteSpace('\n  ')
-      PsiComment(COMMENT)('# and unquoted string literal for values as string,')
+      PsiComment(COMMENT)('"""\n  proper highlighting of special keywords as "fields" (like a JSON),\n  and unquoted string literal for values as string,\n  """')
       PsiWhiteSpace('\n  ')
       ShapeProperty
         ShapePropertyKey
