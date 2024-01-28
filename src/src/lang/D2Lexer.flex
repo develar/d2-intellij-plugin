@@ -16,6 +16,12 @@ import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
   }
 
   private StringBuilder blockStringToken;
+
+  private IElementType startBlockString() {
+    yybegin(BLOCK_STRING_LANG_STATE);
+    blockStringToken = new StringBuilder(yytext()).reverse();
+    return BLOCK_STRING_OPEN;
+  }
 %}
 
 %public
@@ -55,6 +61,8 @@ Int=[0-9]+
 Float=[0-9]+\.[0-9]+
 Semicolon=";"
 
+// docs: D2 actually allows you to use any special symbols (not alphanumeric, space, or _) after the first pipe
+BlockStringStart=\|+[^a-zA-Z0-9\s_|]*
 String='([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\'|\\)*\"
 Color=\"#(([a-fA-F0-9]{2}){3}|([a-fA-F0-9]){3})\"
 
@@ -105,6 +113,7 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
   {Id} { return ID; }
 
   {String} { return STRING; }
+  {BlockStringStart} { return startBlockString(); }
 		// allows to avoid using regex for completion/color provider and other functionality that utilizes color
   {Color} { return COLOR; }
 }
@@ -147,12 +156,7 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 }
 
 <LABEL_STATE> {
-		// docs: D2 actually allows you to use any special symbols (not alphanumeric, space, or _) after the first pipe
-		\|+[^a-zA-Z0-9\s_|]* {
-								yybegin(BLOCK_STRING_LANG_STATE);
-								blockStringToken = new StringBuilder(yytext()).reverse();
-								return BLOCK_STRING_OPEN;
-      }
+    {BlockStringStart} { return startBlockString(); }
 
 	 {String} { return STRING; }
 	 {UnquotedLabelString} { return UNQUOTED_STRING; }
@@ -164,11 +168,12 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 }
 
 <BLOCK_STRING_LANG_STATE> {
-		[^\s|]+ { yybegin(BLOCK_STRING_BODY_STATE); return BLOCK_STRING_LANG; }
-
-		\s+ { return WHITE_SPACE; }
-
-  <<EOF>> { yybegin(YYINITIAL); return BAD_CHARACTER; }
+    [^\s|]+ { yybegin(BLOCK_STRING_BODY_STATE); return BLOCK_STRING_LANG; }
+    \s+|[^\s|]*\| {
+        yypushback(yylength());
+        yybegin(BLOCK_STRING_BODY_STATE);
+    }
+    <<EOF>> { yybegin(YYINITIAL); return BAD_CHARACTER; }
 }
 
 // IntelliJ incremental lexer restores only zero state,
@@ -187,7 +192,7 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 				blockStringToken = null;
 				return BLOCK_STRING_BODY;
 		}
-}
+    }
 
   <<EOF>> { yybegin(YYINITIAL); return BAD_CHARACTER; }
 }

@@ -9,6 +9,11 @@ class D2ParsingTest : D2ParsingTestCase() {
   }
 
   @Test
+  fun code() {
+    test()
+  }
+
+  @Test
   fun `style object`() {
     test("""
       x -> y: {
