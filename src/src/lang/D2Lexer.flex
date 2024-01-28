@@ -50,6 +50,7 @@ REVERSE_ARROW=<-+
 DOUBLE_HYPHEN_ARROW=--+
 DOUBLE_ARROW=<-+>
 Comment=#.*
+BlockComment = "\"\"\""~"\"\"\""
 Int=[0-9]+
 Float=[0-9]+\.[0-9]+
 Semicolon=";"
@@ -91,7 +92,7 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
   {REVERSE_ARROW}             { return REVERSE_ARROW; }
   {DOUBLE_HYPHEN_ARROW}       { return DOUBLE_HYPHEN_ARROW; }
   {DOUBLE_ARROW}              { return DOUBLE_ARROW; }
-  {Comment}                   { return COMMENT; }
+  {Comment} | {BlockComment}  { return COMMENT; }
 
 		{CompositeReservedKeywords} { return COMPOSITE_RESERVED_KEYWORDS; }
 		{SimpleReservedKeywords} { yybegin(PROPERTY_VALUE_BEGIN_STATE); return SIMPLE_RESERVED_KEYWORDS; }
