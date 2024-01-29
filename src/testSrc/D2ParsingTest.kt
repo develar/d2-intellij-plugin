@@ -24,6 +24,11 @@ class D2ParsingTest : D2ParsingTestCase() {
   }
 
   @Test
+  fun `values and labels`() {
+    test()
+  }
+
+  @Test
   fun `style object`() {
     test("""
       x -> y: {

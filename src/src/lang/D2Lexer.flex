@@ -51,7 +51,7 @@ bold | italic | underline | text-transform | shadow | multiple | double-border |
 // reservedKeywordHolders are reserved keywords that are meaningless on its own and must hold composites
 ReservedKeywordHolders = source-arrowhead | target-arrowhead
 
-Continuation=\\\n
+Continuation=\\\R
 Space=[ \t\f]
 SpaceContinuationNewLine=(\s|{Continuation})
 SpaceContinuation=({Space}|{Continuation})
@@ -63,17 +63,33 @@ DOUBLE_ARROW=<{ContinuationClosure}*-(-|{ContinuationClosure})*>
 
 Comment=#.*
 BlockComment = "\"\"\""~"\"\"\""
-Int=[0-9]+
-Float=[0-9]+\.[0-9]+
+Int=[0-9]([0-9]|{ContinuationClosure})*
+Float=[0-9]([0-9]|{ContinuationClosure})*\.{ContinuationClosure}?[0-9]([0-9]|{ContinuationClosure})*
 Semicolon=";"
 
 // docs: D2 actually allows you to use any special symbols (not alphanumeric, space, or _) after the first pipe
 BlockStringStart=\|+[^a-zA-Z0-9\s_|]*
-String='([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\'|\\)*\"
-Color=\"#(([a-fA-F0-9]{2}){3}|([a-fA-F0-9]){3})\"
+
+SingleQuotedString = '[^'\R]*'?
+DoubleQuotedString = \"([^\"\R\\]|{Continuation}|{EscapeSequence})*\"?
+String={SingleQuotedString}|{DoubleQuotedString}
+
+Hex=[a-fA-F0-9]
+// rune literals are allowed, see https://go.dev/ref/spec#Rune_literals
+EscapedHex=\\[{Hex}--[abf]]
+SingleQuotedColor='#({Hex}{3}){1,2}'?
+DoubleQuotedColor=\"{ContinuationClosure}?\\?#{ContinuationClosure}?((({Hex}|{EscapedHex}){ContinuationClosure}?){3}){1,2}\"?
+Color={SingleQuotedColor}|{DoubleQuotedColor}
+
+True=t{ContinuationClosure}?r{ContinuationClosure}?u{ContinuationClosure}?e
+False=f{ContinuationClosure}?a{ContinuationClosure}?l{ContinuationClosure}?s{ContinuationClosure}?e
 
 EscapeSequence=\\.
-ValueSymbol=[^\s;{}\[\]#]
+LabelSymbol=[^\s;{}#]
+UnquotedLabelString = [{LabelSymbol}&&[^|]]{LabelSymbol}*({SpaceContinuation}+{LabelSymbol}+)*
+// [] is not supported - it is array
+ValueSymbol=[{LabelSymbol}&&[^\[\]]]
+UnquotedString = [{ValueSymbol}&&[^|]]{ValueSymbol}*({SpaceContinuation}+{ValueSymbol}+)*
 
 IdSymbol=[[^:.<>&\\-]&&{ValueSymbol}]
 IdDashSubstring=-{SpaceContinuation}*([{IdSymbol}&&[^->*]]|{EscapeSequence})
@@ -83,6 +99,7 @@ ExclamationId=(\!({SpaceContinuation}*([[^&]&&{IdSymbol}]|{EscapeSequence}|{IdDa
 AllowedFirstInId=([{IdSymbol}&&[^|!('\"$@]]|{EscapeSequence}|{IdDashSubstring})
 RegularId={AllowedFirstInId}{IdBody}
 Id=({RegularId}|{ExclamationId})
+WhiteSpaceWithoutNewLines={SpaceContinuation}+
 WhiteSpace={SpaceContinuationNewLine}+
 
 LBrace="{"
@@ -90,13 +107,6 @@ RBrace="}"
 
 LBracket="["
 RBracket="]"
-
-UnquotedLabelStringFragment=[^\s{}|;]+
-UnquotedLabelString={UnquotedLabelStringFragment}([ \t]+{UnquotedLabelStringFragment})*
-
-// [] is not supported - it is array
-UnquotedStringFragment=[^\s{}[]|;]+
-UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 
 %states LABEL_STATE PROPERTY_VALUE_BEGIN_STATE PROPERTY_VALUE_STATE BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE ARRAY_STATE
 
@@ -143,16 +153,16 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 
 		{Int} { return INT; }
 		{Float} { return FLOAT; }
-		"true" { return TRUE; }
-		"false" { return FALSE; }
+		{True} { return TRUE; }
+		{False} { return FALSE; }
 		{Color} { return COLOR; }
 		{String} { return STRING; }
 		{LBracket} { yybegin(ARRAY_STATE); return LBRACKET; }
 		{RBracket} { return RBRACKET; }
 		{UnquotedString} { return UNQUOTED_STRING; }
 
-		[ \t]+ { return WHITE_SPACE; }
-		[\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }
+		{WhiteSpaceWithoutNewLines} { return WHITE_SPACE; }
+		{WhiteSpace} { yybegin(YYINITIAL); return WHITE_SPACE; }
 		{Semicolon} { yybegin(YYINITIAL); return SEMICOLON; }
 
 		// inline shape definition: {shape: person}
@@ -174,8 +184,8 @@ UnquotedString={UnquotedStringFragment}([ \t]+{UnquotedStringFragment})*
 
 	 {String} { return STRING; }
 	 {UnquotedLabelString} { return UNQUOTED_STRING; }
-	 [ \t]+ { return WHITE_SPACE; }
-	 [\r\n]+ { yybegin(YYINITIAL); return WHITE_SPACE; }
+	 {WhiteSpaceWithoutNewLines} { return WHITE_SPACE; }
+	 {WhiteSpace} { yybegin(YYINITIAL); return WHITE_SPACE; }
 	 {LBrace} { yybegin(YYINITIAL); return LBRACE; }
 	 // inline shape definition: {shape: person}
 	 {RBrace} { yybegin(YYINITIAL); return RBRACE; }
