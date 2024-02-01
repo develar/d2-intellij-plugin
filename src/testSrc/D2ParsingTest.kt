@@ -9,7 +9,22 @@ class D2ParsingTest : D2ParsingTestCase() {
   }
 
   @Test
+  fun connections() {
+    test()
+  }
+
+  @Test
+  fun shapeIds() {
+    test()
+  }
+
+  @Test
   fun code() {
+    test()
+  }
+
+  @Test
+  fun `values and labels`() {
     test()
   }
 

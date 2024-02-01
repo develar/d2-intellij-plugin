@@ -28,8 +28,7 @@ D2 File
           PsiWhiteSpace(' ')
           OtherValue
             PsiElement(INT)('10')
-        PsiWhiteSpace('\n')
-        PsiWhiteSpace('  ')
+        PsiWhiteSpace('\n  ')
         PsiElement(RBRACE)('}')
       PsiWhiteSpace('\n')
       PsiElement(RBRACE)('}')

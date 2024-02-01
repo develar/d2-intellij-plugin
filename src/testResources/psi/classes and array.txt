@@ -12,8 +12,7 @@ D2 File
       PsiWhiteSpace(' ')
       StringValue
         PsiElement(STRING)('"qweqwr"')
-    PsiWhiteSpace('\n')
-    PsiWhiteSpace('  ')
+    PsiWhiteSpace('\n  ')
     ASTWrapperPsiElement(SUB_ID_PROPERTY_MAP)
       ASTWrapperPsiElement(ID_PROPERTY_KEY)
         PsiElement(STRING)('"324:"')
@@ -28,8 +27,7 @@ D2 File
         PsiWhiteSpace(' ')
         StringValue
           PsiElement(STRING)('""')
-      PsiWhiteSpace('\n')
-      PsiWhiteSpace('    ')
+      PsiWhiteSpace('\n    ')
       ASTWrapperPsiElement(ID_PROPERTY)
         ASTWrapperPsiElement(ID_PROPERTY_KEY)
           PsiElement(SIMPLE_RESERVED_KEYWORDS)('icon')
@@ -37,8 +35,7 @@ D2 File
         PsiWhiteSpace(' ')
         UnquotedStringValue
           PsiElement(UNQUOTED_STRING)('https://play.d2lang.com/assets/icons/d2-logo.svg')
-      PsiWhiteSpace('\n')
-      PsiWhiteSpace('  ')
+      PsiWhiteSpace('\n  ')
       PsiElement(RBRACE)('}')
     PsiWhiteSpace('\n  ')
     ASTWrapperPsiElement(SUB_ID_PROPERTY_MAP)
@@ -55,8 +52,7 @@ D2 File
         PsiWhiteSpace(' ')
         UnquotedStringValue
           PsiElement(UNQUOTED_STRING)('circle')
-      PsiWhiteSpace('\n')
-      PsiWhiteSpace('    ')
+      PsiWhiteSpace('\n    ')
       ASTWrapperPsiElement(ID_PROPERTY)
         ASTWrapperPsiElement(ID_PROPERTY_KEY)
           PsiElement(STYLE_KEYWORD)('style')
@@ -66,8 +62,7 @@ D2 File
         PsiWhiteSpace(' ')
         OtherValue
           PsiElement(INT)('0')
-      PsiWhiteSpace('\n')
-      PsiWhiteSpace('  ')
+      PsiWhiteSpace('\n  ')
       PsiElement(RBRACE)('}')
     PsiWhiteSpace('\n')
     PsiElement(RBRACE)('}')

@@ -21,22 +21,34 @@ sealed interface PropertyValue : PsiElement
 class OtherValue(node: ASTNode) : AstWrapperPsiElement(node), PropertyValue
 
 class StringValue(node: ASTNode) : AstWrapperPsiElement(node), PropertyValue, ColorValueProvider {
-  override fun getColor(): Color? = NAMED_COLORS.get(text.removeSurrounding("\""))
+    override fun getColor(): Color? {
+        val colorText = when {
+            text.startsWith('"') -> text.removeSurrounding("\"").removeLineContinuations()
+            else -> text.removeSurrounding("'")
+        }
+        return NAMED_COLORS.get(colorText)
+    }
 }
 
 class UnquotedStringValue(node: ASTNode) : AstWrapperPsiElement(node), PropertyValue, ColorValueProvider {
-  override fun getColor(): Color? = NAMED_COLORS.get(text)
+    override fun getColor(): Color? = NAMED_COLORS.get(text.removeLineContinuations())
 }
 
 class ColorValue(node: ASTNode) : AstWrapperPsiElement(node), PropertyValue, ColorValueProvider {
-  override fun getColor(): Color? = ColorHexUtil.fromHexOrNull(text.removeSurrounding("\""))
+    override fun getColor(): Color? = ColorHexUtil.fromHexOrNull(text.removeSurrounding("\"").removeLineContinuations())
 }
 
 // toString doesn't print node element type
 sealed class AstWrapperPsiElement(private val node: ASTNode) : ASTDelegatePsiElement() {
-  override fun getParent(): PsiElement? = SharedImplUtil.getParent(node)
+    override fun getParent(): PsiElement? = SharedImplUtil.getParent(node)
 
-  override fun getNode(): ASTNode = node
+    override fun getNode(): ASTNode = node
 
-  override fun toString(): String = javaClass.simpleName
+    override fun toString(): String = javaClass.simpleName
+}
+
+val CONTINUATION: Regex = Regex("\\\\\\n[ \\t\\f]*")
+
+fun String.removeLineContinuations(): String {
+    return replace(CONTINUATION, "");
 }

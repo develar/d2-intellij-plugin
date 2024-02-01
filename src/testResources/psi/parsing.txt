@@ -18,8 +18,7 @@ D2 File
         PsiWhiteSpace(' ')
         UnquotedStringValue
           PsiElement(UNQUOTED_STRING)('page')
-      PsiWhiteSpace('\n\n')
-      PsiWhiteSpace('  ')
+      PsiWhiteSpace('\n\n  ')
       PsiComment(COMMENT)('# still boolean or int literals is properly highlighted')
       PsiWhiteSpace('\n  ')
       ShapeProperty
@@ -119,8 +118,7 @@ D2 File
                 PsiWhiteSpace(' ')
                 UnquotedStringValue
                   PsiElement(UNQUOTED_STRING)('stored_data')
-              PsiWhiteSpace('\n')
-              PsiWhiteSpace('      ')
+              PsiWhiteSpace('\n      ')
               ShapeProperty
                 ShapePropertyKey
                   PsiElement(STYLE_KEYWORD)('style')
@@ -130,8 +128,7 @@ D2 File
                 PsiWhiteSpace(' ')
                 OtherValue
                   PsiElement(TRUE)('true')
-              PsiWhiteSpace('\n')
-              PsiWhiteSpace('    ')
+              PsiWhiteSpace('\n    ')
               PsiElement(RBRACE)('}')
           PsiWhiteSpace('\n\n    ')
           ShapeConnection
@@ -202,8 +199,7 @@ D2 File
                 PsiWhiteSpace(' ')
                 UnquotedStringValue
                   PsiElement(UNQUOTED_STRING)('cylinder')
-              PsiWhiteSpace('\n')
-              PsiWhiteSpace('      ')
+              PsiWhiteSpace('\n      ')
               ShapeProperty
                 ShapePropertyKey
                   PsiElement(STYLE_KEYWORD)('style')
@@ -213,8 +209,7 @@ D2 File
                 PsiWhiteSpace(' ')
                 OtherValue
                   PsiElement(TRUE)('true')
-              PsiWhiteSpace('\n')
-              PsiWhiteSpace('    ')
+              PsiWhiteSpace('\n    ')
               PsiElement(RBRACE)('}')
           PsiWhiteSpace('\n  ')
           PsiElement(RBRACE)('}')
