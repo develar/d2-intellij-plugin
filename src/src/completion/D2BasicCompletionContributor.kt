@@ -113,7 +113,7 @@ private class D2BasicCompletionContributor : CompletionContributor() {
       // for `test.<caret> ->` a new "shape" is created, so, we must resolve parent for it,
       // otherwise we cannot check siblings (to forbid reserved keyword completion in edges)
       val newParent = parent.parent
-      if (newParent is ShapeId) {
+      if (newParent is ShapeDeclaration) {
         parent = newParent
       }
     }

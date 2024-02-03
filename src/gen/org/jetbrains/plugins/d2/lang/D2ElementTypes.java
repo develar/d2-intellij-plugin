@@ -41,6 +41,7 @@ public interface D2ElementTypes {
   IElementType FALSE = D2ElementTypeFactory.token("FALSE");
   IElementType FLOAT = D2ElementTypeFactory.token("FLOAT");
   IElementType ID = D2ElementTypeFactory.token("ID");
+  IElementType IMPLICIT_SEMICOLON = D2ElementTypeFactory.token("IMPLICIT_SEMICOLON");
   IElementType INT = D2ElementTypeFactory.token("INT");
   IElementType LBRACE = D2ElementTypeFactory.token("LBRACE");
   IElementType LBRACKET = D2ElementTypeFactory.token("LBRACKET");

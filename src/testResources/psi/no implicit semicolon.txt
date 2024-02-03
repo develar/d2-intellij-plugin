@@ -1,0 +1,11 @@
+D2 File
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('b')
+    PsiWhiteSpace(' \\n')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      PsiElement(RBRACE)('}')

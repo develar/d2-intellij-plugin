@@ -167,8 +167,9 @@ D2 File
               ShapeId
                 PsiElement(ID)('transmitter')
           PsiWhiteSpace('\n    ')
-          ShapeId
-            PsiElement(ID)('transmitter')
+          ShapeDeclaration
+            ShapeId
+              PsiElement(ID)('transmitter')
           PsiWhiteSpace('\n  ')
           PsiElement(RBRACE)('}')
       PsiWhiteSpace('\n  ')
@@ -224,8 +225,9 @@ D2 File
         BlockDefinition
           PsiElement(LBRACE)('{')
           PsiWhiteSpace('\n    ')
-          ShapeId
-            PsiElement(ID)('UI')
+          ShapeDeclaration
+            ShapeId
+              PsiElement(ID)('UI')
           PsiWhiteSpace('\n  ')
           PsiElement(RBRACE)('}')
       PsiWhiteSpace('\n\n  ')
