@@ -16,7 +16,7 @@ plugins {
   id("org.jetbrains.intellij") version "1.17.0"
   id("org.jetbrains.changelog") version "2.2.0"
   id("org.jetbrains.qodana") version "2023.3.1"
-  id("org.jetbrains.kotlinx.kover") version "0.7.5"
+  id("org.jetbrains.kotlinx.kover") version "0.7.6"
 
   id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
 
