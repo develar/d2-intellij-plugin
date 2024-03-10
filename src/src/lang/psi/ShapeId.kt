@@ -65,6 +65,8 @@ internal class ShapeId(node: ASTNode) : AstWrapperPsiElement(node), PsiNamedElem
 
 class ShapeConnection(node: ASTNode) : AstWrapperPsiElement(node)
 
+class ShapeConnectionRef(node: ASTNode) : AstWrapperPsiElement(node)
+
 class ShapeRef(node: ASTNode) : AstWrapperPsiElement(node)
 
 class Connector(node: ASTNode) : AstWrapperPsiElement(node)

@@ -1,0 +1,247 @@
+D2 File
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('a')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('-----')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('b')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('c')
+    Connector
+      PsiElement(ARROW)('---->')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('d')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('e')
+    Connector
+      PsiElement(REVERSE_ARROW)('<----')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('f')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('g')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_ARROW)('<---->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('h')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('i)')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_ARROW)('<--->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('j')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('k')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_ARROW)('<--->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('l)')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('m')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('n')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('---')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('o')
+      PsiElement(DOT)('.')
+      ShapeId
+        PsiElement(ID)('p')
+  PsiWhiteSpace('\n\n')
+  ShapeConnectionRef
+    PsiElement(LPAREN)('(')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_ID)
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('a')
+      PsiWhiteSpace(' ')
+      Connector
+        PsiElement(DOUBLE_HYPHEN_ARROW)('--')
+      PsiWhiteSpace(' ')
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('b')
+    PsiElement(RPAREN)(')')
+    PsiElement(LBRACKET)('[')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_INDEX)
+      PsiElement(INT)('0')
+    PsiElement(RBRACKET)(']')
+  PsiWhiteSpace('\n')
+  ShapeConnectionRef
+    PsiElement(LPAREN)('(')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_ID)
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('c')
+      PsiWhiteSpace(' ')
+      Connector
+        PsiElement(ARROW)('->')
+      PsiWhiteSpace(' ')
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('d')
+    PsiElement(RPAREN)(')')
+    PsiElement(LBRACKET)('[')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_INDEX)
+      PsiElement(INT)('0')
+    PsiElement(RBRACKET)(']')
+    PsiWhiteSpace(' ')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('text')
+  PsiWhiteSpace('\n')
+  ShapeConnectionRef
+    PsiElement(LPAREN)('(')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_ID)
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('e')
+      PsiWhiteSpace(' ')
+      Connector
+        PsiElement(REVERSE_ARROW)('<-')
+      PsiWhiteSpace(' ')
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('f')
+    PsiElement(RPAREN)(')')
+    PsiElement(LBRACKET)('[')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_INDEX)
+      PsiElement(INT)('12')
+    PsiElement(RBRACKET)(']')
+    PsiWhiteSpace(' ')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n')
+  ShapeConnectionRef
+    PsiElement(LPAREN)('(')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_ID)
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('g')
+      PsiWhiteSpace(' ')
+      Connector
+        PsiElement(DOUBLE_ARROW)('<->')
+      PsiWhiteSpace(' ')
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('h')
+    PsiElement(RPAREN)(')')
+    PsiElement(LBRACKET)('[')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_INDEX)
+      PsiElement(INT)('123')
+    PsiElement(RBRACKET)(']')
+    PsiElement(DOT)('.')
+    ShapeProperty
+      ShapePropertyKey
+        PsiElement(STYLE_KEYWORD)('style')
+        PsiElement(DOT)('.')
+        PsiElement(STYLE_KEYWORDS)('stroke')
+      PsiElement(COLON)(':')
+      PsiWhiteSpace(' ')
+      UnquotedStringValue
+        PsiElement(UNQUOTED_STRING)('red')
+  PsiWhiteSpace('\n')
+  ShapeConnectionRef
+    PsiElement(LPAREN)('(')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_ID)
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('i)')
+      PsiWhiteSpace(' ')
+      Connector
+        PsiElement(DOUBLE_ARROW)('<->')
+      PsiWhiteSpace(' ')
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('j')
+    PsiElement(RPAREN)(')')
+    PsiElement(LBRACKET)('[')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_INDEX)
+      PsiElement(INT)('0')
+    PsiElement(RBRACKET)(']')
+    PsiWhiteSpace(' ')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n')
+  ShapeConnectionRef
+    PsiElement(LPAREN)('(')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_ID)
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('k')
+      PsiWhiteSpace(' ')
+      Connector
+        PsiElement(DOUBLE_ARROW)('<->')
+      PsiWhiteSpace(' ')
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('l)')
+    PsiElement(RPAREN)(')')
+    PsiElement(LBRACKET)('[')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_INDEX)
+      PsiElement(INT)('1')
+    PsiElement(RBRACKET)(']')
+  PsiWhiteSpace('\n')
+  ShapeConnectionRef
+    PsiElement(LPAREN)('(')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_ID)
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('m')
+        PsiElement(DOT)('.')
+        ShapeId
+          PsiElement(ID)('n')
+      PsiWhiteSpace(' ')
+      Connector
+        PsiElement(DOUBLE_HYPHEN_ARROW)('---')
+      PsiWhiteSpace(' ')
+      ShapeRef
+        ShapeId
+          PsiElement(ID)('o')
+        PsiElement(DOT)('.')
+        ShapeId
+          PsiElement(ID)('p')
+    PsiElement(RPAREN)(')')
+    PsiElement(LBRACKET)('[')
+    ASTWrapperPsiElement(SHAPE_CONNECTION_INDEX)
+      PsiElement(INT)('0')
+    PsiElement(RBRACKET)(']')
