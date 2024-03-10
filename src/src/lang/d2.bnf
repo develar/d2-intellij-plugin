@@ -20,7 +20,7 @@
 
 File ::= !<<eof>> ContainerContent*
 
-private ContainerContent ::= ShapeDeclaration | ShapeIdWithProperty | ShapeConnection | ShapeId | IdPropertyMap | COMMENT | SEMICOLON
+private ContainerContent ::= ShapeIdWithProperty | ShapeConnection | ShapeDeclaration | IdPropertyMap | COMMENT | SEMICOLON | IMPLICIT_SEMICOLON
 
 // same as for file level, but Property is allowed without ShapeIdChain
 BlockDefinition ::= LBRACE ContainerContent* RBRACE {
@@ -31,8 +31,7 @@ private ShapeIdChain ::= ShapeId (DOT ShapeId)*
 ParentShapeRefPsi ::= PARENT_SHAPE_REF
 ShapeRef ::= (ParentShapeRefPsi DOT)? ShapeIdChain
 
-// declaration means `id + label` (not implicit shape via just ID)
-ShapeDeclaration ::= ShapeIdChain COLON (ShapeLabel | BlockString)? BlockDefinition?
+ShapeDeclaration ::= ShapeIdChain (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
 
 ShapeConnection ::= ShapeRef (Connector ShapeRef)+ (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
 Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
@@ -59,7 +58,7 @@ ShapePropertyKey ::= PropertyKey
 private ShapePropertyValue ::= UnquotedStringValue | StringValue | ColorValue | OtherValue | Array
 
 IdPropertyMap ::= (COMPOSITE_RESERVED_KEYWORDS | STYLE_KEYWORD) COLON LBRACE PropertyMapContent* RBRACE
-private PropertyMapContent ::= SubIdPropertyMap | IdProperty | COMMENT | SEMICOLON
+private PropertyMapContent ::= SubIdPropertyMap | IdProperty | COMMENT | SEMICOLON | IMPLICIT_SEMICOLON
 
 SubIdPropertyMap ::= IdPropertyKey COLON LBRACE PropertyMapContent* RBRACE
 

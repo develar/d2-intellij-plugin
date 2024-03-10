@@ -1,0 +1,12 @@
+D2 File
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)('b')
+  PsiWhiteSpace('\n')
+  PsiElement(DUMMY_BLOCK)
+    PsiErrorElement:<id property map>, <shape id>, <shape property key>, <shape ref>, COMMENT, IMPLICIT_SEMICOLON or SEMICOLON expected, got '{'
+      PsiElement(LBRACE)('{')
+    PsiElement(RBRACE)('}')

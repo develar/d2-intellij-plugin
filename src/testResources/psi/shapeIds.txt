@@ -1,32 +1,40 @@
 D2 File
-  ShapeId
-    PsiElement(ID)('imAShape')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('imAShape')
   PsiWhiteSpace('\n')
-  ShapeId
-    PsiElement(ID)('im_a_shape')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('im_a_shape')
   PsiWhiteSpace('\n')
-  ShapeId
-    PsiElement(ID)('im a shape')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('im a shape')
   PsiWhiteSpace('\n')
-  ShapeId
-    PsiElement(ID)('i'm a shape')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('i'm a shape')
   PsiWhiteSpace('\n\n')
-  ShapeId
-    PsiElement(ID)('i'm \\nanother \\nshape')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('i'm \\nanother \\nshape')
   PsiWhiteSpace('\n\n')
   PsiComment(COMMENT)('# notice that one-hyphen is not a connection')
   PsiWhiteSpace('\n')
   PsiComment(COMMENT)('# whereas, `a--shape` would be a connection')
   PsiWhiteSpace('\n')
-  ShapeId
-    PsiElement(ID)('a-shape')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a-shape')
   PsiWhiteSpace('\n')
-  ShapeId
-    PsiElement(ID)('SQLite')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('SQLite')
   PsiElement(SEMICOLON)(';')
   PsiWhiteSpace(' ')
-  ShapeId
-    PsiElement(ID)('Cassandra')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('Cassandra')
   PsiWhiteSpace('\n')
   ShapeDeclaration
     ShapeId
@@ -54,17 +62,108 @@ D2 File
     UnquotedStringValue
       PsiElement(UNQUOTED_STRING)('cloud')
   PsiWhiteSpace('\n')
-  ShapeId
-    PsiElement(ID)('a - a')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a - a')
   PsiWhiteSpace('\n')
-  ShapeId
-    PsiElement(ID)('b -\\nb')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('b -\\nb')
   PsiWhiteSpace('\n')
-  ShapeId
-    PsiElement(ID)('c - \\nc')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('c - \\nc')
   PsiWhiteSpace('\n')
-  ShapeId
-    PsiElement(ID)('- dash')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('- dash')
   PsiWhiteSpace('\n\\n')
-  ShapeId
-    PsiElement(ID)('doesn't start with escape')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('doesn't start with escape')
+  PsiWhiteSpace('\n\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a')
+    PsiElement(DOT)('.')
+    ShapeId
+      PsiElement(ID)('b')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a')
+    PsiElement(DOT)('.')
+    ShapeId
+      PsiElement(ID)('b')
+    PsiElement(DOT)('.')
+    ShapeId
+      PsiElement(ID)('c')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a')
+    PsiWhiteSpace('     ')
+    PsiElement(DOT)('.')
+    PsiWhiteSpace('    ')
+    ShapeId
+      PsiElement(ID)('b')
+    PsiWhiteSpace('    ')
+    PsiElement(DOT)('.')
+    PsiWhiteSpace('   ')
+    ShapeId
+      PsiElement(ID)('c')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a')
+    PsiWhiteSpace(' ')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a')
+    PsiElement(DOT)('.')
+    ShapeId
+      PsiElement(ID)('b')
+    PsiWhiteSpace(' ')
+    BlockDefinition
+      PsiElement(LBRACE)('{')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a""')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a\\n\\n""\\n''\\nb$@()')
+  PsiWhiteSpace('\n\n\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)(')')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('!')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('!a')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('! a')
+  PsiWhiteSpace('\n')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('a')
+    PsiWhiteSpace(' ')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(UNQUOTED_STRING)(':')

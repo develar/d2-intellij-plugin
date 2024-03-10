@@ -1,3 +1,4 @@
 D2 File
-  ShapeId
-    PsiElement(ID)('s')
+  ShapeDeclaration
+    ShapeId
+      PsiElement(ID)('s')

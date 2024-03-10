@@ -61,8 +61,8 @@ abstract class D2ParsingTestCase {
     }
   }
 
-  fun test(@Language("D2") text: String? = null) {
-    testCase.test(text?.trimIndent())
+  fun test(@Language("D2") text: String? = null, checkResult: Boolean = true, ensureNoErrorElements: Boolean = true) {
+    testCase.test(text?.trimIndent(), checkResult, ensureNoErrorElements)
   }
 }
 

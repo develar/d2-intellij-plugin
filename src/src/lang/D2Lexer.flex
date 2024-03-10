@@ -84,14 +84,17 @@ Color={SingleQuotedColor}|{DoubleQuotedColor}
 True=t{ContinuationClosure}?r{ContinuationClosure}?u{ContinuationClosure}?e
 False=f{ContinuationClosure}?a{ContinuationClosure}?l{ContinuationClosure}?s{ContinuationClosure}?e
 
+// does not match newline, see Dot (.) at https://jflex.de/manual.html
 EscapeSequence=\\.
-LabelSymbol=[^\s;{}#]
-UnquotedLabelString = [{LabelSymbol}&&[^|]]{LabelSymbol}*({SpaceContinuation}+{LabelSymbol}+)*
+LabelSymbol=[^\s;{}#\\]
+LabelSymbolOrEscape={LabelSymbol}|{EscapeSequence}
+UnquotedLabelString = ([{LabelSymbol}&&[^|]]|{EscapeSequence}){LabelSymbolOrEscape}*({SpaceContinuation}+{LabelSymbolOrEscape}+)*
 // [] is not supported - it is array
 ValueSymbol=[{LabelSymbol}&&[^\[\]]]
-UnquotedString = [{ValueSymbol}&&[^|]]{ValueSymbol}*({SpaceContinuation}+{ValueSymbol}+)*
+ValueSymbolOrEscape={ValueSymbol}|{EscapeSequence}
+UnquotedString = ([{ValueSymbol}&&[^|]]|{EscapeSequence}){ValueSymbolOrEscape}*({SpaceContinuation}+{ValueSymbolOrEscape}+)*
 
-IdSymbol=[[^:.<>&\\-]&&{ValueSymbol}]
+IdSymbol=[[^:.<>&-]&&{ValueSymbol}]
 IdDashSubstring=-{SpaceContinuation}*([{IdSymbol}&&[^->*]]|{EscapeSequence})
 AllowedInId=({IdSymbol}|{EscapeSequence}|{IdDashSubstring})
 IdBody={AllowedInId}*({SpaceContinuation}+{AllowedInId}+)*
@@ -108,49 +111,53 @@ RBrace="}"
 LBracket="["
 RBracket="]"
 
-%states LABEL_STATE PROPERTY_VALUE_BEGIN_STATE PROPERTY_VALUE_STATE BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE ARRAY_STATE
+%states LABEL_STATE PROPERTY_VALUE_BEGIN_STATE PROPERTY_VALUE_STATE BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE ARRAY_STATE EXPECT_IMPLICIT_SEMICOLON
 
 %%
 <YYINITIAL> {
   {WhiteSpace} { return WHITE_SPACE; }
 
-  {LBrace} { return LBRACE; }
-  {RBrace} { return RBRACE; }
-  "." { return DOT; }
-  {Semicolon} { return SEMICOLON; }
+}
+
+<EXPECT_IMPLICIT_SEMICOLON, PROPERTY_VALUE_BEGIN_STATE, PROPERTY_VALUE_STATE, LABEL_STATE> {
+  {WhiteSpaceWithoutNewLines} { return WHITE_SPACE; }
+  {WhiteSpace} { yybegin(YYINITIAL); yypushback(yylength()); return IMPLICIT_SEMICOLON; }
+}
+
+<YYINITIAL, EXPECT_IMPLICIT_SEMICOLON> {
+  {LBrace} { yybegin(YYINITIAL); return LBRACE; }
+  {RBrace} { yybegin(YYINITIAL); return RBRACE; }
+  "." { yybegin(EXPECT_IMPLICIT_SEMICOLON); return DOT; }
+  {Semicolon} { yybegin(YYINITIAL); return SEMICOLON; }
   ":" { yybegin(LABEL_STATE); return COLON; }
 
-  {ARROW}                     { return ARROW; }
-  {REVERSE_ARROW}             { return REVERSE_ARROW; }
-  {DOUBLE_HYPHEN_ARROW}       { return DOUBLE_HYPHEN_ARROW; }
-  {DOUBLE_ARROW}              { return DOUBLE_ARROW; }
-  {Comment} | {BlockComment}  { return COMMENT; }
+  {ARROW}                     { yybegin(EXPECT_IMPLICIT_SEMICOLON); return ARROW; }
+  {REVERSE_ARROW}             { yybegin(EXPECT_IMPLICIT_SEMICOLON); return REVERSE_ARROW; }
+  {DOUBLE_HYPHEN_ARROW}       { yybegin(EXPECT_IMPLICIT_SEMICOLON); return DOUBLE_HYPHEN_ARROW; }
+  {DOUBLE_ARROW}              { yybegin(EXPECT_IMPLICIT_SEMICOLON); return DOUBLE_ARROW; }
+  {Comment} | {BlockComment}  { yybegin(YYINITIAL); return COMMENT; }
 
-		{CompositeReservedKeywords} { return COMPOSITE_RESERVED_KEYWORDS; }
+		{CompositeReservedKeywords} { yybegin(EXPECT_IMPLICIT_SEMICOLON); return COMPOSITE_RESERVED_KEYWORDS; }
 		{SimpleReservedKeywords} { yybegin(PROPERTY_VALUE_BEGIN_STATE); return SIMPLE_RESERVED_KEYWORDS; }
-		{ReservedKeywordHolders} { return RESERVED_KEYWORD_HOLDERS; }
-		{StyleKeyword} { return STYLE_KEYWORD; }
+		{ReservedKeywordHolders} { yybegin(EXPECT_IMPLICIT_SEMICOLON); return RESERVED_KEYWORD_HOLDERS; }
+		{StyleKeyword} { yybegin(EXPECT_IMPLICIT_SEMICOLON); return STYLE_KEYWORD; }
 		{StyleKeywords} { yybegin(PROPERTY_VALUE_BEGIN_STATE); return STYLE_KEYWORDS; }
 		{ContainerLessKeywords} { yybegin(PROPERTY_VALUE_BEGIN_STATE); return CONTAINER_LESS_KEYWORDS; }
 
-  "_" { return PARENT_SHAPE_REF; }
-  {Id} { return ID; }
+  "_" { yybegin(EXPECT_IMPLICIT_SEMICOLON); return PARENT_SHAPE_REF; }
+  {Id} { yybegin(EXPECT_IMPLICIT_SEMICOLON); return ID; }
 
-  {String} { return STRING; }
+  // allows to avoid using regex for completion/color provider and other functionality that utilizes color
+  {Color} { yybegin(EXPECT_IMPLICIT_SEMICOLON); return COLOR; }
+  {String} { yybegin(EXPECT_IMPLICIT_SEMICOLON); return STRING; }
   {BlockStringStart} { return startBlockString(); }
-		// allows to avoid using regex for completion/color provider and other functionality that utilizes color
-  {Color} { return COLOR; }
 }
 
 <PROPERTY_VALUE_BEGIN_STATE> {
-		":" { yybegin(PROPERTY_VALUE_STATE); return COLON; }
-		{WhiteSpace} { return WHITE_SPACE; }
+    ":" { yybegin(PROPERTY_VALUE_STATE); return COLON; }
 }
-
 // block string is not allowed for property value
 <PROPERTY_VALUE_STATE> {
-  ":" { return COLON; }
-
 		{Int} { return INT; }
 		{Float} { return FLOAT; }
 		{True} { return TRUE; }
@@ -161,8 +168,6 @@ RBracket="]"
 		{RBracket} { return RBRACKET; }
 		{UnquotedString} { return UNQUOTED_STRING; }
 
-		{WhiteSpaceWithoutNewLines} { return WHITE_SPACE; }
-		{WhiteSpace} { yybegin(YYINITIAL); return WHITE_SPACE; }
 		{Semicolon} { yybegin(YYINITIAL); return SEMICOLON; }
 
 		// inline shape definition: {shape: person}
@@ -173,22 +178,19 @@ RBracket="]"
 		{Semicolon} { return SEMICOLON; }
 		// D2 supports nested arrays, but we don't for now (nested states are nnot supported, can be implemented, but not clear yet for what)
 		{LBracket} { return LBRACKET; }
-		{RBracket} { yybegin(YYINITIAL); return RBRACKET; }
+		{RBracket} { yybegin(EXPECT_IMPLICIT_SEMICOLON); return RBRACKET; }
 		{UnquotedString} { return UNQUOTED_STRING; }
-
 		{WhiteSpace} { return WHITE_SPACE; }
 }
 
 <LABEL_STATE> {
     {BlockStringStart} { return startBlockString(); }
-
-	 {String} { return STRING; }
-	 {UnquotedLabelString} { return UNQUOTED_STRING; }
-	 {WhiteSpaceWithoutNewLines} { return WHITE_SPACE; }
-	 {WhiteSpace} { yybegin(YYINITIAL); return WHITE_SPACE; }
-	 {LBrace} { yybegin(YYINITIAL); return LBRACE; }
-	 // inline shape definition: {shape: person}
-	 {RBrace} { yybegin(YYINITIAL); return RBRACE; }
+    {Semicolon} { return SEMICOLON; }
+    {String} { return STRING; }
+    {UnquotedLabelString} { return UNQUOTED_STRING; }
+    {LBrace} { yybegin(YYINITIAL); return LBRACE; }
+    // inline shape definition: {shape: person}
+    {RBrace} { yybegin(YYINITIAL); return RBRACE; }
 }
 
 <BLOCK_STRING_LANG_STATE> {

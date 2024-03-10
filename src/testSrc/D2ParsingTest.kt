@@ -71,6 +71,24 @@ logo.class: [
   }
 
   @Test
+  fun `implicit semicolon`() {
+    test("""
+       a: b
+       {}
+      """,
+      ensureNoErrorElements = false
+    )
+  }
+
+  @Test
+  fun `no implicit semicolon`() {
+    test("""
+      a: b \
+      {}
+    """)
+  }
+
+  @Test
   fun `top-level direction`() {
     test("""
       direction: down
