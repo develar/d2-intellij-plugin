@@ -36,7 +36,7 @@ private class D2MessagesAction : AnAction(), DumbAware {
     val console = content.component.getComponent(0) as ConsoleViewImpl
     console.clear()
     messageView.contentManager.setSelectedContent(content)
-    val state = e.d2FileEditor.renderManager.state ?: return
+    val state = e.d2FileEditor?.renderManager?.state ?: return
     console.print(state.log.toString(), ConsoleViewContentType.LOG_INFO_OUTPUT)
 
     val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(ToolWindowId.MESSAGES_WINDOW)

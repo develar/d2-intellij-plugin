@@ -46,10 +46,10 @@ private class D2LayoutEngineAction(private val layout: D2Layout) : ToggleAction(
   },
   null
 ), DumbAware {
-  override fun isSelected(e: AnActionEvent): Boolean = (e.d2FileEditor.layout ?: D2Layout.DEFAULT) == layout
+  override fun isSelected(e: AnActionEvent): Boolean = (e.d2FileEditor?.layout ?: D2Layout.DEFAULT) == layout
 
   override fun setSelected(e: AnActionEvent, state: Boolean) {
-    e.d2FileEditor.layout = layout
+    e.d2FileEditor?.layout = layout
   }
 
   override fun getActionUpdateThread() = ActionUpdateThread.BGT

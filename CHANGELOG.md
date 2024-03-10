@@ -5,6 +5,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Bug Fixes
+
+- NPE: null cannot be cast to non-null type com.intellij.openapi.fileEditor.TextEditorWithPreview ([GH-39](https://github.com/develar/d2-intellij-plugin/issues/39))
+
+### Features
+
+- Add block comment support (#22)
+- Support block strings as shape ids (#23)
+- Support line continuations in shape ids, arrows, and values (#24)
+- Support line continuations in declarations and fix shape declarations (#30)
+
 ## [1.3.0] - 2024-01-08
 
 ### Added

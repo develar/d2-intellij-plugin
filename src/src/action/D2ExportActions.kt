@@ -54,7 +54,7 @@ private class D2ExportAction : AnAction(), DumbAware {
       project
     ).save((e.getData(PlatformDataKeys.VIRTUAL_FILE) as VirtualFile).parent, defaultFileName) ?: return
 
-    val viewer = e.d2FileEditor
+    val viewer = e.d2FileEditor!!
     val targetFile = fileWrapper.file.toPath()
     convert(targetFile = targetFile, viewer = viewer)
   }
@@ -163,12 +163,12 @@ internal fun notify(project: Project?, @NlsContexts.NotificationContent content:
 
 private class D2LiveBrowserAction : AnAction(), DumbAware {
   override fun actionPerformed(e: AnActionEvent) {
-    val port = e.d2FileEditor.renderManager.state?.port ?: error("port not found")
+    val port = e.d2FileEditor!!.renderManager.state?.port ?: error("port not found")
     BrowserUtil.browse("http://localhost:$port", e.project)
   }
 
   override fun update(e: AnActionEvent) {
-    e.presentation.isEnabled = e.d2FileEditor.renderManager.state?.process != null
+    e.presentation.isEnabled = e.d2FileEditor?.renderManager?.state?.process != null
   }
 
   override fun getActionUpdateThread() = ActionUpdateThread.BGT

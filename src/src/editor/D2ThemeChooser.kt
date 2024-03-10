@@ -25,11 +25,11 @@ private class D2ThemeAction(private val theme: D2Theme) : ToggleAction(theme.nam
   override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
   override fun isSelected(e: AnActionEvent): Boolean {
-    return (e.d2FileEditor.theme ?: D2Theme.DEFAULT) == theme
+    return (e.d2FileEditor!!.theme ?: D2Theme.DEFAULT) == theme
   }
 
   override fun setSelected(e: AnActionEvent, state: Boolean) {
-    e.d2FileEditor.theme = theme
+    e.d2FileEditor!!.theme = theme
   }
 }
 
