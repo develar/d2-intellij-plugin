@@ -18,6 +18,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import org.jetbrains.plugins.d2.D2Bundle
 import org.jetbrains.plugins.d2.D2Layout
+import org.jetbrains.plugins.d2.D2Sketch
 import org.jetbrains.plugins.d2.D2Theme
 import java.net.ServerSocket
 import java.nio.file.Files
@@ -27,7 +28,11 @@ import kotlin.coroutines.resume
 import kotlin.system.measureTimeMillis
 import kotlin.time.Duration.Companion.milliseconds
 
-internal data class RenderRequest(@JvmField val theme: D2Theme?, @JvmField val layout: D2Layout?)
+internal data class RenderRequest(
+  @JvmField val theme: D2Theme?,
+  @JvmField val layout: D2Layout?,
+  @JvmField val sketch: Boolean?,
+)
 
 private val LOG: Logger
   get() = logger<RenderManager>()
@@ -118,6 +123,7 @@ internal class RenderManager(
         port = port,
         theme = getThemeId(request),
         layout = request.layout,
+        sketch = request.sketch,
         log = StringBuilder("[plugin ] info: starting process...\n"),
       )
     } else {
@@ -139,6 +145,7 @@ internal class RenderManager(
         theme = getThemeId(request),
         layout = request.layout,
         log = StringBuilder(oldState.log).append("[plugin ] info: restarting process...\n"),
+        sketch = request.sketch,
       )
     }
 

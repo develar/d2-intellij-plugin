@@ -25,6 +25,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.job
 import kotlinx.serialization.Serializable
 import org.jetbrains.plugins.d2.D2Layout
+import org.jetbrains.plugins.d2.D2Sketch
 import org.jetbrains.plugins.d2.D2Theme
 import java.awt.BorderLayout
 import java.awt.event.ComponentAdapter
@@ -83,6 +84,12 @@ internal class D2Viewer(
       requestRender()
     }
 
+  var sketch: Boolean? = false
+    set(value) {
+      field = value
+      requestRender()
+    }
+
   private val component: JComponent
   private val browser: JBCefBrowser?
 
@@ -128,7 +135,7 @@ internal class D2Viewer(
   }
 
   private fun requestRender() {
-    renderManager.request(RenderRequest(theme = theme, layout = layout))
+    renderManager.request(RenderRequest(theme = theme, layout = layout, sketch = sketch))
   }
 
   override fun getComponent(): JComponent = component

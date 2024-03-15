@@ -4,6 +4,7 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.openapi.vfs.VirtualFile
 import org.jetbrains.plugins.d2.D2Layout
+import org.jetbrains.plugins.d2.D2Sketch
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -13,6 +14,7 @@ internal class D2CompilerState(
   val port: Int,
   val theme: String?,
   val layout: D2Layout?,
+  val sketch: Boolean?,
   val log: StringBuilder,
 ) {
   var process: ProcessHandler? = null
@@ -39,6 +41,10 @@ internal class D2CompilerState(
 
     theme?.let {
       parameters.add("--theme", it)
+    }
+
+    if (sketch == true) {
+      parameters.add("--sketch")
     }
 
     parameters.add(input.path)
