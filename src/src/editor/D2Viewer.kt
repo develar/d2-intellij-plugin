@@ -25,7 +25,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.job
 import kotlinx.serialization.Serializable
 import org.jetbrains.plugins.d2.D2Layout
-import org.jetbrains.plugins.d2.D2Sketch
 import org.jetbrains.plugins.d2.D2Theme
 import java.awt.BorderLayout
 import java.awt.event.ComponentAdapter
@@ -46,7 +45,9 @@ private class ProjectLevelCoroutineScopeHolder(val coroutineScope: CoroutineScop
 internal const val D2_EDITOR_NAME = "D2FileEditor"
 
 @Serializable
-internal data class D2FileEditorState(@JvmField var theme: D2Theme?, @JvmField val layout: D2Layout?) : FileEditorState {
+internal data class D2FileEditorState(@JvmField var theme: D2Theme?,
+                                      @JvmField val layout: D2Layout?,
+                                      @JvmField val sketch: Boolean?) : FileEditorState {
   override fun canBeMergedWith(otherState: FileEditorState, level: FileEditorStateLevel): Boolean = otherState is D2FileEditorState
 
   //override fun getEditorId() = "D2Viewer"
@@ -145,7 +146,7 @@ internal class D2Viewer(
   override fun getName(): String = D2_EDITOR_NAME
 
   override fun getState(level: FileEditorStateLevel): FileEditorState {
-    return D2FileEditorState(theme = theme, layout = layout)
+    return D2FileEditorState(theme = theme, layout = layout, sketch = sketch)
   }
 
   override fun setState(state: FileEditorState) {
@@ -155,6 +156,7 @@ internal class D2Viewer(
 
     theme = state.theme
     layout = state.layout
+    sketch = state.sketch
   }
 
   override fun addPropertyChangeListener(listener: PropertyChangeListener) {

@@ -3,7 +3,6 @@ package org.jetbrains.plugins.d2.action
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ToggleAction
 import com.intellij.openapi.project.DumbAware
-import org.jetbrains.plugins.d2.D2Sketch
 
 private class D2SketchToggleAction() : ToggleAction(), DumbAware {
 

@@ -18,7 +18,6 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import org.jetbrains.plugins.d2.D2Bundle
 import org.jetbrains.plugins.d2.D2Layout
-import org.jetbrains.plugins.d2.D2Sketch
 import org.jetbrains.plugins.d2.D2Theme
 import java.net.ServerSocket
 import java.nio.file.Files

@@ -4,7 +4,6 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.openapi.vfs.VirtualFile
 import org.jetbrains.plugins.d2.D2Layout
-import org.jetbrains.plugins.d2.D2Sketch
 import java.nio.file.Files
 import java.nio.file.Path
 
