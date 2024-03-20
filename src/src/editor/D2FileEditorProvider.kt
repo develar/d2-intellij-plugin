@@ -54,7 +54,7 @@ private class D2FileEditorProvider : FileEditorProvider, DumbAware {
       } else {
         // find a theme with the same id to set name
         themeList.firstOrNull { it.id == theme.id }?.let {
-          D2FileEditorState(theme = theme, layout = result.layout)
+          D2FileEditorState(theme = theme, layout = result.layout, sketch = result.sketch)
         } ?: result
       }
     }
