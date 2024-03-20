@@ -47,7 +47,7 @@ internal const val D2_EDITOR_NAME = "D2FileEditor"
 @Serializable
 internal data class D2FileEditorState(@JvmField var theme: D2Theme?,
                                       @JvmField val layout: D2Layout?,
-                                      @JvmField val sketch: Boolean?) : FileEditorState {
+                                      @JvmField val sketch: Boolean = false) : FileEditorState {
   override fun canBeMergedWith(otherState: FileEditorState, level: FileEditorStateLevel): Boolean = otherState is D2FileEditorState
 
   //override fun getEditorId() = "D2Viewer"
@@ -85,7 +85,7 @@ internal class D2Viewer(
       requestRender()
     }
 
-  var sketch: Boolean? = false
+  var sketch: Boolean = false
     set(value) {
       field = value
       requestRender()

@@ -13,7 +13,7 @@ internal class D2CompilerState(
   val port: Int,
   val theme: String?,
   val layout: D2Layout?,
-  val sketch: Boolean?,
+  val sketch: Boolean,
   val log: StringBuilder,
 ) {
   var process: ProcessHandler? = null
@@ -42,7 +42,7 @@ internal class D2CompilerState(
       parameters.add("--theme", it)
     }
 
-    if (sketch == true) {
+    if (sketch) {
       parameters.add("--sketch")
     }
 

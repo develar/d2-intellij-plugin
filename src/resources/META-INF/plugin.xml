@@ -55,7 +55,7 @@
            icon="AllIcons.General.Layout"/>
     <action id="D2.SketchMode"
            class="org.jetbrains.plugins.d2.action.D2SketchToggleAction"
-           icon="AllIcons.Actions.EnableNewUi"/>
+           icon="/icons/draw.svg"/>
     <group id="D2.ExportMenu"
            popup="true"
            icon="AllIcons.ToolbarDecorator.Export">

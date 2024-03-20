@@ -30,7 +30,7 @@ import kotlin.time.Duration.Companion.milliseconds
 internal data class RenderRequest(
   @JvmField val theme: D2Theme?,
   @JvmField val layout: D2Layout?,
-  @JvmField val sketch: Boolean?,
+  @JvmField val sketch: Boolean,
 )
 
 private val LOG: Logger
