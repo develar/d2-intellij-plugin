@@ -105,7 +105,7 @@ koverReport {
 
 tasks {
   wrapper {
-    gradleVersion = "8.6"
+    gradleVersion = "8.10"
   }
 
   test {
