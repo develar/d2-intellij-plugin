@@ -2,7 +2,7 @@ package org.jetbrains.plugins.d2.lang;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.openapi.util.text.StringUtilRt;
+import com.intellij.openapi.util.text.StringUtil;
 
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
@@ -18,9 +18,51 @@ import static org.jetbrains.plugins.d2.lang.D2ElementTypes.*;
   private StringBuilder blockStringToken;
 
   private IElementType startBlockString() {
-    yybegin(BLOCK_STRING_LANG_STATE);
+    return startBlockString(BLOCK_STRING_LANG_STATE);
+  }
+
+  private IElementType startBlockString(int blockStringLangState) {
+    yybegin(blockStringLangState);
     blockStringToken = new StringBuilder(yytext()).reverse();
     return BLOCK_STRING_OPEN;
+  }
+
+
+  private int suffixLength(CharSequence text, int pos, char repeatingChar) {
+      int length = 0;
+      while (length <= pos && text.charAt(pos - length) == repeatingChar) {
+          length++;
+      }
+      return length;
+  }
+
+  /**
+   * End-of-line characters are only alowed as part of line continuations.
+   */
+  private int skipSpacesAndContinuationsBackward(CharSequence text, int pos) {
+    while (true) {
+      if (pos == 0) return pos;
+      char current = text.charAt(pos);
+      if (current == ' ' || current == '\t' || current == '\f' ) {
+        if (suffixLength(text,pos-1,'\\') % 2 == 1) {
+          return pos; // escaped spaces are ok
+        } else {
+          pos--;
+        }
+      } else if (StringUtil.endsWith(text, 0, pos, "\\\r")) {
+        pos -= 2;
+      } else if (StringUtil.endsWith(text, 0, pos, "\\\n")) {
+        pos -= 2;
+      } else if (StringUtil.endsWith(text, 0, pos, "\\\r\n")) {
+        pos -= 3;
+      } else {
+        return pos; // non-whitespace characters are ok
+      }
+    }
+  }
+
+  private boolean isEOFNext() {
+    return zzCurrentPos == zzEndRead;
   }
 %}
 
@@ -111,7 +153,7 @@ RBrace="}"
 LBracket="["
 RBracket="]"
 
-%states LABEL_STATE PROPERTY_VALUE_BEGIN_STATE PROPERTY_VALUE_STATE BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE ARRAY_STATE EXPECT_IMPLICIT_SEMICOLON
+%states LABEL_STATE PROPERTY_VALUE_BEGIN_STATE PROPERTY_VALUE_STATE BLOCK_STRING_LANG_STATE BLOCK_STRING_BODY_STATE ARRAY_STATE EXPECT_IMPLICIT_SEMICOLON EDGE_GROUP_STATE EDGE_GROUP_BLOCK_STRING_LANG_STATE EDGE_GROUP_BLOCK_STRING_BODY_STATE EXPECT_EDGE_INDEX_STATE EDGE_INDEX_STATE
 
 %%
 <YYINITIAL> {
@@ -119,7 +161,7 @@ RBracket="]"
 
 }
 
-<EXPECT_IMPLICIT_SEMICOLON, PROPERTY_VALUE_BEGIN_STATE, PROPERTY_VALUE_STATE, LABEL_STATE> {
+<EXPECT_IMPLICIT_SEMICOLON, PROPERTY_VALUE_BEGIN_STATE, PROPERTY_VALUE_STATE, LABEL_STATE, EDGE_GROUP_STATE, EXPECT_EDGE_INDEX_STATE, EDGE_INDEX_STATE> {
   {WhiteSpaceWithoutNewLines} { return WHITE_SPACE; }
   {WhiteSpace} { yybegin(YYINITIAL); yypushback(yylength()); return IMPLICIT_SEMICOLON; }
 }
@@ -130,6 +172,7 @@ RBracket="]"
   "." { yybegin(EXPECT_IMPLICIT_SEMICOLON); return DOT; }
   {Semicolon} { yybegin(YYINITIAL); return SEMICOLON; }
   ":" { yybegin(LABEL_STATE); return COLON; }
+  "(" { yybegin(EDGE_GROUP_STATE); return LPAREN; }
 
   {ARROW}                     { yybegin(EXPECT_IMPLICIT_SEMICOLON); return ARROW; }
   {REVERSE_ARROW}             { yybegin(EXPECT_IMPLICIT_SEMICOLON); return REVERSE_ARROW; }
@@ -211,7 +254,7 @@ RBracket="]"
 				blockStringToken = null;
 				return BLOCK_STRING_CLOSE;
 		}
-		else if (StringUtilRt.endsWith(yytext(), blockStringToken)) {
+		else if (StringUtil.endsWith(yytext(), blockStringToken)) {
 				// push back to register on next step as a BLOCK_STRING_CLOSE token,
 				// (we neeed it to easily implement embededed language, brace matcher and so on)
 				yypushback(blockStringToken.length());
@@ -221,6 +264,78 @@ RBracket="]"
     }
 
   <<EOF>> { yybegin(YYINITIAL); return BAD_CHARACTER; }
+}
+
+<EDGE_GROUP_STATE> {
+    "." { return DOT; }
+    {ARROW}                     { return ARROW; }
+    {REVERSE_ARROW}             { return REVERSE_ARROW; }
+    {DOUBLE_HYPHEN_ARROW}       { return DOUBLE_HYPHEN_ARROW; }
+    {DOUBLE_ARROW}              { return DOUBLE_ARROW; }
+    ")" { yybegin(EXPECT_EDGE_INDEX_STATE); return RPAREN; }
+    {Id}{SpaceContinuation}*")"{SpaceContinuation}*[\n#{}\[\]:.] {
+        CharSequence text = yytext();
+        int lastIndex = yylength() - 1;
+        int rightParIndex = StringUtil.lastIndexOfAny(text, ")");
+        int lastIdSymbolIndex = skipSpacesAndContinuationsBackward(text, rightParIndex - 1);
+        yypushback(lastIndex - lastIdSymbolIndex);
+        return ID;
+    }
+    {Id}{SpaceContinuation}*")"{SpaceContinuation}* {
+        CharSequence text = yytext();
+        int lastIndex = yylength() - 1;
+        int rightParIndex = StringUtil.lastIndexOfAny(text, ")");
+        if (isEOFNext()) {
+            int lastIdSymbolIndex = skipSpacesAndContinuationsBackward(text, rightParIndex - 1);
+            yypushback(lastIndex - lastIdSymbolIndex);
+        } else {
+            yypushback(lastIndex - rightParIndex);
+        }
+        return ID;
+    }
+    {Id} { return ID; }
+    {String} { return STRING; }
+    {BlockStringStart} { return startBlockString(EDGE_GROUP_BLOCK_STRING_LANG_STATE); }
+}
+
+<EDGE_GROUP_BLOCK_STRING_LANG_STATE> {
+    [^\s|]+ { yybegin(EDGE_GROUP_BLOCK_STRING_BODY_STATE); return BLOCK_STRING_LANG; }
+    \s+|[^\s|]*\| {
+        yypushback(yylength());
+        yybegin(EDGE_GROUP_BLOCK_STRING_BODY_STATE);
+    }
+    <<EOF>> { yybegin(YYINITIAL); return BAD_CHARACTER; }
+}
+
+<EDGE_GROUP_BLOCK_STRING_BODY_STATE> {
+	[^|]*\|+ {
+		if (blockStringToken == null) {
+				yybegin(EDGE_GROUP_STATE);
+				blockStringToken = null;
+				return BLOCK_STRING_CLOSE;
+		}
+		else if (StringUtil.endsWith(yytext(), blockStringToken)) {
+				// push back to register on next step as a BLOCK_STRING_CLOSE token,
+				// (we neeed it to easily implement embededed language, brace matcher and so on)
+				yypushback(blockStringToken.length());
+				blockStringToken = null;
+				return BLOCK_STRING_BODY;
+		}
+    }
+
+  <<EOF>> { yybegin(YYINITIAL); return BAD_CHARACTER; }
+}
+
+<EXPECT_EDGE_INDEX_STATE> {
+    {LBracket} { yybegin(EDGE_INDEX_STATE); return LBRACKET; }
+    ":" { yybegin(LABEL_STATE); return COLON; }
+    "." { yybegin(EXPECT_IMPLICIT_SEMICOLON); return DOT; }
+    {LBrace} { yybegin(YYINITIAL); return LBRACE; }
+}
+
+<EDGE_INDEX_STATE> {
+    {Int} { return INT; }
+    {RBracket} { yybegin(EXPECT_IMPLICIT_SEMICOLON); return RBRACKET; }
 }
 
 [^] { return BAD_CHARACTER; }

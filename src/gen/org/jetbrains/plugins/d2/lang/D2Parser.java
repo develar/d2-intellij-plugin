@@ -138,6 +138,59 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ConnectionInParen | RegularConnection
+  static boolean Connection(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Connection")) return false;
+    boolean r;
+    r = ConnectionInParen(b, l + 1);
+    if (!r) r = RegularConnection(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Connector ShapeRef
+  static boolean ConnectionContinuation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConnectionContinuation")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = Connector(b, l + 1);
+    p = r; // pin = 1
+    r = r && ShapeRef(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // LPAREN ShapeRef ConnectionContinuation+ RPAREN
+  static boolean ConnectionInParen(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConnectionInParen")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LPAREN);
+    r = r && ShapeRef(b, l + 1);
+    r = r && ConnectionInParen_2(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ConnectionContinuation+
+  private static boolean ConnectionInParen_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConnectionInParen_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ConnectionContinuation(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!ConnectionContinuation(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ConnectionInParen_2", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
   public static boolean Connector(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Connector")) return false;
@@ -152,11 +205,12 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ShapeIdWithProperty | ShapeConnection | ShapeDeclaration | IdPropertyMap | COMMENT | SEMICOLON | IMPLICIT_SEMICOLON
+  // ShapeIdWithProperty | ShapeConnectionRef | ShapeConnection | ShapeDeclaration | IdPropertyMap | COMMENT | SEMICOLON | IMPLICIT_SEMICOLON
   static boolean ContainerContent(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ContainerContent")) return false;
     boolean r;
     r = ShapeIdWithProperty(b, l + 1);
+    if (!r) r = ShapeConnectionRef(b, l + 1);
     if (!r) r = ShapeConnection(b, l + 1);
     if (!r) r = ShapeDeclaration(b, l + 1);
     if (!r) r = IdPropertyMap(b, l + 1);
@@ -354,73 +408,73 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ShapeRef (Connector ShapeRef)+ (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
-  public static boolean ShapeConnection(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeConnection")) return false;
+  // ShapeRef ConnectionContinuation+
+  static boolean RegularConnection(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegularConnection")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SHAPE_CONNECTION, "<shape connection>");
+    Marker m = enter_section_(b);
     r = ShapeRef(b, l + 1);
-    r = r && ShapeConnection_1(b, l + 1);
-    r = r && ShapeConnection_2(b, l + 1);
-    r = r && ShapeConnection_3(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    r = r && RegularConnection_1(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
-  // (Connector ShapeRef)+
-  private static boolean ShapeConnection_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeConnection_1")) return false;
+  // ConnectionContinuation+
+  private static boolean RegularConnection_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RegularConnection_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = ShapeConnection_1_0(b, l + 1);
+    r = ConnectionContinuation(b, l + 1);
     while (r) {
       int c = current_position_(b);
-      if (!ShapeConnection_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ShapeConnection_1", c)) break;
+      if (!ConnectionContinuation(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "RegularConnection_1", c)) break;
     }
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // Connector ShapeRef
-  private static boolean ShapeConnection_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeConnection_1_0")) return false;
+  /* ********************************************************** */
+  // Connection (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
+  public static boolean ShapeConnection(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnection")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = Connector(b, l + 1);
-    r = r && ShapeRef(b, l + 1);
-    exit_section_(b, m, null, r);
+    Marker m = enter_section_(b, l, _NONE_, SHAPE_CONNECTION, "<shape connection>");
+    r = Connection(b, l + 1);
+    r = r && ShapeConnection_1(b, l + 1);
+    r = r && ShapeConnection_2(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // (COLON (ShapeLabel | BlockString)?)?
-  private static boolean ShapeConnection_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeConnection_2")) return false;
-    ShapeConnection_2_0(b, l + 1);
+  private static boolean ShapeConnection_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnection_1")) return false;
+    ShapeConnection_1_0(b, l + 1);
     return true;
   }
 
   // COLON (ShapeLabel | BlockString)?
-  private static boolean ShapeConnection_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeConnection_2_0")) return false;
+  private static boolean ShapeConnection_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnection_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COLON);
-    r = r && ShapeConnection_2_0_1(b, l + 1);
+    r = r && ShapeConnection_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (ShapeLabel | BlockString)?
-  private static boolean ShapeConnection_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeConnection_2_0_1")) return false;
-    ShapeConnection_2_0_1_0(b, l + 1);
+  private static boolean ShapeConnection_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnection_1_0_1")) return false;
+    ShapeConnection_1_0_1_0(b, l + 1);
     return true;
   }
 
   // ShapeLabel | BlockString
-  private static boolean ShapeConnection_2_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeConnection_2_0_1_0")) return false;
+  private static boolean ShapeConnection_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnection_1_0_1_0")) return false;
     boolean r;
     r = ShapeLabel(b, l + 1);
     if (!r) r = BlockString(b, l + 1);
@@ -428,8 +482,151 @@ public class D2Parser implements PsiParser, LightPsiParser {
   }
 
   // BlockDefinition?
-  private static boolean ShapeConnection_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShapeConnection_3")) return false;
+  private static boolean ShapeConnection_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnection_2")) return false;
+    BlockDefinition(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // ShapeRef Connector ShapeRef
+  public static boolean ShapeConnectionId(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionId")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, SHAPE_CONNECTION_ID, "<shape connection id>");
+    r = ShapeRef(b, l + 1);
+    r = r && Connector(b, l + 1);
+    r = r && ShapeRef(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LPAREN ShapeConnectionId RPAREN ShapeConnectionIndexContent
+  static boolean ShapeConnectionIdContent(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionIdContent")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LPAREN);
+    r = r && ShapeConnectionId(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    r = r && ShapeConnectionIndexContent(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // INT
+  public static boolean ShapeConnectionIndex(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionIndex")) return false;
+    if (!nextTokenIs(b, INT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, INT);
+    exit_section_(b, m, SHAPE_CONNECTION_INDEX, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LBRACKET ShapeConnectionIndex RBRACKET
+  static boolean ShapeConnectionIndexContent(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionIndexContent")) return false;
+    if (!nextTokenIs(b, LBRACKET)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, LBRACKET);
+    p = r; // pin = 1
+    r = r && report_error_(b, ShapeConnectionIndex(b, l + 1));
+    r = p && consumeToken(b, RBRACKET) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // ShapeConnectionIdContent (DOT ShapeProperty | (COLON (ShapeLabel | BlockString)?)? BlockDefinition?)
+  public static boolean ShapeConnectionRef(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionRef")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SHAPE_CONNECTION_REF, null);
+    r = ShapeConnectionIdContent(b, l + 1);
+    p = r; // pin = 1
+    r = r && ShapeConnectionRef_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // DOT ShapeProperty | (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
+  private static boolean ShapeConnectionRef_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionRef_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ShapeConnectionRef_1_0(b, l + 1);
+    if (!r) r = ShapeConnectionRef_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // DOT ShapeProperty
+  private static boolean ShapeConnectionRef_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionRef_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOT);
+    r = r && ShapeProperty(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
+  private static boolean ShapeConnectionRef_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionRef_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ShapeConnectionRef_1_1_0(b, l + 1);
+    r = r && ShapeConnectionRef_1_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COLON (ShapeLabel | BlockString)?)?
+  private static boolean ShapeConnectionRef_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionRef_1_1_0")) return false;
+    ShapeConnectionRef_1_1_0_0(b, l + 1);
+    return true;
+  }
+
+  // COLON (ShapeLabel | BlockString)?
+  private static boolean ShapeConnectionRef_1_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionRef_1_1_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    r = r && ShapeConnectionRef_1_1_0_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (ShapeLabel | BlockString)?
+  private static boolean ShapeConnectionRef_1_1_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionRef_1_1_0_0_1")) return false;
+    ShapeConnectionRef_1_1_0_0_1_0(b, l + 1);
+    return true;
+  }
+
+  // ShapeLabel | BlockString
+  private static boolean ShapeConnectionRef_1_1_0_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionRef_1_1_0_0_1_0")) return false;
+    boolean r;
+    r = ShapeLabel(b, l + 1);
+    if (!r) r = BlockString(b, l + 1);
+    return r;
+  }
+
+  // BlockDefinition?
+  private static boolean ShapeConnectionRef_1_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShapeConnectionRef_1_1_1")) return false;
     BlockDefinition(b, l + 1);
     return true;
   }
