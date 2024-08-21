@@ -53,6 +53,9 @@
            class="org.jetbrains.plugins.d2.action.D2LayoutEngineActionGroup"
            popup="true"
            icon="AllIcons.General.Layout"/>
+    <action id="D2.SketchMode"
+           class="org.jetbrains.plugins.d2.action.D2SketchToggleAction"
+           icon="/icons/draw.svg"/>
     <group id="D2.ExportMenu"
            popup="true"
            icon="AllIcons.ToolbarDecorator.Export">
@@ -81,6 +84,7 @@
       <!--<separator/>-->
       <reference id="D2.ThemeChooser"/>
       <reference id="D2.LayoutChooser"/>
+      <reference id="D2.SketchMode"/>
       <reference id="D2.ExportMenu"/>
       <separator/>
       <reference id="D2.Messages"/>
