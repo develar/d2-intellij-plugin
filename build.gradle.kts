@@ -49,7 +49,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-  compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+  compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 }
 
 kotlin {
