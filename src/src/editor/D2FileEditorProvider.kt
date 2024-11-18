@@ -23,10 +23,7 @@ private class D2FileEditorProvider : FileEditorProvider, DumbAware {
   override fun accept(project: Project, file: VirtualFile): Boolean = file.isD2
 
   // 2023.3
-  @Suppress("unused")
-  fun acceptRequiresReadAction(): Boolean {
-    return false
-  }
+  override fun acceptRequiresReadAction(): Boolean = false
 
   override fun createEditor(project: Project, file: VirtualFile): FileEditor {
     val view = D2Viewer(project, file)

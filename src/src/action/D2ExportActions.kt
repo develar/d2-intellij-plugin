@@ -16,13 +16,14 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.fileChooser.FileChooserFactory
 import com.intellij.openapi.fileChooser.FileSaverDescriptor
-import com.intellij.openapi.progress.*
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.NlsContexts
 import com.intellij.openapi.util.io.FileUtilRt
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.platform.ide.progress.withBackgroundProgress
+import com.intellij.platform.util.progress.withRawProgressReporter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -68,7 +69,7 @@ private fun convert(targetFile: Path, viewer: D2Viewer) {
   val formatName = targetFile.extension.uppercase()
   val format = try {
     ConversionOutput.valueOf(formatName)
-  } catch (e: IllegalArgumentException) {
+  } catch (_: IllegalArgumentException) {
     NotificationGroupManager.getInstance()
       .getNotificationGroup(D2_NOTIFICATION_GROUP)
       .createNotification(

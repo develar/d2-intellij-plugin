@@ -53,7 +53,7 @@ abstract class D2ParsingTestCase {
       if (checkResult) {
         checkParseResult(testDataDir = testDataDir, file = file, targetDataName = name)
         if (ensureNoErrorElements) {
-          ParsingTestUtil.ensureNoErrorElements(file)
+          ParsingTestUtil.assertNoPsiErrorElements(file)
         }
       } else {
         toParseTreeText(file, skipSpaces(), includeRanges())
