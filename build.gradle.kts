@@ -21,7 +21,7 @@ plugins {
   id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
 
   id("idea")
-  id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.8"
+  id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.9"
 }
 
 idea {
