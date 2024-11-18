@@ -14,6 +14,16 @@ class D2ParsingTest : D2ParsingTestCase() {
   }
 
   @Test
+  fun `connection reference`() {
+    test()
+  }
+
+  @Test
+  fun `no connection reference`() {
+    test()
+  }
+
+  @Test
   fun shapeIds() {
     test()
   }

@@ -1,0 +1,115 @@
+D2 File
+  ShapeConnection
+    PsiElement(LPAREN)('(')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('a')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('--')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('b')
+    PsiElement(RPAREN)(')')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    PsiElement(LPAREN)('(')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('c')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(ARROW)('->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('d')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(REVERSE_ARROW)('<-')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('e')
+    PsiElement(RPAREN)(')')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    PsiElement(LPAREN)('(')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('f)')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(REVERSE_ARROW)('<-')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('g')
+    PsiElement(RPAREN)(')')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    PsiElement(LPAREN)('(')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('h')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_ARROW)('<->')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('i)')
+    PsiElement(RPAREN)(')')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    PsiElement(LPAREN)('(')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('k')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('--')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)(')')
+    PsiElement(RPAREN)(')')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    PsiElement(LPAREN)('(')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('l')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('--')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)(')')
+    PsiWhiteSpace('   ')
+    PsiElement(RPAREN)(')')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    PsiElement(LPAREN)('(')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('m')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('--')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('\   \ ')
+    PsiWhiteSpace('  ')
+    PsiElement(RPAREN)(')')
+  PsiWhiteSpace('\n')
+  ShapeConnection
+    PsiElement(LPAREN)('(')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('n')
+    PsiWhiteSpace(' ')
+    Connector
+      PsiElement(DOUBLE_HYPHEN_ARROW)('--')
+    PsiWhiteSpace(' ')
+    ShapeRef
+      ShapeId
+        PsiElement(ID)('o)\\n')
+    PsiElement(RPAREN)(')')

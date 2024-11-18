@@ -20,7 +20,7 @@
 
 File ::= !<<eof>> ContainerContent*
 
-private ContainerContent ::= ShapeIdWithProperty | ShapeConnection | ShapeDeclaration | IdPropertyMap | COMMENT | SEMICOLON | IMPLICIT_SEMICOLON
+private ContainerContent ::= ShapeIdWithProperty | ShapeConnectionRef | ShapeConnection | ShapeDeclaration | IdPropertyMap | COMMENT | SEMICOLON | IMPLICIT_SEMICOLON
 
 // same as for file level, but Property is allowed without ShapeIdChain
 BlockDefinition ::= LBRACE ContainerContent* RBRACE {
@@ -33,7 +33,17 @@ ShapeRef ::= (ParentShapeRefPsi DOT)? ShapeIdChain
 
 ShapeDeclaration ::= ShapeIdChain (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
 
-ShapeConnection ::= ShapeRef (Connector ShapeRef)+ (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
+ShapeConnectionRef ::= ShapeConnectionIdContent (DOT ShapeProperty | (COLON (ShapeLabel | BlockString)?)? BlockDefinition?) { pin=1 }
+private ShapeConnectionIdContent ::= LPAREN ShapeConnectionId RPAREN ShapeConnectionIndexContent { pin=4 }
+ShapeConnectionId ::= ShapeRef Connector ShapeRef
+private ShapeConnectionIndexContent ::= LBRACKET ShapeConnectionIndex RBRACKET { pin=1 }
+ShapeConnectionIndex ::= INT
+
+ShapeConnection ::= Connection (COLON (ShapeLabel | BlockString)?)? BlockDefinition?
+private Connection ::= ConnectionInParen | RegularConnection
+private ConnectionInParen ::= LPAREN ShapeRef ConnectionContinuation+ RPAREN
+private RegularConnection ::= ShapeRef ConnectionContinuation+ { pin=2 }
+private ConnectionContinuation ::= Connector ShapeRef { pin=1 }
 Connector ::= ARROW | REVERSE_ARROW | DOUBLE_ARROW | DOUBLE_HYPHEN_ARROW
 
 // logs.style.strokes: "#f4a261"

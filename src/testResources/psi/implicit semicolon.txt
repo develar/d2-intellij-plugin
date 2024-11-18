@@ -7,6 +7,6 @@ D2 File
     PsiElement(UNQUOTED_STRING)('b')
   PsiWhiteSpace('\n')
   PsiElement(DUMMY_BLOCK)
-    PsiErrorElement:<id property map>, <shape id>, <shape property key>, <shape ref>, COMMENT, IMPLICIT_SEMICOLON or SEMICOLON expected, got '{'
+    PsiErrorElement:<id property map>, <shape connection>, <shape id>, <shape property key>, <shape ref>, COMMENT, IMPLICIT_SEMICOLON, LPAREN or SEMICOLON expected, got '{'
       PsiElement(LBRACE)('{')
     PsiElement(RBRACE)('}')
