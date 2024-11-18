@@ -45,7 +45,9 @@ private class ProjectLevelCoroutineScopeHolder(val coroutineScope: CoroutineScop
 internal const val D2_EDITOR_NAME = "D2FileEditor"
 
 @Serializable
-internal data class D2FileEditorState(@JvmField var theme: D2Theme?, @JvmField val layout: D2Layout?) : FileEditorState {
+internal data class D2FileEditorState(@JvmField var theme: D2Theme?,
+                                      @JvmField val layout: D2Layout?,
+                                      @JvmField val sketch: Boolean = false) : FileEditorState {
   override fun canBeMergedWith(otherState: FileEditorState, level: FileEditorStateLevel): Boolean = otherState is D2FileEditorState
 
   //override fun getEditorId() = "D2Viewer"
@@ -78,6 +80,12 @@ internal class D2Viewer(
     }
 
   var layout: D2Layout? = null
+    set(value) {
+      field = value
+      requestRender()
+    }
+
+  var sketch: Boolean = false
     set(value) {
       field = value
       requestRender()
@@ -128,7 +136,7 @@ internal class D2Viewer(
   }
 
   private fun requestRender() {
-    renderManager.request(RenderRequest(theme = theme, layout = layout))
+    renderManager.request(RenderRequest(theme = theme, layout = layout, sketch = sketch))
   }
 
   override fun getComponent(): JComponent = component
@@ -138,7 +146,7 @@ internal class D2Viewer(
   override fun getName(): String = D2_EDITOR_NAME
 
   override fun getState(level: FileEditorStateLevel): FileEditorState {
-    return D2FileEditorState(theme = theme, layout = layout)
+    return D2FileEditorState(theme = theme, layout = layout, sketch = sketch)
   }
 
   override fun setState(state: FileEditorState) {
@@ -148,6 +156,7 @@ internal class D2Viewer(
 
     theme = state.theme
     layout = state.layout
+    sketch = state.sketch
   }
 
   override fun addPropertyChangeListener(listener: PropertyChangeListener) {
