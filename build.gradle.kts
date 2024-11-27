@@ -12,7 +12,7 @@ val channel: String = properties("pluginVersion").split('-').getOrElse(1) { "def
 
 plugins {
   id("java")
-  id("org.jetbrains.kotlin.jvm") version "2.0.21"
+  id("org.jetbrains.kotlin.jvm") version "2.1.0"
   id("org.jetbrains.intellij") version "1.17.4"
   id("org.jetbrains.changelog") version "2.2.1"
   id("org.jetbrains.qodana") version "2024.2.6"
