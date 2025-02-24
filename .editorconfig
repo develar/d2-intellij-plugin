@@ -1,3 +1,9 @@
 [*]
 
 ij_any_line_comment_at_first_column = false
+
+# use spaces
+indent_style = space
+
+# 4 spaces
+indent_size = 4

@@ -1,103 +1,106 @@
 <!--suppress PluginXmlValidity -->
 <idea-plugin package="org.jetbrains.plugins.d2">
-  <id>com.dvd.intellij.d2</id>
-  <name>D2</name>
-  <vendor url="https://github.com/develar/d2-intellij-plugin">Vladimir Krivosheev</vendor>
-  <description>--replaced by plugin--</description>
+    <id>com.d2lang.d2</id>
+    <name>D2</name>
+    <vendor url="https://github.com/develar/d2-intellij-plugin">Vladimir Krivosheev</vendor>
+    <description>--replaced by plugin--</description>
 
-  <dependencies>
-    <plugin id="com.intellij.modules.platform"/>
-    <plugin id="com.intellij.platform.images"/>
-    <plugin id="org.intellij.plugins.markdown"/>
-  </dependencies>
+    <dependencies>
+        <plugin id="com.intellij.modules.platform"/>
+        <plugin id="com.intellij.platform.images"/>
+        <plugin id="org.intellij.plugins.markdown"/>
+    </dependencies>
 
-  <resource-bundle>messages.D2Bundle</resource-bundle>
+    <resource-bundle>messages.D2Bundle</resource-bundle>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <fileType name="D2"
-              language="d2"
-              extensions="d2"
-              implementationClass="org.jetbrains.plugins.d2.file.D2FileType"
-              fieldName="INSTANCE"/>
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="D2"
+                  language="d2"
+                  extensions="d2"
+                  implementationClass="org.jetbrains.plugins.d2.file.D2FileType"
+                  fieldName="INSTANCE"/>
 
-    <lang.parserDefinition language="d2" implementationClass="org.jetbrains.plugins.d2.lang.D2ParserDefinition"/>
-    <lang.braceMatcher language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2BraceMatcher"/>
-    <lang.commenter language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2Commenter"/>
-    <lang.syntaxHighlighterFactory language="d2"
-                                   implementationClass="org.jetbrains.plugins.d2.lang.D2SyntaxHighlighterFactory"/>
+        <lang.parserDefinition language="d2" implementationClass="org.jetbrains.plugins.d2.lang.D2ParserDefinition"/>
+        <lang.braceMatcher language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2BraceMatcher"/>
+        <lang.commenter language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2Commenter"/>
+        <lang.syntaxHighlighterFactory language="d2"
+                                       implementationClass="org.jetbrains.plugins.d2.lang.D2SyntaxHighlighterFactory"/>
 
-    <colorSettingsPage implementation="org.jetbrains.plugins.d2.settings.D2ColorSettingsPage"/>
+        <colorSettingsPage implementation="org.jetbrains.plugins.d2.settings.D2ColorSettingsPage"/>
 
-    <colorProvider implementation="org.jetbrains.plugins.d2.editor.D2ColorProvider"/>
+        <colorProvider implementation="org.jetbrains.plugins.d2.editor.D2ColorProvider"/>
 
-    <fileEditorProvider implementation="org.jetbrains.plugins.d2.editor.D2FileEditorProvider"/>
+        <fileEditorProvider implementation="org.jetbrains.plugins.d2.editor.D2FileEditorProvider"/>
 
-    <formattingService implementation="org.jetbrains.plugins.d2.editor.D2FormatterService"/>
+        <formattingService implementation="org.jetbrains.plugins.d2.editor.D2FormatterService"/>
 
-    <completion.contributor language="d2" implementationClass="org.jetbrains.plugins.d2.completion.D2BasicCompletionContributor"/>
+        <completion.contributor language="d2"
+                                implementationClass="org.jetbrains.plugins.d2.completion.D2BasicCompletionContributor"/>
 
-    <spellchecker.support language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2SpellCheckerStrategy"/>
+        <spellchecker.support language="d2"
+                              implementationClass="org.jetbrains.plugins.d2.editor.D2SpellCheckerStrategy"/>
 
-    <notificationGroup displayType="BALLOON" id="D2" key="D2.notification.group"/>
-    <editorNotificationProvider implementation="org.jetbrains.plugins.d2.editor.D2MissingCompilerNotificationProvider"/>
+        <notificationGroup displayType="BALLOON" id="D2" key="D2.notification.group"/>
+        <editorNotificationProvider
+            implementation="org.jetbrains.plugins.d2.editor.D2MissingCompilerNotificationProvider"/>
 
-    <lang.formatter language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2FormattingModelBuilder"/>
-  </extensions>
+        <lang.formatter language="d2" implementationClass="org.jetbrains.plugins.d2.editor.D2FormattingModelBuilder"/>
+    </extensions>
 
-  <actions>
-    <group id="D2.ThemeChooser"
-           class="org.jetbrains.plugins.d2.editor.D2ThemeActionGroup"
-           popup="true"
-           icon="AllIcons.Toolwindows.ToolWindowPalette"/>
-    <group id="D2.LayoutChooser"
-           class="org.jetbrains.plugins.d2.action.D2LayoutEngineActionGroup"
-           popup="true"
-           icon="AllIcons.General.Layout"/>
-    <action id="D2.SketchMode"
-           class="org.jetbrains.plugins.d2.action.D2SketchToggleAction"
-           icon="/icons/draw.svg"/>
-    <group id="D2.ExportMenu"
-           popup="true"
-           icon="AllIcons.ToolbarDecorator.Export">
-      <action class="org.jetbrains.plugins.d2.action.D2ExportAction"
-              id="D2.ExportDiagram"
-              icon="AllIcons.Actions.MenuSaveall"/>
-      <action class="org.jetbrains.plugins.d2.action.D2LiveBrowserAction"
-              id="D2.LiveBrowser"
-              icon="AllIcons.RunConfigurations.Web_app"/>
-    </group>
-    <action class="org.jetbrains.plugins.d2.editor.D2MessagesAction"
-            id="D2.Messages"
-            icon="AllIcons.Debugger.Console"/>
-    <action class="org.jetbrains.plugins.d2.action.D2InfoAction"
-            id="D2.Info"
-            icon="AllIcons.General.ShowInfos"/>
+    <actions>
+        <group id="D2.ThemeChooser"
+               class="org.jetbrains.plugins.d2.editor.D2ThemeActionGroup"
+               popup="true"
+               icon="AllIcons.Toolwindows.ToolWindowPalette"/>
+        <group id="D2.LayoutChooser"
+               class="org.jetbrains.plugins.d2.action.D2LayoutEngineActionGroup"
+               popup="true"
+               icon="AllIcons.General.Layout"/>
+        <action id="D2.SketchMode"
+                class="org.jetbrains.plugins.d2.action.D2SketchToggleAction"
+                icon="/icons/draw.svg"/>
+        <group id="D2.ExportMenu"
+               popup="true"
+               icon="AllIcons.ToolbarDecorator.Export">
+            <action class="org.jetbrains.plugins.d2.action.D2ExportAction"
+                    id="D2.ExportDiagram"
+                    icon="AllIcons.Actions.MenuSaveall"/>
+            <action class="org.jetbrains.plugins.d2.action.D2LiveBrowserAction"
+                    id="D2.LiveBrowser"
+                    icon="AllIcons.RunConfigurations.Web_app"/>
+        </group>
+        <action class="org.jetbrains.plugins.d2.editor.D2MessagesAction"
+                id="D2.Messages"
+                icon="AllIcons.Debugger.Console"/>
+        <action class="org.jetbrains.plugins.d2.action.D2InfoAction"
+                id="D2.Info"
+                icon="AllIcons.General.ShowInfos"/>
 
-    <group id="D2.EditorToolbar">
-      <!--<reference id="Images.ToggleTransparencyChessboard"/>-->
-      <!--<reference id="Images.Editor.ToggleGrid"/>-->
-      <!--<separator/>-->
-      <!--<reference id="Images.Editor.ZoomIn"/>-->
-      <!--<reference id="Images.Editor.ZoomOut"/>-->
-      <!--<reference id="Images.Editor.ActualSize"/>-->
-      <!--<reference id="Images.Editor.FitZoomToWindow"/>-->
-      <!--<separator/>-->
-      <reference id="D2.ThemeChooser"/>
-      <reference id="D2.LayoutChooser"/>
-      <reference id="D2.SketchMode"/>
-      <reference id="D2.ExportMenu"/>
-      <separator/>
-      <reference id="D2.Messages"/>
-      <reference id="D2.Info"/>
-    </group>
+        <group id="D2.EditorToolbar">
+            <!--<reference id="Images.ToggleTransparencyChessboard"/>-->
+            <!--<reference id="Images.Editor.ToggleGrid"/>-->
+            <!--<separator/>-->
+            <!--<reference id="Images.Editor.ZoomIn"/>-->
+            <!--<reference id="Images.Editor.ZoomOut"/>-->
+            <!--<reference id="Images.Editor.ActualSize"/>-->
+            <!--<reference id="Images.Editor.FitZoomToWindow"/>-->
+            <!--<separator/>-->
+            <reference id="D2.ThemeChooser"/>
+            <reference id="D2.LayoutChooser"/>
+            <reference id="D2.SketchMode"/>
+            <reference id="D2.ExportMenu"/>
+            <separator/>
+            <reference id="D2.Messages"/>
+            <reference id="D2.Info"/>
+        </group>
 
-    <group id="D2.EditorPopupMenu">
-      <reference id="$Copy"/>
-      <reference id="CopyReferencePopupGroup"/>
-      <separator/>
-      <reference id="SynchronizeCurrentFile"/>
-      <separator/>
-      <reference id="D2.EditorToolbar"/>
-    </group>
-  </actions>
+        <group id="D2.EditorPopupMenu">
+            <reference id="$Copy"/>
+            <reference id="CopyReferencePopupGroup"/>
+            <separator/>
+            <reference id="SynchronizeCurrentFile"/>
+            <separator/>
+            <reference id="D2.EditorToolbar"/>
+        </group>
+    </actions>
 </idea-plugin>

@@ -5,11 +5,9 @@ import com.intellij.openapi.util.IconLoader
 import javax.swing.Icon
 
 object D2Icons {
-  val FILE by lazy { IconLoader.getIcon("icons/d2.svg", D2Icons::class.java.classLoader) }
+    val FILE by lazy { IconLoader.getIcon("icons/d2.svg", D2Icons::class.java.classLoader) }
 
-  val PROPERTY: Icon
-    get() = AllIcons.Nodes.Property
+    val PROPERTY: Icon = AllIcons.Nodes.Property
 
-  val CONNECTION: Icon
-    get() = AllIcons.Diff.ArrowLeftRight
+    val CONNECTION: Icon = AllIcons.Diff.ArrowLeftRight
 }

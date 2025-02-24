@@ -1,189 +1,195 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.changelog.Changelog
-import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.gradle.ext.packagePrefix
 import org.jetbrains.gradle.ext.settings
-import java.nio.file.Files
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+// ------------------------------------------------------------------------------
+// Delegated Gradle Properties
+// ------------------------------------------------------------------------------
 
-fun properties(key: String): String = providers.gradleProperty(key).get()
+val pluginVersion: String by project
+val pluginGroup: String by project
+val pluginName: String by project
+val pluginRepositoryUrl: String by project
 
-val channel: String = properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()
+val platformType: String by project
+val platformVersion: String by project
+val platformSinceBuild: String by project
+val platformUntilBuild: String by project
 
+val platformPlugins: String by project
+val platformBundledPlugins: String by project
+
+// ------------------------------------------------------------------------------
+// Plugins
+// ------------------------------------------------------------------------------
 plugins {
-  id("java")
-  id("org.jetbrains.kotlin.jvm") version "2.0.21"
-  id("org.jetbrains.intellij") version "1.17.4"
-  id("org.jetbrains.changelog") version "2.2.1"
-  id("org.jetbrains.qodana") version "2024.2.6"
-  id("org.jetbrains.kotlinx.kover") version "0.7.6"
+    id("java")
+    id("org.jetbrains.kotlin.jvm") version "2.0.21"
+    id("org.jetbrains.changelog") version "2.2.1"
 
-  id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
+    // Migration to new plugin
+    // Replaces old "org.jetbrains.intellij" plugin version "1.x"
+    id("org.jetbrains.intellij.platform") version "2.2.1"
 
-  id("idea")
-  id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.9"
+    id("org.jetbrains.qodana") version "2024.3.4"
+    id("org.jetbrains.kotlinx.kover") version "0.7.6"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
+
+    id("org.jetbrains.grammarkit") version "2022.3.2.2"
+
+
+    id("idea")
+    id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.9"
 }
 
-idea {
-  module {
-    generatedSourceDirs.add(file("src/gen"))
-    settings {
-      packagePrefix["src/src"] = "org.jetbrains.plugins.d2"
-      packagePrefix["src/testSrc"] = "org.jetbrains.plugins.d2"
-    }
-  }
-}
+// ------------------------------------------------------------------------------
+// Project/Plugin Group and Version
+// ------------------------------------------------------------------------------
+group = pluginGroup       // e.g. "org.jetbrains.plugins.d2"
+version = pluginVersion   // e.g. "1.0.0"
 
-group = "org.jetbrains.plugins.d2"
-version = properties("pluginVersion")
-
+// ------------------------------------------------------------------------------
+// Repositories
+// ------------------------------------------------------------------------------
 repositories {
-  mavenCentral()
-  maven(url = "https://cache-redirector.jetbrains.com/intellij-repository/snapshots")
+    mavenCentral()
+    intellijPlatform{
+        defaultRepositories()
+        jetbrainsRuntime()
+
+    }
 }
 
+// ------------------------------------------------------------------------------
+// IntelliJ Platform Dependencies
+// ------------------------------------------------------------------------------
 dependencies {
-  @Suppress("SpellCheckingInspection")
-  testImplementation("org.opentest4j:opentest4j:1.3.0")
-  testImplementation("org.assertj:assertj-core:3.26.3")
-  testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    intellijPlatform {
+        intellijIdeaCommunity("2024.3.3", useInstaller = false)
+        jetbrainsRuntime()
+        bundledPlugins(platformBundledPlugins.split(","))
+        testFramework(TestFrameworkType.Platform)
+    }
 
-  compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    // Other dependencies
+    @Suppress("SpellCheckingInspection")
+    testImplementation("org.opentest4j:opentest4j:1.3.0")
+    testImplementation("org.assertj:assertj-core:3.26.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("junit:junit:4.13.2")
+
+    compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 }
 
+// ------------------------------------------------------------------------------
+// Kotlin Configuration
+// ------------------------------------------------------------------------------
 kotlin {
-  jvmToolchain {
-    languageVersion.set(JavaLanguageVersion.of(17))
-  }
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
 
-  sourceSets {
-    main {
-      kotlin {
-        setSrcDirs(listOf("src/src", "src/gen"))
-      }
-      resources.setSrcDirs(listOf("src/resources"))
+    sourceSets {
+        main {
+            kotlin.setSrcDirs(listOf("src/src", "src/gen"))
+            resources.setSrcDirs(listOf("src/resources"))
+        }
+        test {
+            kotlin.setSrcDirs(listOf("src/testSrc"))
+            resources.setSrcDirs(listOf("src/testResources"))
+        }
     }
-    test {
-      kotlin {
-        setSrcDirs(listOf("src/testSrc"))
-      }
-      resources.setSrcDirs(listOf("src/testResources"))
-    }
-  }
 }
 
+// We set main sourceSets in addition to the Kotlin DSL above
 sourceSets["main"].java.setSrcDirs(listOf("src/gen"))
 
-intellij {
-  pluginName.set(properties("pluginName"))
-  version.set(properties("platformVersion"))
-  type.set(properties("platformType"))
 
-  plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
-}
-
+// ------------------------------------------------------------------------------
+// Changelog Configuration
+// ------------------------------------------------------------------------------
 changelog {
-  groups.set(emptyList())
-  repositoryUrl.set(properties("pluginRepositoryUrl"))
+    groups.set(emptyList())
+    repositoryUrl.set(pluginRepositoryUrl)
 }
 
+// ------------------------------------------------------------------------------
+// Qodana Configuration
+// ------------------------------------------------------------------------------
 qodana {
-  cachePath.set(file(".qodana").canonicalPath)
-  resultsPath.set(file("build/reports/inspections").canonicalPath)
-//  saveReport.set(true)
-//  showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
+    cachePath.set(file(".qodana").canonicalPath)
+    resultsPath.set(file("build/reports/inspections").canonicalPath)
+    //  saveReport.set(true)
+    //  showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
 }
 
+// ------------------------------------------------------------------------------
+// Kotlinx Kover (Coverage) Configuration
+// ------------------------------------------------------------------------------
 koverReport {
-  defaults {
-    xml {
-      onCheck = true
+    defaults {
+        xml {
+            onCheck = true
+        }
     }
-  }
 }
 
+// ------------------------------------------------------------------------------
+// Idea Project Configuration (idea-ext)
+// ------------------------------------------------------------------------------
+idea {
+    module {
+        generatedSourceDirs.add(file("src/gen"))
+        settings {
+            // Maps the custom source/test directories to package prefix
+            packagePrefix["src/src"] = "org.jetbrains.plugins.d2"
+            packagePrefix["src/testSrc"] = "org.jetbrains.plugins.d2"
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------
+// Tasks Configuration
+// ------------------------------------------------------------------------------
 tasks {
-  wrapper {
-    gradleVersion = "8.11.1"
-  }
-
-  test {
-    testLogging {
-      // set options for log level LIFECYCLE
-      events = setOf(
-        TestLogEvent.FAILED,
-        TestLogEvent.SKIPPED,
-        TestLogEvent.STANDARD_OUT
-      )
-      exceptionFormat = TestExceptionFormat.FULL
-      showExceptions = true
-      showCauses = true
-      showStackTraces = true
-
-      // set options for log level DEBUG and INFO
-      debug {
-        events = setOf(
-          TestLogEvent.STARTED,
-          TestLogEvent.FAILED,
-          TestLogEvent.PASSED,
-          TestLogEvent.SKIPPED,
-          TestLogEvent.STANDARD_ERROR,
-          TestLogEvent.STANDARD_OUT
-        )
-        exceptionFormat = TestExceptionFormat.FULL
-      }
-      info.events = debug.events
-      info.exceptionFormat = debug.exceptionFormat
+    wrapper {
+        gradleVersion = "8.11.1"
     }
 
-    // *** gradle *** html is not required - failures must be correctly printed to console
-    reports.html.required = false
-    useJUnitPlatform()
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events = setOf(
+                TestLogEvent.FAILED,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.STANDARD_OUT
+            )
+            exceptionFormat = TestExceptionFormat.FULL
+            showExceptions = true
+            showCauses = true
+            showStackTraces = true
 
-    val overwriteData = providers.gradleProperty("idea.tests.overwrite.data").getOrNull() == "true"
-    systemProperty("idea.tests.overwrite.data", overwriteData)
-  }
+            debug {
+                events = setOf(
+                    TestLogEvent.STARTED,
+                    TestLogEvent.FAILED,
+                    TestLogEvent.PASSED,
+                    TestLogEvent.SKIPPED,
+                    TestLogEvent.STANDARD_ERROR,
+                    TestLogEvent.STANDARD_OUT
+                )
+                exceptionFormat = TestExceptionFormat.FULL
+            }
+            info.events = debug.events
+            info.exceptionFormat = debug.exceptionFormat
+        }
 
-  patchPluginXml {
-    version.set(properties("pluginVersion"))
-    sinceBuild.set(properties("pluginSinceBuild"))
-    untilBuild.set(properties("pluginUntilBuild"))
+        reports.html.required = false
 
-    val lines = Files.readString(file("README.md").toPath()).lines()
-    val start = lines.indexOf("<!-- Plugin description -->")
-    val end = lines.indexOf("<!-- Plugin description end -->")
-    if (start < 0 || end < 0) {
-      throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+        // e.g. to allow overwriting data in tests
+        val overwriteData = providers.gradleProperty("idea.tests.overwrite.data").getOrNull() == "true"
+        systemProperty("idea.tests.overwrite.data", overwriteData)
     }
-    pluginDescription.set(lines.subList(start + 1, end).joinToString("\n").let { markdownToHTML(it) })
-
-    changeNotes.set(provider {
-      changelog.renderItem(item = changelog.getOrNull(properties("pluginVersion")) ?: changelog.getLatest(), outputType = Changelog.OutputType.HTML)
-    })
-  }
-
-  buildSearchableOptions {
-    enabled = false
-  }
-
-  runIdeForUiTests {
-    systemProperty("robot-server.port", "8082")
-    systemProperty("ide.mac.message.dialogs.as.sheets", "false")
-    systemProperty("jb.privacy.policy.text", "<!--999.999-->")
-    systemProperty("jb.consents.confirmation.enabled", "false")
-  }
-
-  signPlugin {
-    certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-    privateKey.set(System.getenv("PRIVATE_KEY"))
-    password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
-  }
-
-  publishPlugin {
-    dependsOn("patchChangelog")
-    token.set(System.getenv("PUBLISH_TOKEN"))
-
-    channels.set(listOf(channel))
-  }
 }

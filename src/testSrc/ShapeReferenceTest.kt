@@ -11,10 +11,10 @@ import org.jetbrains.plugins.d2.lang.psi.buildFQN
 import org.junit.jupiter.api.Test
 
 class ShapeReferenceTest : D2LightCodeInsightFixtureTestCase() {
-  @Test
-  fun `no ref for declaration`() {
-    test(
-      """
+    @Test
+    fun `no ref for declaration`() {
+        test(
+            """
       christmas: {
         presents
       }
@@ -24,15 +24,15 @@ class ShapeReferenceTest : D2LightCodeInsightFixtureTestCase() {
         _.christmas.style.fill: "#ACE1AF"
       }      
     """
-    ) {
-      assertNoRef()
+        ) {
+            assertNoRef()
+        }
     }
-  }
 
-  @Test
-  fun `ref from qualified reference`() {
-    test(
-      """
+    @Test
+    fun `ref from qualified reference`() {
+        test(
+            """
       christmas: {
         presents
       }
@@ -42,15 +42,15 @@ class ShapeReferenceTest : D2LightCodeInsightFixtureTestCase() {
         _.christmas.style.fill: "#ACE1AF"
       }      
     """
-    ) {
-      assertRefToShapeWithLabel("christmas")
+        ) {
+            assertRefToShapeWithLabel("christmas")
+        }
     }
-  }
 
-  @Test
-  fun `ref to local ambiguous`() {
-    test(
-      """
+    @Test
+    fun `ref to local ambiguous`() {
+        test(
+            """
       christmas: {
         presents
       }
@@ -59,15 +59,15 @@ class ShapeReferenceTest : D2LightCodeInsightFixtureTestCase() {
         _.christmas.presents -> <caret>presents: regift
       }      
     """
-    ) {
-      assertRefToShapeWithFQN(listOf("birthdays", "presents"))
+        ) {
+            assertRefToShapeWithFQN(listOf("birthdays", "presents"))
+        }
     }
-  }
 
-  @Test
-  fun `ref to nonlocal ambiguous`() {
-    test(
-      """
+    @Test
+    fun `ref to nonlocal ambiguous`() {
+        test(
+            """
       christmas: {
         presents
       }
@@ -76,15 +76,15 @@ class ShapeReferenceTest : D2LightCodeInsightFixtureTestCase() {
         _.christmas.<caret>presents -> presents: regift
       }      
     """
-    ) {
-      assertRefToShapeWithFQN(listOf("christmas", "presents"))
+        ) {
+            assertRefToShapeWithFQN(listOf("christmas", "presents"))
+        }
     }
-  }
 
-  @Test
-  fun `parent ref level 1`() {
-    test(
-      """
+    @Test
+    fun `parent ref level 1`() {
+        test(
+            """
         christmas: {
           presents
         }
@@ -94,15 +94,15 @@ class ShapeReferenceTest : D2LightCodeInsightFixtureTestCase() {
           _<caret>.christmas.presents -> presents: regift
         }
     """
-    ) {
-      assertNoRef()
+        ) {
+            assertNoRef()
+        }
     }
-  }
 
-  @Test
-  fun `parent ref level 2`() {
-    test(
-      """
+    @Test
+    fun `parent ref level 2`() {
+        test(
+            """
         christmas: {
           presents
         }
@@ -116,37 +116,37 @@ class ShapeReferenceTest : D2LightCodeInsightFixtureTestCase() {
           }
         }
     """
-    ) {
-      assertRefToShapeWithLabel("birthdays")
+        ) {
+            assertRefToShapeWithLabel("birthdays")
+        }
     }
-  }
 }
 
 private class RefAssertions(private val fixture: CodeInsightTestFixture) {
-  fun assertNoRef() {
-    assertThat(fixture.file.findReferenceAt(fixture.editor.caretModel.offset)).isNull()
-  }
+    fun assertNoRef() {
+        assertThat(fixture.file.findReferenceAt(fixture.editor.caretModel.offset)).isNull()
+    }
 
-  fun assertRefToShapeWithLabel(label: String) {
-    val ref = fixture.file.findReferenceAt(fixture.editor.caretModel.offset)
-    val shapeId = (ref as PsiReference).resolve() as ShapeId
-    assertThat(shapeId.text).isEqualTo(label)
-    assertThat((shapeId.parent as ShapeDeclaration).findId()!!.text).isEqualTo(label)
-  }
+    fun assertRefToShapeWithLabel(label: String) {
+        val ref = fixture.file.findReferenceAt(fixture.editor.caretModel.offset)
+        val shapeId = (ref as PsiReference).resolve() as ShapeId
+        assertThat(shapeId.text).isEqualTo(label)
+        assertThat((shapeId.parent as ShapeDeclaration).findId()!!.text).isEqualTo(label)
+    }
 
-  fun assertRefToShapeWithFQN(fqn: List<String>) {
-    val ref = fixture.file.findReferenceAt(fixture.editor.caretModel.offset)
-    val shapeId = (ref as PsiReference).resolve() as ShapeId
-    assertThat(shapeId.text).isEqualTo(fqn.last())
-    assertThat(buildFQN(shapeId).map { it.name }.asReversed()).isEqualTo(fqn)
-  }
+    fun assertRefToShapeWithFQN(fqn: List<String>) {
+        val ref = fixture.file.findReferenceAt(fixture.editor.caretModel.offset)
+        val shapeId = (ref as PsiReference).resolve() as ShapeId
+        assertThat(shapeId.text).isEqualTo(fqn.last())
+        assertThat(buildFQN(shapeId).map { it.name }.asReversed()).isEqualTo(fqn)
+    }
 }
 
 private fun D2LightCodeInsightFixtureTestCase.test(content: String, test: RefAssertions.() -> Unit) {
-  fixture.configureByText("test.d2", content.trimIndent())
-  runBlocking {
-    readAction {
-      test(RefAssertions(fixture))
+    fixture.configureByText("test.d2", content.trimIndent())
+    runBlocking {
+        readAction {
+            test(RefAssertions(fixture))
+        }
     }
-  }
 }

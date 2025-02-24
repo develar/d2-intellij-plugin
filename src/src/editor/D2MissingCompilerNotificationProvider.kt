@@ -14,24 +14,27 @@ import java.util.function.Supplier
 import javax.swing.JComponent
 
 private class D2MissingCompilerNotificationProvider : EditorNotificationProvider, DumbAware {
-  override fun collectNotificationData(project: Project, file: VirtualFile): Function<in FileEditor, out JComponent?>? {
-    if (!file.isD2) {
-      return null
-    }
+    override fun collectNotificationData(
+        project: Project,
+        file: VirtualFile
+    ): Function<in FileEditor, out JComponent?>? {
+        if (!file.isD2) {
+            return null
+        }
 
-    return Function { fileEditor ->
-      ((fileEditor as? TextEditorWithPreview)?.previewEditor as? D2Viewer)?.renderManager?.fileNotification?.let {
-        D2MissingCompilerNotificationPanel(fileEditor, it)
-      }
+        return Function { fileEditor ->
+            ((fileEditor as? TextEditorWithPreview)?.previewEditor as? D2Viewer)?.renderManager?.fileNotification?.let {
+                D2MissingCompilerNotificationPanel(fileEditor, it)
+            }
+        }
     }
-  }
 }
 
 private class D2MissingCompilerNotificationPanel(
-  fileEditor: FileEditor,
-  text: Supplier<@Nls String>,
+    fileEditor: FileEditor,
+    text: Supplier<@Nls String>,
 ) : EditorNotificationPanel(fileEditor, Status.Warning) {
-  init {
-    setText(text.get())
-  }
+    init {
+        setText(text.get())
+    }
 }

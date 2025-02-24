@@ -26,12 +26,12 @@ class StringValue(node: ASTNode) : AstWrapperPsiElement(node), PropertyValue, Co
             text.startsWith('"') -> text.removeSurrounding("\"").removeLineContinuations()
             else -> text.removeSurrounding("'")
         }
-        return NAMED_COLORS.get(colorText)
+        return NAMED_COLORS[colorText]
     }
 }
 
 class UnquotedStringValue(node: ASTNode) : AstWrapperPsiElement(node), PropertyValue, ColorValueProvider {
-    override fun getColor(): Color? = NAMED_COLORS.get(text.removeLineContinuations())
+    override fun getColor(): Color? = NAMED_COLORS[text.removeLineContinuations()]
 }
 
 class ColorValue(node: ASTNode) : AstWrapperPsiElement(node), PropertyValue, ColorValueProvider {
@@ -50,5 +50,5 @@ sealed class AstWrapperPsiElement(private val node: ASTNode) : ASTDelegatePsiEle
 val CONTINUATION: Regex = Regex("\\\\\\n[ \\t\\f]*")
 
 fun String.removeLineContinuations(): String {
-    return replace(CONTINUATION, "");
+    return replace(CONTINUATION, "")
 }

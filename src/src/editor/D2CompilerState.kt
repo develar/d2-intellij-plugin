@@ -8,46 +8,46 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 internal class D2CompilerState(
-  val input: VirtualFile,
-  val targetFile: Path,
-  val port: Int,
-  val theme: String?,
-  val layout: D2Layout?,
-  val sketch: Boolean,
-  val log: StringBuilder,
+    val input: VirtualFile,
+    val targetFile: Path,
+    val port: Int,
+    val theme: String?,
+    val layout: D2Layout?,
+    val sketch: Boolean,
+    val log: StringBuilder,
 ) {
-  var process: ProcessHandler? = null
+    var process: ProcessHandler? = null
 
-  fun deleteTargetFile() {
-    targetFile.let { Files.deleteIfExists(it) }
-  }
-
-  fun createCommandLine(watch: Boolean, targetFile: Path): GeneralCommandLine {
-    val command = GeneralCommandLine().withCharset(Charsets.UTF_8)
-    val parameters = command.parametersList
-    command.setWorkDirectory(input.parent.path)
-    command.exePath = "d2"
-    if (watch) {
-      parameters.add("--watch")
-      parameters.add("--browser", "0")
-
-      parameters.add("--port", port.toString())
+    fun deleteTargetFile() {
+        targetFile.let { Files.deleteIfExists(it) }
     }
 
-    layout?.let {
-      parameters.add("--layout", it.name)
-    }
+    fun createCommandLine(watch: Boolean, targetFile: Path): GeneralCommandLine {
+        val command = GeneralCommandLine().withCharset(Charsets.UTF_8)
+        val parameters = command.parametersList
+        command.setWorkDirectory(input.parent.path)
+        command.exePath = "d2"
+        if (watch) {
+            parameters.add("--watch")
+            parameters.add("--browser", "0")
 
-    theme?.let {
-      parameters.add("--theme", it)
-    }
+            parameters.add("--port", port.toString())
+        }
 
-    if (sketch) {
-      parameters.add("--sketch")
-    }
+        layout?.let {
+            parameters.add("--layout", it.name)
+        }
 
-    parameters.add(input.path)
-    parameters.add(targetFile.toString())
-    return command
-  }
+        theme?.let {
+            parameters.add("--theme", it)
+        }
+
+        if (sketch) {
+            parameters.add("--sketch")
+        }
+
+        parameters.add(input.path)
+        parameters.add(targetFile.toString())
+        return command
+    }
 }

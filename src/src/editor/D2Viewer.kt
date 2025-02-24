@@ -45,149 +45,158 @@ private class ProjectLevelCoroutineScopeHolder(val coroutineScope: CoroutineScop
 internal const val D2_EDITOR_NAME = "D2FileEditor"
 
 @Serializable
-internal data class D2FileEditorState(@JvmField var theme: D2Theme?,
-                                      @JvmField val layout: D2Layout?,
-                                      @JvmField val sketch: Boolean = false) : FileEditorState {
-  override fun canBeMergedWith(otherState: FileEditorState, level: FileEditorStateLevel): Boolean = otherState is D2FileEditorState
+internal data class D2FileEditorState(
+    @JvmField var theme: D2Theme?,
+    @JvmField val layout: D2Layout?,
+    @JvmField val sketch: Boolean = false
+) : FileEditorState {
+    override fun canBeMergedWith(otherState: FileEditorState, level: FileEditorStateLevel): Boolean =
+        otherState is D2FileEditorState
 
-  //override fun getEditorId() = "D2Viewer"
-  //
-  //override fun getTransferableOptions(): Map<String, String?> {
-  //  return mapOf("theme" to theme)
-  //}
-  //
-  //override fun setTransferableOptions(options: Map<String, String?>) {
-  //  theme = options.get("theme")
-  //}
-  //
-  //override fun setCopiedFromMasterEditor() {
-  //}
+    //override fun getEditorId() = "D2Viewer"
+    //
+    //override fun getTransferableOptions(): Map<String, String?> {
+    //  return mapOf("theme" to theme)
+    //}
+    //
+    //override fun setTransferableOptions(options: Map<String, String?>) {
+    //  theme = options.get("theme")
+    //}
+    //
+    //override fun setCopiedFromMasterEditor() {
+    //}
 }
 
 internal class D2Viewer(
-  val project: Project,
-  private val file: VirtualFile
+    val project: Project,
+    private val file: VirtualFile
 ) : UserDataHolderBase(), FileEditor, DumbAware {
-  private val dispatcher = EventDispatcher.create(PropertyChangeListener::class.java)
+    private val dispatcher = EventDispatcher.create(PropertyChangeListener::class.java)
 
-  val renderManager: RenderManager
-  val coroutineScope: CoroutineScope
+    val renderManager: RenderManager
+    val coroutineScope: CoroutineScope
 
-  var theme: D2Theme? = null
-    set(value) {
-      field = value
-      requestRender()
-    }
-
-  var layout: D2Layout? = null
-    set(value) {
-      field = value
-      requestRender()
-    }
-
-  var sketch: Boolean = false
-    set(value) {
-      field = value
-      requestRender()
-    }
-
-  private val component: JComponent
-  private val browser: JBCefBrowser?
-
-  init {
-    browser = JBCefBrowserBuilder()
-      .build()
-
-    coroutineScope = project.service<ProjectLevelCoroutineScopeHolder>().coroutineScope.childScope()
-    renderManager = RenderManager(coroutineScope = coroutineScope, project = project, file = file) {
-      browser.loadURL("http://127.0.0.1:$it")
-    }
-
-    component = object : JPanel(BorderLayout()), DataProvider {
-      override fun getData(dataId: String): Any? {
-        return when {
-          CommonDataKeys.PROJECT.`is`(dataId) -> project
-          D2_INFO_DATA_KEY.`is`(dataId) -> renderManager.d2Info.value.takeIf { it.version.isNotEmpty() }
-          else -> null
+    var theme: D2Theme? = null
+        set(value) {
+            field = value
+            requestRender()
         }
-      }
+
+    var layout: D2Layout? = null
+        set(value) {
+            field = value
+            requestRender()
+        }
+
+    var sketch: Boolean = false
+        set(value) {
+            field = value
+            requestRender()
+        }
+
+    private val component: JComponent
+    private val browser: JBCefBrowser?
+
+    init {
+        browser = JBCefBrowserBuilder()
+            .build()
+
+        coroutineScope = project.service<ProjectLevelCoroutineScopeHolder>().coroutineScope.childScope()
+        renderManager = RenderManager(coroutineScope = coroutineScope, project = project, file = file) {
+            browser.loadURL("http://127.0.0.1:$it")
+        }
+
+        component = object : JPanel(BorderLayout()),  DataProvider {
+            override fun getData(dataId: String): Any? {
+                return when {
+                    CommonDataKeys.PROJECT.`is`(dataId) -> project
+                    D2_INFO_DATA_KEY.`is`(dataId) -> renderManager.d2Info.value.takeIf { it.version.isNotEmpty() }
+                    else -> null
+                }
+            }
+
+            //override fun uiDataSnapshot(sink: DataSink) {
+            //    TODO("Not yet implemented")
+            //}
+        }
+
+        val actionManager = ActionManager.getInstance()
+        val actionGroup = actionManager.getAction("D2.EditorToolbar") as ActionGroup
+        val actionToolbar = actionManager.createActionToolbar("D2.D2Viewer", actionGroup, true)
+        actionToolbar.targetComponent = component
+
+        component.add(actionToolbar.component, BorderLayout.PAGE_START)
+        component.add(browser.component, BorderLayout.CENTER)
+
+        component.addComponentListener(object : ComponentAdapter() {
+            override fun componentShown(e: ComponentEvent?) {
+                // if preview was hidden initially (mode without preview)
+                browser.cefBrowser.reload()
+            }
+        })
+
+        ApplicationManager.getApplication().messageBus.connect(coroutineScope)
+            .subscribe(LafManagerListener.TOPIC, LafManagerListener {
+                requestRender()
+            })
+
+        requestRender()
     }
 
-    val actionManager = ActionManager.getInstance()
-    val actionGroup = actionManager.getAction("D2.EditorToolbar") as ActionGroup
-    val actionToolbar = actionManager.createActionToolbar("D2.D2Viewer", actionGroup, true)
-    actionToolbar.targetComponent = component
-
-    component.add(actionToolbar.component, BorderLayout.PAGE_START)
-    component.add(browser.component, BorderLayout.CENTER)
-
-    component.addComponentListener(object : ComponentAdapter() {
-      override fun componentShown(e: ComponentEvent?) {
-        // if preview was hidden initially (mode without preview)
-        browser.cefBrowser.reload()
-      }
-    })
-
-    ApplicationManager.getApplication().messageBus.connect(coroutineScope).subscribe(LafManagerListener.TOPIC, LafManagerListener {
-      requestRender()
-    })
-
-    requestRender()
-  }
-
-  private fun requestRender() {
-    renderManager.request(RenderRequest(theme = theme, layout = layout, sketch = sketch))
-  }
-
-  override fun getComponent(): JComponent = component
-
-  override fun getPreferredFocusedComponent(): JComponent = if (browser == null) component else browser.cefBrowser.uiComponent as JComponent
-
-  override fun getName(): String = D2_EDITOR_NAME
-
-  override fun getState(level: FileEditorStateLevel): FileEditorState {
-    return D2FileEditorState(theme = theme, layout = layout, sketch = sketch)
-  }
-
-  override fun setState(state: FileEditorState) {
-    if (state !is D2FileEditorState) {
-      return
+    private fun requestRender() {
+        renderManager.request(RenderRequest(theme = theme, layout = layout, sketch = sketch))
     }
 
-    theme = state.theme
-    layout = state.layout
-    sketch = state.sketch
-  }
+    override fun getComponent(): JComponent = component
 
-  override fun addPropertyChangeListener(listener: PropertyChangeListener) {
-    dispatcher.addListener(listener)
-  }
+    override fun getPreferredFocusedComponent(): JComponent =
+        if (browser == null) component else browser.cefBrowser.uiComponent as JComponent
 
-  override fun removePropertyChangeListener(listener: PropertyChangeListener) {
-    dispatcher.removeListener(listener)
-  }
+    override fun getName(): String = D2_EDITOR_NAME
 
-  override fun isModified(): Boolean = false
-
-  override fun isValid(): Boolean = true
-
-  override fun getBackgroundHighlighter(): BackgroundEditorHighlighter? = null
-
-  override fun getCurrentLocation(): FileEditorLocation? = null
-
-  override fun getStructureViewBuilder(): StructureViewBuilder? = null
-
-  override fun dispose() {
-    coroutineScope.cancel()
-    browser?.let {
-      Disposer.dispose(it)
+    override fun getState(level: FileEditorStateLevel): FileEditorState {
+        return D2FileEditorState(theme = theme, layout = layout, sketch = sketch)
     }
-  }
 
-  override fun getFile(): VirtualFile = file
+    override fun setState(state: FileEditorState) {
+        if (state !is D2FileEditorState) {
+            return
+        }
+
+        theme = state.theme
+        layout = state.layout
+        sketch = state.sketch
+    }
+
+    override fun addPropertyChangeListener(listener: PropertyChangeListener) {
+        dispatcher.addListener(listener)
+    }
+
+    override fun removePropertyChangeListener(listener: PropertyChangeListener) {
+        dispatcher.removeListener(listener)
+    }
+
+    override fun isModified(): Boolean = false
+
+    override fun isValid(): Boolean = true
+
+    override fun getBackgroundHighlighter(): BackgroundEditorHighlighter? = null
+
+    override fun getCurrentLocation(): FileEditorLocation? = null
+
+    override fun getStructureViewBuilder(): StructureViewBuilder? = null
+
+    override fun dispose() {
+        coroutineScope.cancel()
+        browser?.let {
+            Disposer.dispose(it)
+        }
+    }
+
+    override fun getFile(): VirtualFile = file
 }
 
 private fun CoroutineScope.childScope(context: CoroutineContext = EmptyCoroutineContext): CoroutineScope {
-  val parentContext = coroutineContext
-  return CoroutineScope(parentContext + SupervisorJob(parent = parentContext.job) + context)
+    val parentContext = coroutineContext
+    return CoroutineScope(parentContext + SupervisorJob(parent = parentContext.job) + context)
 }

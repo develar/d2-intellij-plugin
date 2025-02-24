@@ -1,3 +1,5 @@
+.intellijPlatform
+gradle/gradle-daemon-jvm.properties
 .gradle
 .idea
 .qodana
